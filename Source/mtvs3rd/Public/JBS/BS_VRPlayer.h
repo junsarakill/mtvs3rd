@@ -29,6 +29,22 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
+	// 이동 속도
+	// @@ 트리거 세기에 따라 이동속도 조절되면 좋을듯?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	float moveSpeed = 600.f;
+	// 이동 방향
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FVector moveDir;
+
+	// 회전 설정
+	// @@ 나중엔 자연스러운 회전 추가할까?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	bool isSnapTurn = true;
+
+	// 스냅턴 각도
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	float snapTurnDeg = 45.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
 	class UInputMappingContext* imcDefault;
@@ -51,6 +67,19 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);
+
+	// 이동속도 설정
+	void SetMoveSpeed(float value);
+	// 이동방향 설정
+	UFUNCTION(BlueprintCallable)
+	void SetMoveDir(FVector2D dir);
+
+	// 썸스틱으로 회전
+	UFUNCTION(BlueprintCallable)
+	void EventTurn(float value);
+
+	void SnapTurn(bool isRight);
+
 
 public:
 

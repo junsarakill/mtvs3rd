@@ -14,8 +14,8 @@ ABS_Hand::ABS_Hand()
 	motionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("motionController"));
 	motionController->SetupAttachment(RootComponent);
 
-	handMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("handMesh"));
-	handMesh->SetupAttachment(motionController);
+	// handMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("handMesh"));
+	// handMesh->SetupAttachment(motionController);
 }
 
 // Called when the game starts or when spawned
@@ -23,21 +23,22 @@ void ABS_Hand::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetController(cType);
-
+	// 설정은 스폰한 플레이어가 해줌
 }
 
 void ABS_Hand::SetController(EMotionControllerType type)
 {
+	cType = type;
 	// 컨트롤러 데이터 찾기
-	for(auto ff : typeData)
+	for(auto fct : typeData)
 	{
-		if(ff.type == type)
+		if(fct.type == cType)
 		{
 			// 왼손 오른손 데이터 설정
 			motionController->MotionSource = type == EMotionControllerType::LEFT ? FName(TEXT("Left")) : FName(TEXT("Right"));
-			handMesh->SetSkeletalMesh(ff.mesh);
-			handMesh->SetRelativeLocationAndRotation(ff.loc, ff.rot);
+			SetHandMesh(cType);
+			handMesh->SetSkeletalMesh(fct.mesh);
+			handMesh->SetRelativeLocationAndRotation(fct.loc, fct.rot);
 		}
 	}
 }

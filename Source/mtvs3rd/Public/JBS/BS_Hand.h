@@ -67,4 +67,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetController(EMotionControllerType type);
+
+	// 핸드 메시 설정
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetHandMesh(EMotionControllerType type);
 };
