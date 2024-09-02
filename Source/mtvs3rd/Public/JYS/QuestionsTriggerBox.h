@@ -28,14 +28,9 @@ protected:
 public: 
 	// À§Á¬ ½ºÆù
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<class AActor> QuestionsWidgetFactory;
+	TSubclassOf<class AActor> questionsWidgetFactory;
 
-private:
-	// À§Á¬
-	UPROPERTY()
-	class UQuestionsWidget* QuestionsWidget;
-
-	UPROPERTY()
-	class AActor* SpawnedWidgetActor;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UShapeComponent* shapeComp;
+	
 };
