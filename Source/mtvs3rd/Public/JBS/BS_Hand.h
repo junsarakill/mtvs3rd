@@ -41,21 +41,43 @@ public:
 	// Sets default values for this actor's properties
 	ABS_Hand();
 
+	// 컨트롤러
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UMotionControllerComponent* motionController;
+	// 손 루트
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class USceneComponent* handRoot;
+	// 손 메시
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USkeletalMeshComponent* handMesh;
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	// class UXRDeviceVisualizationComponent* xrDVisualComp;
 	
 
 // 컨트롤러 종류
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	EMotionControllerType cType;
 
 // 컨트롤러 데이터
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	TArray<FControllerType> typeData;
+
+	// 잡기 가능 여부
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	bool isGrab = false;
+	// 현재 잡은 액터
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class ABS_GrabbableActor* grabActor;
+
+	// 잡기 범위
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	float grabRadius = 6.f;
+
+	// 현재 잡은 그랩 컴포
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class UBS_GrabComponent* curGrabComp;	
+
+	// XXX 디버그용 잡기 범위 표시
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
+	bool enableDebugGrabSphere = false;
 
 protected:
 	// Called when the game starts or when spawned
@@ -71,4 +93,20 @@ public:
 	// 핸드 메시 설정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetHandMesh(EMotionControllerType type);
+
+	// 해당 액터 잡기로 설정
+	void SetGrabActor(ABS_GrabbableActor* actor);
+
+	// 잡기
+	UFUNCTION(BlueprintCallable)
+	bool TryGrab();
+	// 놓기
+	UFUNCTION(BlueprintCallable)
+	bool TryRelease();
+
+	// 주변에 잡을 것이 있는지 찾기
+	class UBS_GrabComponent* FindGrabComponentNearHand();
+
+
+	
 };

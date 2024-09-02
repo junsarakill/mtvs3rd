@@ -6,6 +6,7 @@
 #include <MotionControllerComponent.h>
 #include <EnhancedInputSubsystems.h>
 #include "GameFramework/CharacterMovementComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ABS_VRPlayer::ABS_VRPlayer()

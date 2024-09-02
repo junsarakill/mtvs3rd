@@ -15,6 +15,7 @@ public class mtvs3rd : ModuleRules
 		, "InputCore"
 		, "EnhancedInput"
 		, "HeadMountedDisplay"
+		, "UMG"
 		 });
 	}
 }

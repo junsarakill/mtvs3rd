@@ -4,6 +4,9 @@
 #include "JBS/BS_Hand.h"
 #include <MotionControllerComponent.h>
 #include "Components/SkeletalMeshComponent.h"
+#include <Kismet/KismetSystemLibrary.h>
+#include <JBS/BS_GrabComponent.h>
+#include "JBS/BS_VRPlayer.h"
 
 // Sets default values
 ABS_Hand::ABS_Hand()
@@ -14,16 +17,14 @@ ABS_Hand::ABS_Hand()
 	motionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("motionController"));
 	motionController->SetupAttachment(RootComponent);
 
-	// handMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("handMesh"));
-	// handMesh->SetupAttachment(motionController);
+	handRoot = CreateDefaultSubobject<USceneComponent>(TEXT("handRoot"));
+	handRoot->SetupAttachment(motionController);
 }
 
 // Called when the game starts or when spawned
 void ABS_Hand::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// 설정은 스폰한 플레이어가 해줌
 }
 
 void ABS_Hand::SetController(EMotionControllerType type)
@@ -50,3 +51,130 @@ void ABS_Hand::Tick(float DeltaTime)
 
 }
 
+void ABS_Hand::SetGrabActor(ABS_GrabbableActor *actor)
+{
+	check(actor);
+	// if(isGrab)
+	// 	return;
+	isGrab = true;
+	grabActor = actor;
+}
+
+bool ABS_Hand::TryGrab()
+{
+	bool hasGrab = false;
+	// 가까운 그랩 컴포 가져오기
+	auto* grabComp = FindGrabComponentNearHand();
+	if(grabComp)
+	{
+		// 잡기 시도
+		hasGrab = grabComp->TryGrab(motionController);
+		if(hasGrab)
+		{
+			// 잡기
+			curGrabComp = grabComp;
+
+			// 주인의 반대 손이 같은걸 잡고 있다면 해제 시키기
+			auto* owner = Cast<ABS_VRPlayer>(this->GetOwner());
+			auto* otherHand = cType == EMotionControllerType::LEFT ? owner->rightController : owner->leftController;
+			
+			if(otherHand->curGrabComp == this->curGrabComp)
+				otherHand->curGrabComp = nullptr;
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, TEXT("잡을게 없음"));
+	}
+	
+
+    return hasGrab;
+}
+bool ABS_Hand::TryRelease()
+{
+	if(!curGrabComp) return false;
+
+	// 놓기 시도
+	bool isSuccess = curGrabComp->TryRelease();
+	// 놓았으면 관계 끊기
+	if(isSuccess)
+		curGrabComp = nullptr;
+
+    return isSuccess;
+}
+UBS_GrabComponent *ABS_Hand::FindGrabComponentNearHand()
+{
+	check(motionController);
+	// 주변 잡을 만한 거 찾기
+	// 스피어 trace 하기
+	// 시작 위치
+	FVector gripLocation = motionController->GetComponentLocation();
+	// 범위 : grapRadius
+	TArray<FHitResult> outHitResults;
+	FCollisionShape sphereCol = FCollisionShape::MakeSphere(grabRadius);
+	ECollisionChannel traceChl = ECC_Visibility;
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+	// 히트 하는 위치 설정
+	FVector startLocation = gripLocation;
+	FVector endLocation = gripLocation;
+	
+	bool isHit = GetWorld()->SweepMultiByChannel(
+		outHitResults,
+		startLocation,
+		endLocation,
+		FQuat::Identity,
+		traceChl,
+		sphereCol,
+		params
+	);
+
+	float minDis = FLT_MAX;
+	UBS_GrabComponent* nearestGrabComp = nullptr;
+
+	if(isHit)
+	{
+		for(const FHitResult outHit : outHitResults)
+		{
+			AActor* hitActor = outHit.GetActor();
+			if(hitActor)
+			{
+				// 액터의 모든 잡기 컴포넌트 가져오기
+				TArray<UActorComponent*> grabComps = hitActor->K2_GetComponentsByClass(UBS_GrabComponent::StaticClass());
+				if(grabComps.Num() <= 0) continue;
+				// 가장 가까운 잡기 컴포넌트 구하기
+				for(auto* comp : grabComps)
+				{
+					// 잡기 컴포넌트에 하기
+					UBS_GrabComponent* grabComp = CastChecked<UBS_GrabComponent>(comp);
+					if(!grabComp) continue;
+
+					// 최소 길이 계산
+					float dis = FVector::Dist(grabComp->GetComponentLocation(), gripLocation);
+					if(dis < minDis)
+					{
+						minDis = dis;
+						nearestGrabComp = grabComp;
+					}
+				}
+			}
+		}
+		// 계산 종료
+	}
+
+	// 디버그용 잡기 범위 시각화
+	if(enableDebugGrabSphere)
+	{
+		DrawDebugSphere(
+			GetWorld(),
+			startLocation,
+			grabRadius,
+			24,
+			FColor::Green,
+			false,
+			-1.0f
+		);
+	}
+
+    return nearestGrabComp;
+}

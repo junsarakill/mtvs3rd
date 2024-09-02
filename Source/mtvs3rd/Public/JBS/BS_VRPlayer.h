@@ -17,16 +17,6 @@ public:
 
 #pragma region 변수 영역
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	class USceneComponent* vrRoot;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	class UCameraComponent* vrHMDCam;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	class ABS_Hand* leftController;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	class ABS_Hand* rightController;
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
 	// 이동 속도
@@ -50,6 +40,14 @@ protected:
 	class UInputMappingContext* imcDefault;
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class USceneComponent* vrRoot;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class UCameraComponent* vrHMDCam;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class ABS_Hand* leftController;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class ABS_Hand* rightController;
 
 #pragma endregion
 #pragma region 함수 영역
