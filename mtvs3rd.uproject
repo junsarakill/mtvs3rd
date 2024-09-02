@@ -49,6 +49,10 @@
 				"Linux",
 				"Android"
 			]
+		},
+		{
+			"Name": "VRM4U",
+			"Enabled": true
 		}
 	]
 }
