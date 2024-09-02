@@ -36,6 +36,7 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 
 	// @@ 디버그단
 	GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("액터 rot : %s"), *GetActorRotation().ToString()));
+	GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Yellow, FString::Printf(TEXT("액터 moveDir : %s"), *moveDir.ToString()));
 	
 
 	// 이동 방향대로 이동
@@ -81,10 +82,13 @@ void ABS_VRPlayer::SetMoveDir(FVector2D dir)
 	// 입력 값
 	FVector inputDir = FVector(dir.X,dir.Y,0.f).GetSafeNormal();
 	// 카메라의 전방을 기준 축으로 잡기
-	moveDir = vrHMDCam->GetComponentRotation().RotateVector(inputDir);
-	// 2d 이동으로 정규화
-	moveDir.Z = 0.f;
-	moveDir.Normalize();
+	moveDir = (vrHMDCam->GetForwardVector() * inputDir.Y) + (vrHMDCam->GetRightVector() * inputDir.X);
+	if(!moveDir.IsZero())
+		moveDir.Normalize();
+	// moveDir = vrHMDCam->GetComponentRotation().RotateVector(inputDir);
+	// // 2d 이동으로 정규화
+	// moveDir.Z = 0.f;
+	// moveDir.Normalize();
 }
 
 void ABS_VRPlayer::EventTurn(float value)
