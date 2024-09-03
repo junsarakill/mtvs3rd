@@ -23,12 +23,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// ºôº¸µå
 	UFUNCTION()
 	void BillBoardQuestionsWidget();
 
+	//// PC
 	UPROPERTY(EditDefaultsOnly)
-	class UWidgetComponent* questionsUIComp;
+	class TSubclassOf<class UUserWidget> pcWidgetFactory;
+	//// PC
+	UPROPERTY()
+	class UQuestionsWidget* pcWiidget;
+
+	//// VR
+	//UPROPERTY(EditDefaultsOnly)
+	//class UWidgetComponent* questionsUIComp;
 
 	UPROPERTY(EditDefaultsOnly)
 	class ACharacter* player;
+
+	int32 answerNum;
+
+	void SetAnswer(int num);
 };
