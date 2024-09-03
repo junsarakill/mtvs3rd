@@ -7,6 +7,7 @@
 #include <EnhancedInputSubsystems.h>
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ABS_VRPlayer::ABS_VRPlayer()
@@ -36,14 +37,19 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// @@ 디버그단
-	GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("액터 rot : %s"), *GetActorRotation().ToString()));
-	GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Yellow, FString::Printf(TEXT("액터 moveDir : %s"), *moveDir.ToString()));
+	// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("액터 rot : %s"), *GetActorRotation().ToString()));
+	// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Yellow, FString::Printf(TEXT("액터 moveDir : %s"), ));
+	FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
+	
+	FString velStr = GetVelocity().ToString();
+	FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s"), *moveDir.ToString(), *velStr);
+	DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
 	
 
 	// 이동 방향대로 이동
 	AddMovementInput(moveDir, 1);
-	if(moveDir != FVector::ZeroVector)
-		moveDir = FVector::ZeroVector;
+	// if(moveDir != FVector::ZeroVector)
+	// 	moveDir = FVector::ZeroVector;
 
 
 
