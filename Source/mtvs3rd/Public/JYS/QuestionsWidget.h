@@ -30,10 +30,21 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button4;
 
-	UPROPERTY(EditDefaultsOnly)
-	class AActor* owner;
+	void SetOwner(class AQuestionsWidgetActor * actor);
 
 private: 
 	UFUNCTION()
-	void OnButtonClicked();
+	void OnButton1Clicked();
+	
+	UFUNCTION()
+	void OnButton2Clicked();
+	
+	UFUNCTION()
+	void OnButton3Clicked();
+
+	UFUNCTION()
+	void OnButton4Clicked();
+
+	UPROPERTY(EditDefaultsOnly)
+	class AQuestionsWidgetActor* owner;
 };
