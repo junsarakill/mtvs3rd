@@ -41,9 +41,23 @@ public:
 	// Sets default values for this actor's properties
 	ABS_Hand();
 
+	// 모션 루트
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class USceneComponent* motionRoot;
+
 	// 컨트롤러
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UMotionControllerComponent* motionController;
+	// 에임 컨트롤러
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class UMotionControllerComponent* aimMC;
+
+	// ui 상호작용
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class UWidgetInteractionComponent* uiInteractComp;
+
+
+
 	// 손 루트
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* handRoot;
@@ -106,6 +120,13 @@ public:
 
 	// 주변에 잡을 것이 있는지 찾기
 	class UBS_GrabComponent* FindGrabComponentNearHand();
+
+	// ui 클릭
+	UFUNCTION(BlueprintCallable)
+	void EventPressLMB();
+	UFUNCTION(BlueprintCallable)
+	void EventReleaseLMB();
+
 
 
 	

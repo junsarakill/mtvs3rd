@@ -7,6 +7,8 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include <JBS/BS_GrabComponent.h>
 #include "JBS/BS_VRPlayer.h"
+#include <Components/WidgetInteractionComponent.h>
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 ABS_Hand::ABS_Hand()
@@ -14,13 +16,25 @@ ABS_Hand::ABS_Hand()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	motionRoot = CreateDefaultSubobject<USceneComponent>(TEXT("motionRoot"));
+	// motionRoot->SetupAttachment(motionController);
+	SetRootComponent(motionController);
+
 	motionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("motionController"));
-	motionController->SetupAttachment(RootComponent);
+	motionController->SetupAttachment(motionRoot);
+	// SetRootComponent(motionController);
+
 
 	handRoot = CreateDefaultSubobject<USceneComponent>(TEXT("handRoot"));
 	handRoot->SetupAttachment(motionController);
-}
 
+	// 에임 컨트롤러
+	aimMC = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("aimMC"));
+	aimMC->SetupAttachment(motionRoot);
+
+	uiInteractComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("uiInteractComp"));
+	uiInteractComp->SetupAttachment(aimMC);
+}
 // Called when the game starts or when spawned
 void ABS_Hand::BeginPlay()
 {
@@ -36,10 +50,25 @@ void ABS_Hand::SetController(EMotionControllerType type)
 		if(fct.type == cType)
 		{
 			// 왼손 오른손 데이터 설정
-			motionController->MotionSource = type == EMotionControllerType::LEFT ? FName(TEXT("Left")) : FName(TEXT("Right"));
+
+			// left, right 정하기
+			FString enumStr = UEnum::GetValueAsString(fct.type);
+			int32 idx = enumStr.Find(TEXT("::"));
+
+			FString cTypeStr = enumStr.RightChop(idx + 2);
+			motionController->MotionSource = FName(cTypeStr);
+
+
 			SetHandMesh(cType);
 			handMesh->SetSkeletalMesh(fct.mesh);
 			handMesh->SetRelativeLocationAndRotation(fct.loc, fct.rot);
+			
+			// 에임 컨트롤러 설정
+			aimMC->MotionSource = FName(cTypeStr + TEXT("Aim"));
+			uiInteractComp->PointerIndex = type == EMotionControllerType::LEFT ? 0 : 1;
+
+
+			break;
 		}
 	}
 }
@@ -177,4 +206,13 @@ UBS_GrabComponent *ABS_Hand::FindGrabComponentNearHand()
 	}
 
     return nearestGrabComp;
+}
+
+void ABS_Hand::EventPressLMB()
+{
+	uiInteractComp->PressPointerKey(EKeys::LeftMouseButton);
+}
+void ABS_Hand::EventReleaseLMB()
+{
+	uiInteractComp->ReleasePointerKey(EKeys::LeftMouseButton);
 }
