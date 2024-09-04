@@ -83,10 +83,5 @@ void ASecondEventTriggerBox::PlaceBoxInFrontOfCamera(ACharacter* PlayerCharacter
 		// 박스를 플레이어한테 부착
 		spawnedBox->AttachToComponent(CameraComponent, FAttachmentTransformRules::KeepWorldTransform);
 	}
-	/*if (UPrimitiveComponent* primitiveComponent = Cast<UPrimitiveComponent>(spawnedBox->GetRootComponent()))
-	{
-		primitiveComponent->SetOwnerNoSee(false);
-		primitiveComponent->SetOnlyOwnerSee(true);
-	}*/
 }
 
