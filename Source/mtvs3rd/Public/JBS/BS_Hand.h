@@ -49,12 +49,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UMotionControllerComponent* motionController;
 	// 에임 컨트롤러
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	// class UMotionControllerComponent* aimMC;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class UMotionControllerComponent* aimMC;
 
-	// // ui 상호작용
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	// class UWidgetInteractionComponent* uiInteractComp;
+	// ui 상호작용
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class UWidgetInteractionComponent* uiInteractComp;
 
 
 
