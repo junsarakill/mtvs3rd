@@ -36,9 +36,12 @@ ABS_Hand::ABS_Hand()
 	uiInteractComp->SetupAttachment(aimMC);
 }
 // Called when the game starts or when spawned
+
 void ABS_Hand::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ENABLE_RAY = ENABLE_RAY;
 }
 
 void ABS_Hand::SetController(EMotionControllerType type)
@@ -78,6 +81,12 @@ void ABS_Hand::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+// 레이 활/비
+void ABS_Hand::SetEnableRay(bool value)
+{
+	enableRay = value;
+	uiInteractComp->bShowDebug = ENABLE_RAY;
 }
 
 void ABS_Hand::SetGrabActor(ABS_GrabbableActor *actor)
