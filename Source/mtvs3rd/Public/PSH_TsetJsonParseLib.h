@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "PSH/PSH_HttpDataTable.h"
 #include "PSH_TsetJsonParseLib.generated.h"
 
 /**
@@ -17,8 +18,8 @@ class MTVS3RD_API UPSH_TsetJsonParseLib : public UBlueprintFunctionLibrary
 
 public:
 
-	
-	static FString JsonParse(const FString& json);
+	static void JsonParse(const FString& json , FPSH_HttpDataTable& data);
+	//static FString JsonParse(const FString& json);
 
 	static FString MakeJson(const TMap<FString, FString> source);
 

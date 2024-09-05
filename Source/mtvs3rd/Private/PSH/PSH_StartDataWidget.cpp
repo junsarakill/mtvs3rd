@@ -8,10 +8,13 @@
 #include "PSH_TsetJsonParseLib.h"
 #include "PSH/PSH_HttpActor.h"
 #include "PSH/PSH_StartDataHttpActor.h"
+#include "PSH/PSH_Mtvs3rdGameModBase.h"
 
 void UPSH_StartDataWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
 
 	// Age Button FUNCTION
 	BT_0->OnClicked.AddDynamic(this,&UPSH_StartDataWidget::OnClick0);
@@ -54,6 +57,13 @@ void UPSH_StartDataWidget::NativeConstruct()
 	BT_ESFJ->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickESFJ);
 	BT_ENFJ->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickENFJ);
 	BT_ENTJ->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickENTJ);
+
+	// BloodType Button FUNCTION
+	BT_Blood->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickBlood);
+	BT_A->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickA);
+	BT_B->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickB);
+	BT_AB->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickAB);
+	BT_O->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickO);
 	
 }
 
@@ -61,15 +71,28 @@ void UPSH_StartDataWidget::OnClickRequest()
 {
 	if (HttpActor)
 	{
-		HttpActor->SetStartData(GenderText,AgeText,MBTIText);
-		UE_LOG(LogTemp, Warning, TEXT("GenderText : %s , AgeText : %s ,  MBTIText : %s"), *GenderText, *AgeText, *MBTIText);
+		auto * pc = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+		/*pc->GetGame*/
+		data.Age = FCString::Atoi(*AgeText);
+		data.MBTI = MBTIText;
+		data.Gender = GenderText;
+		data.Blood = BloodText;
+		data.Name = SetName(GenderText);
+		
+
+		GM->SetStartData(data);
+		
+		if (pc)
+		{
+			RemoveFromParent();
+			pc->SetShowMouseCursor(false);
+			pc->SetInputMode(FInputModeGameOnly());
+		}
 	}
-	
 }
 
 void UPSH_StartDataWidget::OnClick0()
 {
-	
 	if (AgeText.Len() > 1)
 	{
 		return;
@@ -79,7 +102,6 @@ void UPSH_StartDataWidget::OnClick0()
 		AgeText += "0";
 		TB_Age->SetText(FText::FromString(AgeText));
 	}
-	
 }
 
 void UPSH_StartDataWidget::OnClick1()
@@ -367,6 +389,43 @@ void UPSH_StartDataWidget::OnClickENTJ()
 	TB_MBTI->SetText(FText::FromString(PrintString + MBTIText));
 }
 
+void UPSH_StartDataWidget::OnClickBlood()
+{
+	SwichSlot(3);
+}
+
+void UPSH_StartDataWidget::OnClickA()
+{
+	BloodText = "A";
+	FString PrintString = "BloodType : ";
+	TB_Blood->SetText(FText::FromString(PrintString + BloodText));
+	SwichSlot(0);
+}
+
+void UPSH_StartDataWidget::OnClickB()
+{
+	BloodText = "B";
+	FString PrintString = "BloodType : ";
+	TB_Blood->SetText(FText::FromString(PrintString + BloodText));
+	SwichSlot(0);
+}
+
+void UPSH_StartDataWidget::OnClickO()
+{
+	BloodText = "O";
+	FString PrintString = "BloodType : ";
+	TB_Blood->SetText(FText::FromString(PrintString + BloodText));
+	SwichSlot(0);
+}
+
+void UPSH_StartDataWidget::OnClickAB()
+{
+	BloodText = "AB";
+	FString PrintString = "BloodType : ";
+	TB_Blood->SetText(FText::FromString(PrintString + BloodText));
+	SwichSlot(0);
+}
+
 void UPSH_StartDataWidget::SetHttpACtor(class APSH_StartDataHttpActor* Owner)
 {
 	HttpActor = Owner;
@@ -375,4 +434,16 @@ void UPSH_StartDataWidget::SetHttpACtor(class APSH_StartDataHttpActor* Owner)
 void UPSH_StartDataWidget::SwichSlot(int num)
 {
 	SelectSwicher->SetActiveWidgetIndex(num);
+}
+
+FString UPSH_StartDataWidget::SetName(FString Gender)
+{
+	if (Gender == "Man")
+	{
+		return "YeongCheol";
+	}
+	else
+	{
+		return "Oksun";
+	}
 }

@@ -74,6 +74,15 @@ public:
 	UPROPERTY(meta = (BindWidget)) UButton* BT_ENFJ;
 	UPROPERTY(meta = (BindWidget)) UButton* BT_ENTJ;
 
+	// BloodType Button
+	FString BloodText;
+	UPROPERTY(meta = (BindWidget)) class UTextBlock * TB_Blood;
+	UPROPERTY(meta = (BindWidget)) UButton* BT_Blood;
+	UPROPERTY(meta = (BindWidget)) UButton* BT_A;
+	UPROPERTY(meta = (BindWidget)) UButton* BT_B;
+	UPROPERTY(meta = (BindWidget)) UButton* BT_AB;
+	UPROPERTY(meta = (BindWidget)) UButton* BT_O;
+
 public:
 	virtual void NativeConstruct() override;
 
@@ -118,8 +127,23 @@ public:
 	UFUNCTION() void OnClickENFJ();
 	UFUNCTION() void OnClickENTJ();
 	
+	// BloodType Button FUNCTION
+	UFUNCTION() void OnClickBlood();
+	UFUNCTION() void OnClickA();
+	UFUNCTION() void OnClickB();
+	UFUNCTION() void OnClickO();
+	UFUNCTION() void OnClickAB();
+
 	void SetHttpACtor(class APSH_StartDataHttpActor* Owner);
 
 	//Swicher  Button FUNCTION
 	void SwichSlot(int num);
+
+
+private:
+	FString SetName(FString Gender);
+
+	FPSH_HttpDataTable data;
+	UPROPERTY()
+	class APSH_Mtvs3rdGameModBase* GM;
 };

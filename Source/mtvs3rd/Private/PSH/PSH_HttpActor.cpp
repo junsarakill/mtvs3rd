@@ -68,7 +68,7 @@ void APSH_HttpActor::OnResGetTest(FHttpRequestPtr Request, FHttpResponsePtr Resp
 		FString result = Response->GetContentAsString();
 
 		// Json을 파싱해서 필요한 정보만 뽑아서 화면에 출력하고싶다.
-		httpUi->SetTextLog(UPSH_TsetJsonParseLib::JsonParse(result));
+		//httpUi->SetTextLog(UPSH_TsetJsonParseLib::JsonParse(result));
 	}
 	else
 	{
