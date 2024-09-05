@@ -8,6 +8,7 @@ public class mtvs3rd : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
+
 		PublicDependencyModuleNames.AddRange(new string[] { 
 		  "Core"
 		, "CoreUObject"
@@ -16,6 +17,10 @@ public class mtvs3rd : ModuleRules
 		, "EnhancedInput"
 		, "HeadMountedDisplay"
 		, "UMG"
-		 });
+        , "HTTP"
+		, "Json"
+		, "JsonUtilities"
+         });
+
 	}
 }
