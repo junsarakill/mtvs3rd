@@ -34,9 +34,9 @@ public:
 	UPROPERTY()
 	class UQuestionsWidget* pcWiidget;
 
-	//// VR
-	//UPROPERTY(EditDefaultsOnly)
-	//class UWidgetComponent* questionsUIComp;
+	// VR
+	UPROPERTY(EditDefaultsOnly)
+	class UWidgetComponent* questionsUIComp;
 
 	UPROPERTY(EditDefaultsOnly)
 	class ACharacter* player;
