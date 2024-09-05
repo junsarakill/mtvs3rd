@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "QuestionsWidget.h"
 #include "QuestionsWidgetActor.generated.h"
 
 UCLASS()
@@ -27,12 +28,17 @@ public:
 	UFUNCTION()
 	void BillBoardQuestionsWidget();
 
-	//// PC
-	UPROPERTY(EditDefaultsOnly)
-	class TSubclassOf<class UUserWidget> pcWidgetFactory;
-	//// PC
-	UPROPERTY()
-	class UQuestionsWidget* pcWiidget;
+	////// PC
+	//UPROPERTY(EditDefaultsOnly)
+	//class TSubclassOf<class UUserWidget> pcWidgetFactory1;	
+	//
+	////// PC
+	//UPROPERTY(EditDefaultsOnly)
+	//class TSubclassOf<class UUserWidget> pcWidgetFactory2;
+
+	////// PC
+	//UPROPERTY()
+	//class UQuestionsWidget* pcWiidget;
 
 	// VR
 	UPROPERTY(EditDefaultsOnly)
@@ -44,4 +50,12 @@ public:
 	int32 answerNum;
 
 	void SetAnswer(int num);
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UQuestionsWidget> QuestionWidgetFactory1;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UQuestionsWidget> QuestionWidgetFactory2;
+
+	void InitUI(int32 widgetNum);
 };

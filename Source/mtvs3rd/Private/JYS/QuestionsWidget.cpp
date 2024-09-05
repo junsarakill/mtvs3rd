@@ -33,6 +33,8 @@ void UQuestionsWidget::SetOwner(AQuestionsWidgetActor* actor)
 	owner = actor;
 }
 
+
+
 void UQuestionsWidget::OnButton1Clicked()
 {
 	// owner ¿Œµ¶Ω∫ «“¥Á

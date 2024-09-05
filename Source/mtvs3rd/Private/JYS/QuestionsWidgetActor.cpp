@@ -67,3 +67,13 @@ void AQuestionsWidgetActor::SetAnswer(int num)
 	UE_LOG(LogTemp,Warning,TEXT("%d"),answerNum);
 }
 
+void AQuestionsWidgetActor::InitUI(int32 widgetNum)
+{
+	switch (widgetNum)
+	{
+	case 1:
+		questionsUIComp->SetWidgetClass(QuestionWidgetFactory1);
+	case 2:
+		questionsUIComp->SetWidgetClass(QuestionWidgetFactory2);
+	}
+}
