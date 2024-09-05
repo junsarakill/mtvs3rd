@@ -51,10 +51,22 @@ public:
 	// 에임 컨트롤러
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UMotionControllerComponent* aimMC;
-
 	// ui 상호작용
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UWidgetInteractionComponent* uiInteractComp;
+	// 레이 활/비
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	bool enableRay = false;
+		public:
+	__declspec(property(get = GetEnableRay, put = SetEnableRay)) bool ENABLE_RAY;
+	UFUNCTION(BlueprintCallable)
+	bool GetEnableRay()
+	{
+		return enableRay;
+	}
+	UFUNCTION(BlueprintCallable)
+	void SetEnableRay(bool value);
+		protected:
 
 
 
@@ -92,6 +104,8 @@ public:
 	// XXX 디버그용 잡기 범위 표시
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugGrabSphere = false;
+
+
 
 protected:
 	// Called when the game starts or when spawned
