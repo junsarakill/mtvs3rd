@@ -9,6 +9,14 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class EPlayerType : uint8
+{
+	MALE1 = 0
+	,FEMALE1 = 1
+};
+
+
 UCLASS()
 class MTVS3RD_API UBS_Utility : public UBlueprintFunctionLibrary
 {
