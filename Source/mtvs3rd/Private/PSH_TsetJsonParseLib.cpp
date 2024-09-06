@@ -18,31 +18,11 @@ void UPSH_TsetJsonParseLib::JsonParse(const FString& json, FPSH_HttpDataTable& d
 	/*FPSH_HttpDataTable* newRow = new FPSH_HttpDataTable();*/
 	if (FJsonSerializer::Deserialize(reader, result))
 	{
-// 		TArray<TSharedPtr<FJsonValue>> ParseDatList = result->GetArrayField(TEXT("items"));
-// 		for (TSharedPtr<FJsonValue> data : ParseDatList)
-// 		{
-// 			// 책의 이름과 저자.
-// 
-//  			FString id = data->AsObject()->GetStringField("id");
-//  			FString pw = data->AsObject()->GetStringField("pw");
-// // 			FString authorName = data->AsObject()->GetStringField("aut_nm");
-//  			//returnValue.Append(FString::Printf(TEXT("BookName : %s / AuthrName : %s\n"), *bookName, *authorName));
-//  			returnValue.Append(FString::Printf(TEXT("id : %s \n pw : 5s"), *id, *pw));
-// 			// 책의 이름과 저자.
-// // 			if (data->AsObject()->HasField("bk_nm")) // 있는지 확인
-// // 				int age = data->AsObject()->GetIntegerField("123");
-// 		
-// 		}
-		
-// 		data.FromUserID1 = result->GetIntegerField("Target_1_Id");
-// 		data.FromUserID2 = result->GetIntegerField("Target_2_Id");
-// 		data.AffinityScore_ID1 = result->GetNumberField("synchro_1");
-// 		data.AffinityScore_ID2 = result->GetNumberField("synchro_2");
-
-
 		data.testFromUserID = result->GetStringField("FromUserID");
 		data.testToUserID = result->GetStringField("ToUserID");
 		data.testAffinityScore = result->GetStringField("AffinityScore");
+// 		data.AffinityScore_ID1 
+// 		data.AffinityScore_ID1
 	}
 
 	data.PrintStruct();

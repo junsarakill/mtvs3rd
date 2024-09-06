@@ -14,6 +14,8 @@ UCLASS()
 class MTVS3RD_API APSH_Mtvs3rdGameModBase : public AGameModeBase
 {
 	GENERATED_BODY()
+	
+	APSH_Mtvs3rdGameModBase();
 
 public:
 
@@ -25,23 +27,30 @@ public:
 	void SetStartData(FPSH_HttpDataTable Data);
 	FPSH_HttpDataTable PlayerData;
 
+	UPROPERTY()
+	class ABS_PlayerState * playerState;
+	
+	UPROPERTY(EditDefaultsOnly)
+	FName LevelName;
+
 	UPROPERTY(EditDefaultsOnly)
 
 	int32 id = 0;
 
-	UPROPERTY(EditDefaultsOnly)
-	class UDataTable * DataTable;
+	
 
 	void ReqPost(FString json, FString URL);
 
 	void SetData(FPSH_HttpDataTable Data);
 
-	void StatDataJson();
 
-	void QestButtonJson(int num);
-
-	// 응답받을 함수
+	void QestButtonJson(int ButtonNum, int QestNum);
 	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	void StatDataJson();
+	void ReqStartPost(FString json, FString URL);
+	// 응답받을 함수
+	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 protected:
 	virtual void BeginPlay() override;

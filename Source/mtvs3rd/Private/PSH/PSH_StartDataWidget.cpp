@@ -79,12 +79,13 @@ void UPSH_StartDataWidget::OnClickRequest()
 		data.Blood = BloodText;
 		data.Name = SetName(GenderText);
 		
-
+		
 		GM->SetStartData(data);
 		
 		if (pc)
 		{
 			RemoveFromParent();
+			//HttpActor->SelectComponent->Setvisibl
 			pc->SetShowMouseCursor(false);
 			pc->SetInputMode(FInputModeGameOnly());
 		}
