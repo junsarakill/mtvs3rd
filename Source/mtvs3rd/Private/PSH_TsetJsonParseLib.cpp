@@ -9,31 +9,46 @@
 
 void UPSH_TsetJsonParseLib::JsonParse(const FString& json, FPSH_HttpDataTable& data)
 {
-	// ¸®´õ±â¸¦ ¸¸µé°í
+	// ï¿½ï¿½ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½
 	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
 
-	// ÆÄ½Ì °á°ú¸¦ ´ãÀ» º¯¼ö ¼±¾ð . MakeShareable ½º¸¶Æ® Æ÷ÀÎÆ® °ü¸®¸¦ À§ÇØ »ç¿ë.
-	TSharedPtr<FJsonObject> result = MakeShareable(new FJsonObject()); // ¸Þ¸ð¸® °ü¸® 
-	// ÇØ¼®À» ÇÑ´Ù.
+	// ï¿½Ä½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ . MakeShareable ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½.
+	TSharedPtr<FJsonObject> result = MakeShareable(new FJsonObject()); // ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+	// ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½.
 	/*FPSH_HttpDataTable* newRow = new FPSH_HttpDataTable();*/
 	if (FJsonSerializer::Deserialize(reader, result))
 	{
-		data.testFromUserID = result->GetStringField("FromUserID");
-		data.testToUserID = result->GetStringField("ToUserID");
-		data.testAffinityScore = result->GetStringField("AffinityScore");
-// 		data.AffinityScore_ID1 
-// 		data.AffinityScore_ID1
+// 		TArray<TSharedPtr<FJsonValue>> ParseDatList = result->GetArrayField(TEXT("items"));
+// 		for (TSharedPtr<FJsonValue> data : ParseDatList)
+// 		{
+// 			// Ã¥ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+// 
+//  			FString id = data->AsObject()->GetStringField("id");
+//  			FString pw = data->AsObject()->GetStringField("pw");
+// // 			FString authorName = data->AsObject()->GetStringField("aut_nm");
+//  			//returnValue.Append(FString::Printf(TEXT("BookName : %s / AuthrName : %s\n"), *bookName, *authorName));
+//  			returnValue.Append(FString::Printf(TEXT("id : %s \n pw : 5s"), *id, *pw));
+// 			// Ã¥ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+// // 			if (data->AsObject()->HasField("bk_nm")) // ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+// // 				int age = data->AsObject()->GetIntegerField("123");
+// 		
+// 		}
+		
+		data.otherUserID1 = result->GetIntegerField("Target_1_Id");
+		data.otherUserID2 = result->GetIntegerField("Target_2_Id");
+		data.syncPercentID1 = result->GetNumberField("synchro_1");
+		data.syncPercentID2 = result->GetNumberField("synchro_2");
 	}
 
 	data.PrintStruct();
 
-	// ¹ÝÈ¯ÇÑ´Ù.
+	// ï¿½ï¿½È¯ï¿½Ñ´ï¿½.
 	//return newRow;
 }
 
 FString UPSH_TsetJsonParseLib::MakeJson(const TMap<FString, FString> source)
 {
-	// source¸¦ jsonObjectÇü½ÄÀ¸·Î ¸¸µé°í
+	// sourceï¿½ï¿½ jsonObjectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	TSharedPtr<FJsonObject> jsonObject = MakeShareable(new FJsonObject());
 
 	for (TPair<FString, FString> pair : source)
@@ -41,11 +56,11 @@ FString UPSH_TsetJsonParseLib::MakeJson(const TMap<FString, FString> source)
 		jsonObject->SetStringField(pair.Key, pair.Value);
 	}
 
-	// Writer¸¦ ¸¸µé¾î¼­ jsonObject¸¦ ÀÎÄÚµùÇØ¼­ 
+	// Writerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½î¼­ jsonObjectï¿½ï¿½ ï¿½ï¿½ï¿½Úµï¿½ï¿½Ø¼ï¿½ 
 	FString json;
 	TSharedRef<TJsonWriter<TCHAR>> writer = TJsonWriterFactory<TCHAR>::Create(&json);
 	FJsonSerializer::Serialize(jsonObject.ToSharedRef(), writer);
 
-	//¹ÝÈ¯
+	//ï¿½ï¿½È¯
 	return json;
 }

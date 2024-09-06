@@ -52,10 +52,7 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	// if(moveDir != FVector::ZeroVector)
 	// 	moveDir = FVector::ZeroVector;
 
-
-
 	
-
 }
 
 // Called to bind functionality to input
@@ -67,7 +64,7 @@ void ABS_VRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void ABS_VRPlayer::SetIMC(UInputMappingContext* imc)
 {
-	auto* pc = Cast<APlayerController>(Controller);
+	auto* pc = Cast<APlayerController>(this->GetController());
 	if(pc)
 	{
 		auto* subSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer());
@@ -76,6 +73,7 @@ void ABS_VRPlayer::SetIMC(UInputMappingContext* imc)
 			subSystem->AddMappingContext(imc, 0);
 		}
 	}
+
 }
 
 void ABS_VRPlayer::SetMoveSpeed(float value)
@@ -121,4 +119,7 @@ void ABS_VRPlayer::SnapTurn(bool isRight)
 	// AddControllerYawInput(snapTurnDeg * (isRight ? 1 : -1));
 	// SetActorRotation(GetActorRotation() + turnRot);
 	AddActorWorldRotation(turnRot);
+
+	
 }
+

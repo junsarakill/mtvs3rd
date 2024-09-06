@@ -30,20 +30,22 @@ USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
 
 	
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 int AffinityScore_ID1; // 싱크로율 Key -> AffinityScore
+	  int otherUserID1; //  Key -> FromUserID
+	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	  float syncPercentID1; // 싱크로율 Key -> AffinityScore
+
+	// XXX 미사용
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float ToUserAffinityScore_1; // 내가 선택한 상대 1의 호감도  Key -> ToUserID
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int AffinityScore_ID2;
+	  int otherUserID2;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float ToUserAffinityScore_2;
+	  float syncPercentID2;
 
-	 FString testFromUserID;
-	 FString testToUserID;
-	 FString testAffinityScore;
-	
-	// 싱글 단계에서는 호감도 
+	// XXX 미사용
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	 int ToUserAffinityScore_2;
 
 	  void PrintStruct();
  };
