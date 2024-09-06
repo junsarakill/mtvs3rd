@@ -252,6 +252,7 @@ void ABS_Hand::LineTracePlayer()
 	ECollisionChannel traceChl = ECC_Camera;
 	FCollisionQueryParams params;
 	params.AddIgnoredActor(this);
+	params.AddIgnoredActor(Cast<ABS_VRPlayer>(this->GetOwner()));
 	// 히트 하는 위치 설정
 	FVector startLocation = aimMC->GetComponentLocation();
 	FVector endLocation = startLocation + aimMC->GetForwardVector() * RAY_INTERACT_DIS;
@@ -273,6 +274,8 @@ void ABS_Hand::LineTracePlayer()
 			// 내 손에 프로필 ui 생성
 			FPSH_HttpDataTable temp;
 			temp.Id = 0;
+			auto* player = Cast<ABS_VRPlayer>(this->GetOwner());
+			// ps 로 뭔가하기
 			temp.Name = TEXT("도레미");
 			temp.Gender = TEXT("man");
 			SpawnProfileUI(temp);
@@ -325,6 +328,7 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 	if(ownerData.otherUserID1 == otherPlayerData.Id)
 	{
 		sync = otherPlayerData.syncPercentID1;
+		
 	}
 	else if(ownerData.otherUserID2 == otherPlayerData.Id)
 	{
@@ -342,6 +346,6 @@ void ABS_Hand::DeleteProfileUI()
 	if(!profileUIActor) return;
 
 	// 액터 제거 및 초기화
-	Destroy(profileUIActor);
+	profileUIActor->Destroy();
 	profileUIActor = nullptr;
 }

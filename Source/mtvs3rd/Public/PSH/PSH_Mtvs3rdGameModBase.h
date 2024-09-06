@@ -49,7 +49,7 @@ public:
 
 	void StatDataJson();
 	void ReqStartPost(FString json, FString URL);
-	// ÀÀ´ä¹ÞÀ» ÇÔ¼ö
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 protected:
@@ -58,6 +58,6 @@ protected:
 private:
 
 
-	FString URLStart = "http://192.168.0.14:3111/userinfo";
+	FString URLStart = "http://192.168.0.19:3111/userinfo";
 	FString URLScore = "http://192.168.0.14:3111/lovescore";
 };
