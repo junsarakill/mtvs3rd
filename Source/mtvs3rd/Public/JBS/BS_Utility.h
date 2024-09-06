@@ -14,6 +14,7 @@ enum class EPlayerType : uint8
 {
 	MALE1 = 0
 	,FEMALE1 = 1
+	,DUMMY = 4
 };
 
 

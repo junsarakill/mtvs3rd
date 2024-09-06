@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
+#include <JBS/BS_PlayerState.h>
 
 // Sets default values
 ABS_VRPlayer::ABS_VRPlayer()
@@ -81,7 +82,6 @@ void ABS_VRPlayer::SetMoveSpeed(float value)
 {
 	moveSpeed = value;
 	GetCharacterMovement()->MaxWalkSpeed = moveSpeed;
-
 }
 
 void ABS_VRPlayer::SetMoveDir(FVector2D dir)

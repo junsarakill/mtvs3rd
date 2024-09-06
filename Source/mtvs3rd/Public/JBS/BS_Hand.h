@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BS_Utility.h"
+#include "PSH/PSH_HttpDataTable.h"
 #include "BS_Hand.generated.h"
 
 UENUM(BlueprintType)
@@ -55,16 +57,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UWidgetInteractionComponent* uiInteractComp;
 	// 레이 활/비
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values", BlueprintGetter=GetEnableRay, BlueprintSetter=SetEnableRay)
 	bool enableRay = false;
 		public:
 	__declspec(property(get = GetEnableRay, put = SetEnableRay)) bool ENABLE_RAY;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintGetter)
 	bool GetEnableRay()
 	{
+		// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("adas"));
 		return enableRay;
 	}
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintSetter)
 	void SetEnableRay(bool value);
 		protected:
 
@@ -105,6 +108,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugGrabSphere = false;
 
+	// 플레이어 프로필 ui 프리팹
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
+	TSubclassOf<AActor> profileUICompPrefab;
+	
+	// ui 위치
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
+	class UArrowComponent* profileUIPos;
+
+	//ui 상호작용 거리
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values", BlueprintGetter=GetRayInteractDis, BlueprintSetter=SetRayInteractDis)
+	float rayInteractDis = 2000.f;
+		public:
+	__declspec(property(get = GetRayInteractDis, put = SetRayInteractDis)) float RAY_INTERACT_DIS;
+	UFUNCTION(BlueprintGetter)
+	float GetRayInteractDis()
+	{
+		return rayInteractDis;
+	}
+	UFUNCTION(BlueprintSetter)
+	void SetRayInteractDis(float value);
+		protected:
+
 
 
 protected:
@@ -140,6 +165,12 @@ public:
 	void EventPressLMB();
 	UFUNCTION(BlueprintCallable)
 	void EventReleaseLMB();
+
+	// ray로 플레이어 감지
+	void LineTracePlayer();
+
+	// 프로필 ui 생성
+	void SpawnProfileUI(FPSH_HttpDataTable playerData);
 
 
 

@@ -9,6 +9,7 @@
 #include "JBS/BS_VRPlayer.h"
 #include <Components/WidgetInteractionComponent.h>
 #include "Components/ArrowComponent.h"
+#include <JBS/BS_PlayerState.h>
 
 // Sets default values
 ABS_Hand::ABS_Hand()
@@ -34,8 +35,13 @@ ABS_Hand::ABS_Hand()
 
 	uiInteractComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("uiInteractComp"));
 	uiInteractComp->SetupAttachment(aimMC);
+
+	profileUIPos = CreateDefaultSubobject<UArrowComponent>(TEXT("profileUIPos"));
+	profileUIPos->SetupAttachment(aimMC);
 }
 // Called when the game starts or when spawned
+
+
 
 void ABS_Hand::BeginPlay()
 {
@@ -81,6 +87,15 @@ void ABS_Hand::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
+
+}
+
+void ABS_Hand::SetRayInteractDis(float value)
+{
+	rayInteractDis = value;
+	// uiinteractcomp 도 동기화
+	uiInteractComp->InteractionDistance = RAY_INTERACT_DIS;
 }
 // 레이 활/비
 void ABS_Hand::SetEnableRay(bool value)
@@ -224,4 +239,72 @@ void ABS_Hand::EventPressLMB()
 void ABS_Hand::EventReleaseLMB()
 {
 	uiInteractComp->ReleasePointerKey(EKeys::LeftMouseButton);
+
+	// 플레이어 감지해서 프로필 뜨게하기
+	LineTracePlayer();
+}
+void ABS_Hand::LineTracePlayer()
+{
+	FHitResult outHit;
+	ECollisionChannel traceChl = ECC_Camera;
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+	// 히트 하는 위치 설정
+	FVector startLocation = aimMC->GetComponentLocation();
+	FVector endLocation = startLocation + aimMC->GetForwardVector() * RAY_INTERACT_DIS;
+	bool isHit = GetWorld()->LineTraceSingleByChannel(
+		outHit,
+		startLocation,
+		endLocation,
+		traceChl,
+		params
+	);
+	
+	if(isHit)
+	{
+		// 뭔가하기
+		;
+
+		// @@ 프로토타입용
+		// 대상이 더미라면
+		if(outHit.GetActor()->ActorHasTag(FName("Player")))
+		{
+			// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
+			// 내 손에 프로필 ui 생성
+			FPSH_HttpDataTable temp;
+			temp.Name = TEXT("도레미");
+			temp.Gender = TEXT("남성");
+			// FIXME ps 에 플레이어 id로 나->상대 에 대한 싱크로율 가져오는 함수 필ㅇ요
+			// SpawnProfileUI()
+		}
+		// 대상이 플레이어라면
+		else if(outHit.GetActor()->ActorHasTag(FName("Player")))
+		{
+			auto* player = Cast<ABS_VRPlayer>(outHit.GetActor());
+			check(player);
+			// 해당 플레이어의 스텟 가져오기
+			auto* ps = player->GetPlayerState<ABS_PlayerState>();
+			check(ps);
+			// @@ ps 로 뭔가하기
+			
+		}
+		
+
+	}
+
+	// DrawDebugLine(
+	// 	GetWorld(),
+	// 	startLocation,
+	// 	endLocation,
+	// 	isHit ? FColor::Green : FColor::Red,
+	// 	false,
+	// 	1.5f,
+	// 	0,
+	// 	.5f
+	// );
+}
+
+void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable playerData)
+{
+
 }
