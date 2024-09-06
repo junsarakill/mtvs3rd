@@ -50,6 +50,10 @@
 				"Android",
 				"VisionOS"
 			]
+		},
+		{
+			"Name": "VRM4U",
+			"Enabled": true
 		}
 	]
 }
