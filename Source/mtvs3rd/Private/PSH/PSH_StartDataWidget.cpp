@@ -73,7 +73,7 @@ void UPSH_StartDataWidget::OnClickRequest()
 	{
 		auto * pc = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 		/*pc->GetGame*/
-		data.Age = AgeText;
+		data.Age = FCString::Atoi(*AgeText);
 		data.MBTI = MBTIText;
 		data.Gender = GenderText;
 		data.Blood = BloodText;

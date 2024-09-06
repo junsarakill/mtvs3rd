@@ -13,12 +13,12 @@ USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
  public:
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 FString Id;
+	 int Id;
 	// int Id;
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 FString Name; // 랜덤으로 지어짐
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 FString Age;  // 2개 선택 // 버튼 누르면 1씩 더해지고 9넘어가면 0으로 초기화
+	 int Age;  // 2개 선택 // 버튼 누르면 1씩 더해지고 9넘어가면 0으로 초기화
 	// int Age;  // 2개 선택 // 버튼 누르면 1씩 더해지고 9넘어가면 0으로 초기화
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)

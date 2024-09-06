@@ -39,7 +39,7 @@ void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 {
 	PlayerData = Data; // 데이터 가져오기
 	id++;
-	PlayerData.Id = FString::FromInt(id); // id 할당
+	PlayerData.Id = id; // id 할당
 	
 	Gi->SetStartData(PlayerData); // 데이터 갱신 및 저장
 
@@ -77,8 +77,8 @@ void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 void APSH_Mtvs3rdGameModBase::StatDataJson()
 {
 	TMap<FString, FString> StartData; // 제이슨에 들어갈 데이터
-	StartData.Add("ID", PlayerData.Id);  // 키 , 벨류
-	StartData.Add("Age", PlayerData.Age);
+	StartData.Add("ID", FString::FromInt(PlayerData.Id));  // 키 , 벨류
+	StartData.Add("Age", FString::FromInt(PlayerData.Age));
 	StartData.Add("Name", PlayerData.Name);
 	StartData.Add("Gender", PlayerData.Gender);
 	StartData.Add("MBTI", PlayerData.MBTI);
