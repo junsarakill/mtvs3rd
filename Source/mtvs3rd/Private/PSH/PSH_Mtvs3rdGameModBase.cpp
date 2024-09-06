@@ -182,6 +182,8 @@ void APSH_Mtvs3rdGameModBase::OnResPost(FHttpRequestPtr Request, FHttpResponsePt
 		FString result = Response->GetContentAsString();
 		UPSH_TsetJsonParseLib::JsonParse(result, PlayerData);
 
+		Gi->SetStartData(PlayerData);
+
 		// 
 		// httpUi->SetTextLog(result);
 	}
