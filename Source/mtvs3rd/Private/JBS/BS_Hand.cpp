@@ -272,12 +272,9 @@ void ABS_Hand::LineTracePlayer()
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
 			// 내 손에 프로필 ui 생성
 			FPSH_HttpDataTable temp;
+			temp.Id = 0;
 			temp.Name = TEXT("도레미");
-			temp.Gender = TEXT("남성");
-			// 나의 더미에 대한 호감도 임시 설정
-			// FIXME
-
-			// SpawnProfileUI()
+			temp.Gender = TEXT("man");
 			SpawnProfileUI(temp);
 		}
 		// 대상이 플레이어라면
@@ -285,14 +282,12 @@ void ABS_Hand::LineTracePlayer()
 		{
 			auto* player = Cast<ABS_VRPlayer>(outHit.GetActor());
 			check(player);
-			// 해당 플레이어의 스텟 가져오기
-			auto* ps = player->GetPlayerState<ABS_PlayerState>();
-			check(ps);
-			// @@ ps 로 뭔가하기
-			
+			// 해당 플레이어의 정보 가져오기
+			auto* otherPS = player->GetPlayerState<ABS_PlayerState>();
+			check(otherPS);
+			// 프로필 ui 생성
+			SpawnProfileUI(otherPS->GetPlayerData());
 		}
-		
-
 	}
 
 	// DrawDebugLine(
@@ -340,5 +335,13 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 	FProfileData data(otherPlayerData.Name,(int) sync, otherPlayerData.Gender);
 	// ui에 값 설정
 	profileUIActor->SetProfileUIValue(data);
+}
 
+void ABS_Hand::DeleteProfileUI()
+{
+	if(!profileUIActor) return;
+
+	// 액터 제거 및 초기화
+	Destroy(profileUIActor);
+	profileUIActor = nullptr;
 }
