@@ -36,19 +36,14 @@ void AQuestionsTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Other
 		{
 			// spawnedWidgetActor 변수에 questionsWidgetFactory Widget UI 가져오기
 			AQuestionsWidgetActor* spawnedWidgetActor = GetWorld()->SpawnActor<AQuestionsWidgetActor>(questionsWidgetFactory);
-
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("num : %d"), widgetNum));
+			spawnedWidgetActor->InitUI(widgetNum);
 			// spawnedWidgetActor에 있는 player에 액터 i번을 넣어준다 (자료형이 다르기 때문에 Actor를 Cast 해서 Character로 바꿔주기
 			spawnedWidgetActor->player = Cast<ACharacter>(OutActor[i]);
 
 			// player 변수에 spawnedWidgetActor에 있는 player 가져오기
 			auto* player = spawnedWidgetActor->player;
-			// playerCamera 변수에 player의 카메라컴포넌트 가져오기
-			auto* playerCamera = player->GetComponentByClass<UCameraComponent>();
-			// spawnedWidgetActor(Widget UI)를 컴포넌트에 붙여주기
-			spawnedWidgetActor->AttachToComponent(playerCamera, FAttachmentTransformRules::KeepRelativeTransform);
-			// Widget UI Location 위치 설정해주기
-			FVector playerUILoc = playerCamera->GetForwardVector() * 300;
-			spawnedWidgetActor->SetActorRelativeLocation(playerUILoc);
+			
 		}
 		// 트리거박스의 Collision 꺼주기
 		shapeComp->SetCollisionProfileName(FName("NoCollision"));	

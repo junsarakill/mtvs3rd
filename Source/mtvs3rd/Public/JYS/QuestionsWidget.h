@@ -30,7 +30,11 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button4;
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Question1;
+
 	void SetOwner(class AQuestionsWidgetActor * actor);
+
 
 private: 
 	UFUNCTION()

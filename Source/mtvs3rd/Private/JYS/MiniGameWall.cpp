@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "JYS/MiniGameShutter.h"
+#include "JYS/MiniGameWall.h"
 
 // Sets default values
-AMiniGameShutter::AMiniGameShutter()
+AMiniGameWall::AMiniGameWall()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,15 +12,16 @@ AMiniGameShutter::AMiniGameShutter()
 }
 
 // Called when the game starts or when spawned
-void AMiniGameShutter::BeginPlay()
+void AMiniGameWall::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AMiniGameShutter::Tick(float DeltaTime)
+void AMiniGameWall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
+

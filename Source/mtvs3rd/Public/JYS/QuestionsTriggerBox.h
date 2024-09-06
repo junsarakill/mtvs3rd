@@ -32,5 +32,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UShapeComponent* shapeComp;
-	
+	 
+	 UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	 int32 widgetNum;
 };
