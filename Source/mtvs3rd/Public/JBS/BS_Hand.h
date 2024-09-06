@@ -43,6 +43,16 @@ public:
 	// Sets default values for this actor's properties
 	ABS_Hand();
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+public:
+
 	// 모션 루트
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* motionRoot;
@@ -70,8 +80,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintSetter)
 	void SetEnableRay(bool value);
 		protected:
-
-
 
 	// 손 루트
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
@@ -110,7 +118,11 @@ public:
 
 	// 플레이어 프로필 ui 프리팹
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
-	TSubclassOf<AActor> profileUICompPrefab;
+	TSubclassOf<class ABS_ProfileWorldUIActor> profileUIActorPrefab;
+
+	// 프로필 ui
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class ABS_ProfileWorldUIActor* profileUIActor;
 	
 	// ui 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
@@ -131,15 +143,7 @@ public:
 		protected:
 
 
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+public:
 	UFUNCTION(BlueprintCallable)
 	void SetController(EMotionControllerType type);
 
@@ -170,7 +174,7 @@ public:
 	void LineTracePlayer();
 
 	// 프로필 ui 생성
-	void SpawnProfileUI(FPSH_HttpDataTable playerData);
+	void SpawnProfileUI(FPSH_HttpDataTable otherPlayerData);
 
 
 

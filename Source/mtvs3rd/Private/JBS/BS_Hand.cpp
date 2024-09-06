@@ -10,6 +10,9 @@
 #include <Components/WidgetInteractionComponent.h>
 #include "Components/ArrowComponent.h"
 #include <JBS/BS_PlayerState.h>
+#include <JBS/BS_ProfileWorldUIActor.h>
+#include <JBS/BS_Utility.h>
+
 
 // Sets default values
 ABS_Hand::ABS_Hand()
@@ -262,20 +265,20 @@ void ABS_Hand::LineTracePlayer()
 	
 	if(isHit)
 	{
-		// 뭔가하기
-		;
-
 		// @@ 프로토타입용
 		// 대상이 더미라면
-		if(outHit.GetActor()->ActorHasTag(FName("Player")))
+		if(outHit.GetActor()->ActorHasTag(FName("Dummy")))
 		{
-			// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
 			// 내 손에 프로필 ui 생성
 			FPSH_HttpDataTable temp;
 			temp.Name = TEXT("도레미");
 			temp.Gender = TEXT("남성");
-			// FIXME ps 에 플레이어 id로 나->상대 에 대한 싱크로율 가져오는 함수 필ㅇ요
+			// 나의 더미에 대한 호감도 임시 설정
+			// FIXME
+
 			// SpawnProfileUI()
+			SpawnProfileUI(temp);
 		}
 		// 대상이 플레이어라면
 		else if(outHit.GetActor()->ActorHasTag(FName("Player")))
@@ -304,7 +307,38 @@ void ABS_Hand::LineTracePlayer()
 	// );
 }
 
-void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable playerData)
+// 프로필 ui 생성
+void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 {
+	if(profileUIActor) return;
+
+	profileUIActor = GetWorld()->SpawnActor<ABS_ProfileWorldUIActor>(profileUIActorPrefab, profileUIPos->GetComponentLocation(), profileUIPos->GetComponentRotation());
+	profileUIActor->AttachToComponent(aimMC, FAttachmentTransformRules::KeepWorldTransform);
+
+	// ui 컴포넌트 캐시
+	profileUIActor->SetProfileUI();
+
+	// 싱크로율 구하기
+	// 내 정보
+	// 일단 주인 부터 설정해야
+	auto* player = Cast<ABS_VRPlayer>(GetOwner());
+	auto* ps = player->GetPlayerState<ABS_PlayerState>();
+	check(ps);
+	// ps 로 뭔가하기
+	auto ownerData = ps->GetPlayerData();
+	float sync = -1.f;
+	if(ownerData.otherUserID1 == otherPlayerData.Id)
+	{
+		sync = otherPlayerData.syncPercentID1;
+	}
+	else if(ownerData.otherUserID2 == otherPlayerData.Id)
+	{
+		sync = otherPlayerData.syncPercentID2;
+	}
+	
+	// 프로필 데이터 구조체
+	FProfileData data(otherPlayerData.Name,(int) sync, otherPlayerData.Gender);
+	// ui에 값 설정
+	profileUIActor->SetProfileUIValue(data);
 
 }
