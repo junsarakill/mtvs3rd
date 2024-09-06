@@ -34,10 +34,15 @@ void UPSH_TsetJsonParseLib::JsonParse(const FString& json, FPSH_HttpDataTable& d
 // 		
 // 		}
 		
-		data.FromUserID1 = result->GetIntegerField("Target_1_Id");
-		data.FromUserID2 = result->GetIntegerField("Target_2_Id");
-		data.AffinityScore_ID1 = result->GetNumberField("synchro_1");
-		data.AffinityScore_ID2 = result->GetNumberField("synchro_2");
+// 		data.FromUserID1 = result->GetIntegerField("Target_1_Id");
+// 		data.FromUserID2 = result->GetIntegerField("Target_2_Id");
+// 		data.AffinityScore_ID1 = result->GetNumberField("synchro_1");
+// 		data.AffinityScore_ID2 = result->GetNumberField("synchro_2");
+
+
+		data.testFromUserID = result->GetStringField("FromUserID");
+		data.testToUserID = result->GetStringField("ToUserID");
+		data.testAffinityScore = result->GetStringField("AffinityScore");
 	}
 
 	data.PrintStruct();

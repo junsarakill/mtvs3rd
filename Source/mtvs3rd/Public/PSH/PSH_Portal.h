@@ -24,6 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditDefaultsOnly,Category = Mesh)
+	class USceneComponent * Root;
+
+	UPROPERTY(EditDefaultsOnly,Category = Mesh)
 	class UStaticMeshComponent * mesh;
 
 	UPROPERTY(EditDefaultsOnly,Category = widget)
@@ -32,4 +35,28 @@ public:
 	UPROPERTY()
 	class UPSH_PotalWidget * PotalWidget;
 
+	UPROPERTY(EditAnywhere , Category = Tags)
+	bool bisEndPotal;
+
+	UPROPERTY(EditAnywhere , Category = Tags)
+	FName TagetName;
+
+
+	UFUNCTION()
+	void OnComponentBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	void Setvisilbe(bool chek);
+
+
+	void SetPortal();
+	
+	void GoPotal();
+
+
+private:
+
+	UPROPERTY()
+	class Amtvs3rdCharacter* player;
+	UPROPERTY()
+	TArray<class AActor*> EndPotal;
 };

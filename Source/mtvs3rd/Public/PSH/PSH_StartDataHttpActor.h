@@ -31,9 +31,9 @@ public:
 
 	UPROPERTY()
 	class UPSH_StartDataWidget* httpUi;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UWidgetComponent * SelectComponent;
+// 
+// 	UPROPERTY(EditDefaultsOnly)
+// 	class UWidgetComponent * SelectComponent;
 
 	UPROPERTY(EditDefaultsOnly)
 	class TSubclassOf<UUserWidget> HttpWidgetFac;

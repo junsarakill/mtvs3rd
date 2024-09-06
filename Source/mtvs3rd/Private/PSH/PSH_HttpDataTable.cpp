@@ -5,5 +5,11 @@
 
 void FPSH_HttpDataTable::PrintStruct()
 {
-	UE_LOG(LogTemp,Warning,TEXT("Id : %d Name : %s Age : %d Gender : %s MBTI : %s Blood : %s FromUserID1 : %d synchro_1 : %f Target_2_Id : %d synchro_2 : %f "),Id, *Name , Age, *Gender, *MBTI, *Blood, FromUserID1, AffinityScore_ID1, FromUserID2, AffinityScore_ID2);
+	UE_LOG(LogTemp,Warning,TEXT("Id : %s Name : %s Age : %s Gender : %s MBTI : %s Blood : %s AffinityScore_ID1 : %d ToUserAffinityScore_1 : %f AffinityScore_ID2 : %d ToUserAffinityScore_2 : %f "),*Id, *Name , *Age, *Gender, *MBTI, *Blood, AffinityScore_ID1, ToUserAffinityScore_1, AffinityScore_ID2, ToUserAffinityScore_2);
+
+	//UE_LOG(LogTemp, Warning, TEXT("FromUserID : %s ToUserID : %s AffinityScore : %s "), *testFromUserID, *testToUserID, *testAffinityScore);
+
+
+	
+	
 }

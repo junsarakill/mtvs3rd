@@ -19,6 +19,9 @@ public:
 
 // 	FHttopStartData GetStartData();
 
+	UPROPERTY()
+	class UPSH_GameInstance * Gi;
+
 	void SetStartData(FPSH_HttpDataTable Data);
 	FPSH_HttpDataTable PlayerData;
 
@@ -29,8 +32,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UDataTable * DataTable;
 
-	void ReqPost(FString json);
+	void ReqPost(FString json, FString URL);
 
+	void SetData(FPSH_HttpDataTable Data);
 
 	void StatDataJson();
 
@@ -39,8 +43,12 @@ public:
 	// 응답받을 함수
 	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 
 
-	FString URL = "192.168.0.14:3111/userinfo";
+	FString URLStart = "http://192.168.0.14:3111/userinfo";
+	FString URLScore = "http://192.168.0.14:3111/lovescore";
 };

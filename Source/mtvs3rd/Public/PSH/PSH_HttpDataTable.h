@@ -13,11 +13,13 @@ USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
  public:
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 int Id;
+	 FString Id;
+	// int Id;
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 FString Name; // 랜덤으로 지어짐
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 int Age;  // 2개 선택 // 버튼 누르면 1씩 더해지고 9넘어가면 0으로 초기화
+	 FString Age;  // 2개 선택 // 버튼 누르면 1씩 더해지고 9넘어가면 0으로 초기화
+	// int Age;  // 2개 선택 // 버튼 누르면 1씩 더해지고 9넘어가면 0으로 초기화
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 FString Gender; // 성별 2개 선택
@@ -26,19 +28,22 @@ USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 FString Blood; // 선택
 
+	
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  int FromUserID1; //  Key -> FromUserID
-	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  float AffinityScore_ID1; // 싱크로율 Key -> AffinityScore
+	 int AffinityScore_ID1; // 싱크로율 Key -> AffinityScore
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 int ToUserAffinityScore_1; // 내가 선택한 상대 1의 호감도  Key -> ToUserID
+	float ToUserAffinityScore_1; // 내가 선택한 상대 1의 호감도  Key -> ToUserID
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  int FromUserID2;
+	int AffinityScore_ID2;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  float AffinityScore_ID2;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 int ToUserAffinityScore_2;
+	float ToUserAffinityScore_2;
+
+	 FString testFromUserID;
+	 FString testToUserID;
+	 FString testAffinityScore;
+	
+	// 싱글 단계에서는 호감도 
 
 	  void PrintStruct();
  };
