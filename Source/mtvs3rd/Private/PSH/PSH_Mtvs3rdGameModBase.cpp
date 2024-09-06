@@ -5,6 +5,17 @@
 #include "PSH_TsetJsonParseLib.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include "HttpModule.h"
+#include "Kismet/GameplayStatics.h"
+
+
+
+void APSH_Mtvs3rdGameModBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Gi = Cast<UPSH_GameInstance>(GetGameInstance());
+}
+
 
 void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 {
@@ -12,10 +23,14 @@ void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 	PlayerData = Data;
 
 	id++;
-	PlayerData.Id = id;
-	FName RowName = FName(FString::FromInt(id));
+	PlayerData.Id = FString::FromInt(id);
+	FName RowName = FName(PlayerData.Id);
 
+	// 같은 Name으로 접근하면 덮어 씌워진다.
 	DataTable->AddRow(RowName, PlayerData); // 데이터 테이블에 추가.
+
+	// 플레이어에게 Id 를 줘야한다.
+
 
 	StatDataJson();
 
@@ -45,14 +60,21 @@ void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 
 }
 
+// 버튼 눌러서 초기 대기데이터 설정 해서 
 
+// 버튼 눌러서 한번에 
+
+// 누가 ID, 버튼 번호 < >, 뭐 눌렀는지 < >
+
+// return 
 
 void APSH_Mtvs3rdGameModBase::StatDataJson()
 {
 	TMap<FString, FString> StartData; // 제이슨에 들어갈 데이터
-	StartData.Add("ID", FString::FromInt(PlayerData.Id));  // 키 , 벨류
+	StartData.Add("ID", PlayerData.Id);  // 키 , 벨류
+	StartData.Add("Age", PlayerData.Age);
 	StartData.Add("Name", PlayerData.Name);
-	StartData.Add("Gander", PlayerData.Gender);
+	StartData.Add("Gender", PlayerData.Gender);
 	StartData.Add("MBTI", PlayerData.MBTI);
 	StartData.Add("blood", PlayerData.Blood);
 
@@ -62,20 +84,22 @@ void APSH_Mtvs3rdGameModBase::StatDataJson()
 
 	FString json = UPSH_TsetJsonParseLib::MakeJson(StartData);
 
-	ReqPost(json); // 만든 제이슨 보내주는거
+	ReqPost(json, URLStart); // 만든 제이슨 보내주는거
 }
 
 void APSH_Mtvs3rdGameModBase::QestButtonJson(int num)
 {
-	TMap<FString, FString> StudentData; // 제이슨에 들어갈 데이터
-	StudentData.Add("Answer", FString::FromInt(num));  // 키 , 벨류
-	
-	FString json = UPSH_TsetJsonParseLib::MakeJson(StudentData);
+	TMap<FString, FString> QestData; // 제이슨에 들어갈 데이터
+	//QestData.Add("Answer", FString::FromInt(num));  // 키 , 벨류
+	QestData.Add("AffinityScore_ID1; ", "f1");
+	QestData.Add("AffinityScore_ID2; ", "f2");
 
-	ReqPost(json); // 만든 제이슨 보내주는거
+	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+
+	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
 }
 
-void APSH_Mtvs3rdGameModBase::ReqPost(FString json)
+void APSH_Mtvs3rdGameModBase::ReqPost(FString json, FString URL)
 {
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
@@ -95,19 +119,23 @@ void APSH_Mtvs3rdGameModBase::ReqPost(FString json)
 	 	req->ProcessRequest();
 }
 
+void APSH_Mtvs3rdGameModBase::SetData(FPSH_HttpDataTable Data)
+{
+	PlayerData = Data;
+}
+
 void APSH_Mtvs3rdGameModBase::OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	if (bConnectedSuccessfully)
 	{
 		// 성공
 		// actorv controll
-		// 
-		// 
 		// Json을 파싱해서 필요한 정보만 뽑아서 화면에 출력하고싶다.
-		UE_LOG(LogTemp, Warning, TEXT("성공"));
+		UE_LOG(LogTemp, Warning, TEXT("creal"));
 		FString result = Response->GetContentAsString();
 		UPSH_TsetJsonParseLib::JsonParse(result, PlayerData);
-		
+
+		UGameplayStatics::OpenLevel(GetWorld(), FName());
 		// 
 		// httpUi->SetTextLog(result);
 	}

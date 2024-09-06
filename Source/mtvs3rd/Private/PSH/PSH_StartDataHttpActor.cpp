@@ -16,16 +16,16 @@ APSH_StartDataHttpActor::APSH_StartDataHttpActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//vr 모드
-	SelectComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("SelectUi"));
-	SelectComponent->SetupAttachment(RootComponent);
-	
-	ConstructorHelpers::FClassFinder<UUserWidget> TempWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/PSH/Blueprints/UI/WBP_PSH_StartDataWidget.WBP_PSH_StartDataWidget_C'"));
-
-	if (TempWidget.Succeeded())
-	{
-		SelectComponent->SetWidgetClass(TempWidget.Class);
-		SelectComponent->SetDrawSize(FVector2D(1920,1080));
-	}
+// 	SelectComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("SelectUi"));
+// 	SelectComponent->SetupAttachment(RootComponent);
+// 	
+// 	ConstructorHelpers::FClassFinder<UUserWidget> TempWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/PSH/Blueprints/UI/WBP_PSH_StartDataWidget.WBP_PSH_StartDataWidget_C'"));
+// 
+// 	if (TempWidget.Succeeded())
+// 	{
+// 		SelectComponent->SetWidgetClass(TempWidget.Class);
+// 		SelectComponent->SetDrawSize(FVector2D(1920,1080));
+// 	}
 }
 
 // Called when the game starts or when spawned
@@ -33,28 +33,28 @@ void APSH_StartDataHttpActor::BeginPlay()
 {
 	Super::BeginPlay();
 		
-// 	httpUi = Cast<UPSH_StartDataWidget>(CreateWidget(GetWorld(), HttpUiFact));
-// 	if (httpUi) // 테스트용
-// 	{
-// 		httpUi->AddToViewport();
-// 		httpUi->SetHttpACtor(this);
-// 		GetWorld()->GetAuthGameMode();
-// 
-// 		auto* pc = GetWorld()->GetFirstPlayerController();
-// 		pc->SetShowMouseCursor(true);
-// 		pc->SetInputMode(FInputModeUIOnly());
-// 	}
+	httpUi = Cast<UPSH_StartDataWidget>(CreateWidget(GetWorld(), HttpUiFact));
+	if (httpUi) // 테스트용
+	{
+		httpUi->AddToViewport();
+		httpUi->SetHttpACtor(this);
+		GetWorld()->GetAuthGameMode();
+
+		auto* pc = GetWorld()->GetFirstPlayerController();
+		pc->SetShowMouseCursor(true);
+		pc->SetInputMode(FInputModeUIOnly());
+	}
 
 	// vr전용
-	if (SelectComponent)
-	{
-		HttpWidget = Cast<UPSH_StartDataWidget>(SelectComponent->GetWidget());
-		if (HttpWidget)
-		{
-			HttpWidget->SetHttpACtor(this);
-			UE_LOG(LogTemp, Warning, TEXT("HttpWidget : %s"), *HttpWidget->GetClass()->GetName());
-		}
-	}
+// 	if (SelectComponent)
+// 	{
+// 		HttpWidget = Cast<UPSH_StartDataWidget>(SelectComponent->GetWidget());
+// 		if (HttpWidget)
+// 		{
+// 			HttpWidget->SetHttpACtor(this);
+// 			UE_LOG(LogTemp, Warning, TEXT("HttpWidget : %s"), *HttpWidget->GetClass()->GetName());
+// 		}
+// 	}
 	
 
 }
