@@ -15,6 +15,16 @@ public:
 	// Sets default values for this character's properties
 	ABS_VRPlayer();
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 #pragma region 변수 영역
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
@@ -52,17 +62,7 @@ public:
 #pragma endregion
 #pragma region 함수 영역
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-protected:
-
+	// imc 추가
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);
 
@@ -77,7 +77,6 @@ protected:
 	void EventTurn(float value);
 
 	void SnapTurn(bool isRight);
-
 
 public:
 

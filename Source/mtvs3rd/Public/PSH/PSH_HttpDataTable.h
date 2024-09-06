@@ -27,16 +27,20 @@ USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
 	 FString Blood; // 선택
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  int FromUserID1; //  Key -> FromUserID
+	  int otherUserID1; //  Key -> FromUserID
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  float AffinityScore_ID1; // 싱크로율 Key -> AffinityScore
+	  float syncPercentID1; // 싱크로율 Key -> AffinityScore
+
+	// XXX 미사용
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 int ToUserAffinityScore_1; // 내가 선택한 상대 1의 호감도  Key -> ToUserID
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  int FromUserID2;
+	  int otherUserID2;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  float AffinityScore_ID2;
+	  float syncPercentID2;
+
+	// XXX 미사용
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 int ToUserAffinityScore_2;
 

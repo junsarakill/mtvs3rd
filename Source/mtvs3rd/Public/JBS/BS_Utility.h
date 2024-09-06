@@ -17,6 +17,25 @@ enum class EPlayerType : uint8
 	,DUMMY = 4
 };
 
+USTRUCT(BlueprintType)
+struct FProfileData
+{
+	GENERATED_BODY()
+	
+	FString name;
+	EPlayerType type;
+	int32 syncPercent;
+
+	FProfileData() {}
+
+	FProfileData(FString name, int32 percent, FString gender)
+	{
+		this->name = name;
+		type = gender == TEXT("man") ? EPlayerType::MALE1 :EPlayerType::FEMALE1;
+		syncPercent = percent;
+	}
+};
+
 
 UCLASS()
 class MTVS3RD_API UBS_Utility : public UBlueprintFunctionLibrary

@@ -27,4 +27,6 @@ void UBS_ProfileUI::SetCapturePlayer(EPlayerType type)
     check(cp);
     // 메시 설정
     cp->SetMesh(type);
+
+    GEngine->AddOnScreenDebugMessage(-1,3.f, FColor::Green, FString::Printf(TEXT("type: %s"), *UEnum::GetValueAsString(type)));
 }

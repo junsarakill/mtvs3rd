@@ -33,5 +33,4 @@ public:
 	// FIXME 아마 플레이어는 gender를 아니깐 바꿔야할듯?
 	void SetCapturePlayer(EPlayerType type);
 
-
 };
