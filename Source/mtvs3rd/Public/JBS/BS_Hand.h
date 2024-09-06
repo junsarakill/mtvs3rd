@@ -176,6 +176,8 @@ public:
 	// 프로필 ui 생성
 	void SpawnProfileUI(FPSH_HttpDataTable otherPlayerData);
 
+	// 프로필 ui 제거
+	void DeleteProfileUI();
 
 
 	
