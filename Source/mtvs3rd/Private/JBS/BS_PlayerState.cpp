@@ -7,3 +7,8 @@ void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data)
 {
     playerData = data;
 }
+
+void ABS_PlayerState::SetIsFinalSelect(bool value)
+{
+    isFinalSelect = value;
+}

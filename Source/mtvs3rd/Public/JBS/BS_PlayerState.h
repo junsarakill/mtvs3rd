@@ -22,6 +22,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Default|Values", BlueprintGetter=GetPlayerData, BlueprintSetter=SetPlayerData)
 	FPSH_HttpDataTable playerData;
 
+	// 최종선택 여부
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	bool isFinalSelect = false;
+		public:
+	__declspec(property(get = GetIsFinalSelect, put = SetIsFinalSelect)) bool IS_FINAL_SELECT;
+	bool GetIsFinalSelect()
+	{
+		return isFinalSelect;
+	}
+	void SetIsFinalSelect(bool value);
+		protected:
+
 public:
 	UFUNCTION(BlueprintGetter)
 	FPSH_HttpDataTable GetPlayerData()
