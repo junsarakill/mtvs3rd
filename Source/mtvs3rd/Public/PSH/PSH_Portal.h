@@ -56,7 +56,8 @@ public:
 private:
 
 	UPROPERTY()
-	class Amtvs3rdCharacter* player;
+	//class Amtvs3rdCharacter* player;
+	class ABS_VRPlayer* player;
 	UPROPERTY()
 	TArray<class AActor*> EndPotal;
 };

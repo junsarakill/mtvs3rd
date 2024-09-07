@@ -18,7 +18,6 @@ void UPSH_LastChoiceWidget::NativeConstruct()
 
 	VisibleName(false);
 
-	GM->LastChoice(0,0);
 }
 
 void UPSH_LastChoiceWidget::SetActor(class APSH_LastChoiceActor* Owner)

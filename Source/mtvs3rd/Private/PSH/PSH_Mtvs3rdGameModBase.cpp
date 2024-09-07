@@ -27,6 +27,7 @@ void APSH_Mtvs3rdGameModBase::BeginPlay()
 	{
 		playerState = Cast<ABS_PlayerState>(pc->PlayerState);
 	}
+	
 	ChoiceNum.Init(0, 5); // 플레이어 수만큼 만들기로 변경.
 	
 }
@@ -158,10 +159,10 @@ void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱
 	
 	// 같으면 성공 UI
 	if(ChoiceWidget)
-	//ChoiceWidget->SuccessChoice();
+	ChoiceWidget->SuccessChoice();
 
 	// 틀리면 실패 UI
-	ChoiceWidget->FailChoice();
+	//ChoiceWidget->FailChoice();
 
 }
 

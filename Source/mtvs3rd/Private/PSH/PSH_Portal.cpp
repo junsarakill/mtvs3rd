@@ -7,6 +7,7 @@
 #include "JBS/BS_VRPlayer.h"
 #include "mtvs3rdCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "JBS/BS_PlayerState.h"
 
 // Sets default values
 APSH_Portal::APSH_Portal()
@@ -60,7 +61,10 @@ void APSH_Portal::Tick(float DeltaTime)
 void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//ABS_VRPlayer * player = Cast<ABS_VRPlayer>(OtherActor);
-	player = Cast<Amtvs3rdCharacter>(OtherActor);
+	// Test
+	//player = Cast<Amtvs3rdCharacter>(OtherActor);
+
+	player = Cast<ABS_VRPlayer>(OtherActor);
 	if (player)
 	{
 		 // 플레이어가 부딫히면 카운트를 올림
@@ -78,8 +82,7 @@ void APSH_Portal::Setvisilbe(bool chek)
 
 void APSH_Portal::SetPortal()
 {
-	FName nam = TagetName;
-	UGameplayStatics::GetAllActorsWithTag(GetWorld(), nam,EndPotal);
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), TagetName,EndPotal);
 }
 
 void APSH_Portal::GoPotal()
@@ -87,6 +90,13 @@ void APSH_Portal::GoPotal()
 	if (player)
 	{
 		player->SetActorLocation(EndPotal[0]->GetActorLocation());
+	}
+
+	if (TagetName == TEXT("EndPotal"))
+	{
+		player->SetActorLocation(EndPotal[0]->GetActorLocation());
+		auto * state = Cast<ABS_PlayerState>(player->GetPlayerState());
+		state->SetIsFinalSelect(true);
 	}
 }
 
