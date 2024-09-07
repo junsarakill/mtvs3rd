@@ -22,6 +22,11 @@ ABS_VRPlayer::ABS_VRPlayer()
 	vrHMDCam = CreateDefaultSubobject<UCameraComponent>(TEXT("vrHMDCam"));
 	vrHMDCam->SetupAttachment(vrRoot);
 	vrHMDCam->bUsePawnControlRotation = true;
+
+	// 플레이어 ui 위치 1
+	playerUIPos1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("playerUIPos1"));
+	playerUIPos1->SetupAttachment(vrHMDCam);
+	
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +35,11 @@ void ABS_VRPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	SetMoveSpeed(moveSpeed);
+
+	if(enableDebugFinalSelect)
+	{
+		PS->IS_FINAL_SELECT = enableDebugFinalSelect;
+	}
 }
 
 // Called every frame
@@ -62,7 +72,15 @@ void ABS_VRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-void ABS_VRPlayer::SetIMC(UInputMappingContext* imc)
+void ABS_VRPlayer::SetPS(ABS_PlayerState *value)
+{
+	auto* myPS = this->GetPlayerState<ABS_PlayerState>();
+	check(myPS);
+	// ps 로 뭔가하기
+	ps = myPS;
+}
+
+void ABS_VRPlayer::SetIMC(UInputMappingContext *imc)
 {
 	auto* pc = Cast<APlayerController>(this->GetController());
 	if(pc)

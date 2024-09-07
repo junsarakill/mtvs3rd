@@ -49,6 +49,35 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
 	class UInputMappingContext* imcDefault;
 
+	// 플레이어 상태
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class ABS_PlayerState* ps;
+		public:
+	__declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
+	ABS_PlayerState* GetPS()
+	{
+		// ps 캐시 안되있으면 가져오기
+		if(!ps)
+		{
+			auto* myPS = this->GetPlayerState<ABS_PlayerState>();
+			check(myPS);
+			// ps 로 뭔가하기
+			ps = myPS;
+		}
+
+		return ps;
+	}
+	void SetPS(ABS_PlayerState* value);
+		protected:
+
+
+	// XXX 디버그용 최종 선택 가능
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
+	bool enableDebugFinalSelect = false;
+
+	
+	
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* vrRoot;
@@ -58,6 +87,11 @@ public:
 	class ABS_Hand* leftController;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class ABS_Hand* rightController;
+	// 최종 선택 UI 위치
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
+	class UStaticMeshComponent* playerUIPos1;
+
+	
 
 #pragma endregion
 #pragma region 함수 영역

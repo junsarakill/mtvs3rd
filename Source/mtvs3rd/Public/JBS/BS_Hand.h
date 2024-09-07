@@ -53,6 +53,11 @@ public:
 
 public:
 
+	// 나를 소유한 플레이어
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class ABS_VRPlayer* ownerPlayer;
+
+	
 	// 모션 루트
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* motionRoot;
@@ -66,6 +71,20 @@ public:
 	// ui 상호작용
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UWidgetInteractionComponent* uiInteractComp;
+	// 손 루트
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class USceneComponent* handRoot;
+	// 손 메시
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	class USkeletalMeshComponent* handMesh;
+	// 최종 선택 컴포넌트
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
+	class UBS_FinalSelectComponent* fsComp;
+
+
+
+
+
 	// 레이 활/비
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values", BlueprintGetter=GetEnableRay, BlueprintSetter=SetEnableRay)
 	bool enableRay = false;
@@ -81,19 +100,11 @@ public:
 	void SetEnableRay(bool value);
 		protected:
 
-	// 손 루트
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	class USceneComponent* handRoot;
-	// 손 메시
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
-	class USkeletalMeshComponent* handMesh;
-	
-
-// 컨트롤러 종류
+	// 컨트롤러 종류
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	EMotionControllerType cType;
 
-// 컨트롤러 데이터
+	// 컨트롤러 데이터
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	TArray<FControllerType> typeData;
 
@@ -145,7 +156,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetController(EMotionControllerType type);
+	void SetController(EMotionControllerType type, ABS_VRPlayer* player);
 
 	// 핸드 메시 설정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -177,7 +188,10 @@ public:
 	void SpawnProfileUI(FPSH_HttpDataTable otherPlayerData);
 
 	// 프로필 ui 제거
+	UFUNCTION(BlueprintCallable)
 	void DeleteProfileUI();
+
+	// 
 
 
 	

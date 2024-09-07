@@ -9,7 +9,7 @@
 #include "BS_ProfileWorldUIActor.generated.h"
 
 UCLASS()
-class MTVS3RD_API ABS_ProfileWorldUIActor : public AActor
+class MTVS3RD_API ABS_ProfileWorldUIActor : public ABS_BillBoardWorldUIActor
 {
 	GENERATED_BODY()
 	
@@ -38,8 +38,8 @@ public:
 protected:
 	
 
-	// 빌보드
-	void BillboardUI();
+	// // 빌보드
+	// void BillboardUI();
 
 public:
 	// ui 설정

@@ -12,6 +12,7 @@
 #include <JBS/BS_PlayerState.h>
 #include <JBS/BS_ProfileWorldUIActor.h>
 #include <JBS/BS_Utility.h>
+#include <JBS/BS_FinalSelectComponent.h>
 
 
 // Sets default values
@@ -41,6 +42,9 @@ ABS_Hand::ABS_Hand()
 
 	profileUIPos = CreateDefaultSubobject<UArrowComponent>(TEXT("profileUIPos"));
 	profileUIPos->SetupAttachment(aimMC);
+
+	// 최종 선택 컴포넌트 추가
+	fsComp = CreateDefaultSubobject<UBS_FinalSelectComponent>(TEXT("fsComp"));
 }
 // Called when the game starts or when spawned
 
@@ -53,7 +57,7 @@ void ABS_Hand::BeginPlay()
 	ENABLE_RAY = ENABLE_RAY;
 }
 
-void ABS_Hand::SetController(EMotionControllerType type)
+void ABS_Hand::SetController(EMotionControllerType type, ABS_VRPlayer* player)
 {
 	cType = type;
 	// 컨트롤러 데이터 찾기
@@ -70,7 +74,6 @@ void ABS_Hand::SetController(EMotionControllerType type)
 			FString cTypeStr = enumStr.RightChop(idx + 2);
 			motionController->MotionSource = FName(cTypeStr);
 
-
 			SetHandMesh(cType);
 			handMesh->SetSkeletalMesh(fct.mesh);
 			handMesh->SetRelativeLocationAndRotation(fct.loc, fct.rot);
@@ -79,10 +82,13 @@ void ABS_Hand::SetController(EMotionControllerType type)
 			aimMC->MotionSource = FName(cTypeStr + TEXT("Aim"));
 			uiInteractComp->PointerIndex = type == EMotionControllerType::LEFT ? 0 : 1;
 
-
 			break;
 		}
 	}
+
+	// 주인 설정
+	check(player);
+	ownerPlayer = player;
 }
 
 // Called every frame
@@ -273,14 +279,18 @@ void ABS_Hand::LineTracePlayer()
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
 			// 내 손에 프로필 ui 생성
 			FPSH_HttpDataTable temp;
-			temp.Id = 0;
+			temp.Id = 1;
 			auto* player = Cast<ABS_VRPlayer>(this->GetOwner());
 			// ps 로 뭔가하기
 			temp.Name = TEXT("도레미");
 			temp.Gender = TEXT("man");
 			SpawnProfileUI(temp);
+			// 최종 선택인 경우 선택 UI도 생성
+			fsComp->TrySpawnSelectConfirmUI(temp.Id);
+			
 		}
 		// 대상이 플레이어라면
+		// @@ 알파때 점검 필요
 		else if(outHit.GetActor()->ActorHasTag(FName("Player")))
 		{
 			auto* player = Cast<ABS_VRPlayer>(outHit.GetActor());
@@ -288,8 +298,12 @@ void ABS_Hand::LineTracePlayer()
 			// 해당 플레이어의 정보 가져오기
 			auto* otherPS = player->GetPlayerState<ABS_PlayerState>();
 			check(otherPS);
+			// 플레이어 정보
+			auto otherPD = otherPS->GetPlayerData();
 			// 프로필 ui 생성
-			SpawnProfileUI(otherPS->GetPlayerData());
+			SpawnProfileUI(otherPD);
+			// 최종 선택인 경우 선택 UI도 생성
+			fsComp->TrySpawnSelectConfirmUI(otherPD.Id);
 		}
 	}
 
@@ -318,13 +332,13 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 
 	// 싱크로율 구하기
 	// 내 정보
-	// 일단 주인 부터 설정해야
 	auto* player = Cast<ABS_VRPlayer>(GetOwner());
 	auto* ps = player->GetPlayerState<ABS_PlayerState>();
 	check(ps);
 	// ps 로 뭔가하기
 	auto ownerData = ps->GetPlayerData();
 	float sync = -1.f;
+	// 상대 id 찾아서 싱크로율 가져오기
 	if(ownerData.otherUserID1 == otherPlayerData.Id)
 	{
 		sync = otherPlayerData.syncPercentID1;
