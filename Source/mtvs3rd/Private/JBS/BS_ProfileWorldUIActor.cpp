@@ -29,28 +29,28 @@ void ABS_ProfileWorldUIActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	BillboardUI();
+	BillboardUI(profileUIComp);
 }
 
-void ABS_ProfileWorldUIActor::BillboardUI()
-{
-	if(!profileUIComp) return;
+// void ABS_ProfileWorldUIActor::BillboardUI()
+// {
+// 	if(!profileUIComp) return;
 
-	auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if(pc)
-	{
-		//pc로 뭔가 하기
-		auto cam = pc->PlayerCameraManager;
-		if(cam)
-		{
-			FVector targetLoc = cam->GetCameraLocation();
-			FVector worldUILoc = profileUIComp->GetComponentLocation();
+// 	auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+// 	if(pc)
+// 	{
+// 		//pc로 뭔가 하기
+// 		auto cam = pc->PlayerCameraManager;
+// 		if(cam)
+// 		{
+// 			FVector targetLoc = cam->GetCameraLocation();
+// 			FVector worldUILoc = profileUIComp->GetComponentLocation();
 			
-			FRotator lookRot = (targetLoc - worldUILoc).Rotation();
-			profileUIComp->SetWorldRotation(lookRot);
-		}
-	}
-}
+// 			FRotator lookRot = (targetLoc - worldUILoc).Rotation();
+// 			profileUIComp->SetWorldRotation(lookRot);
+// 		}
+// 	}
+// }
 
 void ABS_ProfileWorldUIActor::SetProfileUIValue(FProfileData profileData)
 {
