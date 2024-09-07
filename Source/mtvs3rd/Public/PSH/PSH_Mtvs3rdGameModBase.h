@@ -39,6 +39,11 @@ public:
 
 	TArray<int> ChoiceNum;
 
+	int LastChoiceNum = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	int playerCount = 2;
+
 	UPROPERTY()
 	class UPSH_LastChoiceWidget * ChoiceWidget;
 
@@ -56,6 +61,8 @@ public:
 	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	void LastChoice(int FromId, int ToId);
+
+	void ChekChoice();
 
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 

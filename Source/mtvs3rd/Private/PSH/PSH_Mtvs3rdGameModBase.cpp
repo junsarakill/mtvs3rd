@@ -150,20 +150,61 @@ void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱
 	// 각 id 를 저장
 	//ChoiceWidget->SetData(PlayerData);
 	
+	
+	ChoiceNum[FromId] = ToId; // 사전에 플레이어의 수만큼 만들어놓은 배열에 상대의 ID 를 집어 넣음
 
+	LastChoiceNum++; // 함수 실행 횟수 체크
 
-	//ChoiceNum[FromId] = ToId;
+	if (LastChoiceNum <= playerCount || ChoiceWidget == nullptr) // 테스트 현재 플레이어 수 현재 2
+	{
+		return;
+	}
 
+	ChekChoice();
+	
+
+	// 1, 2 남자
+	
+
+	// 3. 4 여자
+	
+	// for문을 돌리면서 Toid
 	// 미리 만들어 놓고 비교
 	// 각 id 를 비교
 	
 	// 같으면 성공 UI
-	if(ChoiceWidget)
-	ChoiceWidget->SuccessChoice();
+	
 
 	// 틀리면 실패 UI
-	//ChoiceWidget->FailChoice();
+	//
 
+}
+
+void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일 때 UI 어떻게 보여줘야 하는지 잘 모르겠어서 추후 수정
+{
+	if (ChoiceWidget)
+	{
+		for (int i = 1; i < 3; i++)  // 전체 확인을 했기 때문에 3명을 검사 할 필요가 없다.
+		{
+			
+			if (ChoiceNum[i] == 0) // 플레이어를 선택 안했거나 플레이어가 아님
+			{
+				continue;
+			}
+			else
+			{
+				if (ChoiceNum[i] == ChoiceNum[ChoiceNum[i]]) // 남자 1번과 누군가 자신을 선택했는지
+				{
+					ChoiceWidget->SuccessChoice();
+				}
+				else
+				{
+					ChoiceWidget->FailChoice();
+				}
+			}
+		}
+
+	}
 }
 
 void APSH_Mtvs3rdGameModBase::SetLastWdiget(class UPSH_LastChoiceWidget* widget)
