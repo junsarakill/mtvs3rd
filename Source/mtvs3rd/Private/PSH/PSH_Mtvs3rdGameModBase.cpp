@@ -260,7 +260,7 @@ void APSH_Mtvs3rdGameModBase::OnResPost(FHttpRequestPtr Request, FHttpResponsePt
 		UPSH_TsetJsonParseLib::JsonParse(result, PlayerData);
 
 		Gi->SetStartData(PlayerData);
-
+		playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
 		// 
 		// httpUi->SetTextLog(result);
 	}
