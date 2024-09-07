@@ -37,7 +37,10 @@ public:
 
 	int32 id = 0;
 
-	
+	TArray<int> ChoiceNum;
+
+	UPROPERTY()
+	class UPSH_LastChoiceWidget * ChoiceWidget;
 
 	void ReqPost(FString json, FString URL);
 
@@ -51,6 +54,10 @@ public:
 	void ReqStartPost(FString json, FString URL);
 	// ������� �Լ�
 	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	void LastChoice(int FromId, int ToId);
+
+	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
 protected:
 	virtual void BeginPlay() override;

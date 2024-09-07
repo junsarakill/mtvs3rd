@@ -24,7 +24,7 @@ APSH_StartDataHttpActor::APSH_StartDataHttpActor()
 	if (TempWidget.Succeeded())
 	{
 		SelectComponent->SetWidgetClass(TempWidget.Class);
-		SelectComponent->SetDrawSize(FVector2D(1920,1080));
+		SelectComponent->SetDrawSize(FVector2D(500,500));
 	}
 }
 

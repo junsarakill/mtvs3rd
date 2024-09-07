@@ -32,7 +32,7 @@ public:
 	UPROPERTY()
 	class UPSH_StartDataWidget* httpUi;
 // 
-// 	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly)
  	class UWidgetComponent * SelectComponent;
 
 	UPROPERTY(EditDefaultsOnly)

@@ -34,10 +34,10 @@ void UPSH_TsetJsonParseLib::JsonParse(const FString& json, FPSH_HttpDataTable& d
 // 		
 // 		}
 		
-		data.otherUserID1 = result->GetIntegerField("Target_1_Id");
-		data.otherUserID2 = result->GetIntegerField("Target_2_Id");
-		data.syncPercentID1 = result->GetNumberField("synchro_1");
-		data.syncPercentID2 = result->GetNumberField("synchro_2");
+		data.otherUserID1 = result->GetIntegerField(TEXT("Target_1_Id"));
+		data.otherUserID2 = result->GetIntegerField(TEXT("Target_2_Id"));
+		data.syncPercentID1 = result->GetNumberField(TEXT("synchro_1"));
+		data.syncPercentID2 = result->GetNumberField(TEXT("synchro_2"));
 	}
 
 	data.PrintStruct();

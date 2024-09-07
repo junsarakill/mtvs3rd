@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "JBS/BS_PlayerState.h"
 #include "PSH/PSH_GameInstance.h"
+#include "PSH/PSH_LastChoiceWidget.h"
 
 
 APSH_Mtvs3rdGameModBase::APSH_Mtvs3rdGameModBase()
@@ -26,6 +27,7 @@ void APSH_Mtvs3rdGameModBase::BeginPlay()
 	{
 		playerState = Cast<ABS_PlayerState>(pc->PlayerState);
 	}
+	ChoiceNum.Init(0, 5); // 플레이어 수만큼 만들기로 변경.
 	
 }
 
@@ -133,6 +135,39 @@ void APSH_Mtvs3rdGameModBase::OnStartResPost(FHttpRequestPtr Request, FHttpRespo
 		// 실패
 		UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
 	}
+}
+
+void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱신 가능.
+{
+
+	// 시연 용 ( 프로토)
+	//ChoiceWidget->
+	
+
+	// 최종 선택 판별
+
+	// 각 id 를 저장
+	//ChoiceWidget->SetData(PlayerData);
+	
+
+
+	//ChoiceNum[FromId] = ToId;
+
+	// 미리 만들어 놓고 비교
+	// 각 id 를 비교
+	
+	// 같으면 성공 UI
+	if(ChoiceWidget)
+	//ChoiceWidget->SuccessChoice();
+
+	// 틀리면 실패 UI
+	ChoiceWidget->FailChoice();
+
+}
+
+void APSH_Mtvs3rdGameModBase::SetLastWdiget(class UPSH_LastChoiceWidget* widget)
+{
+	ChoiceWidget = widget;
 }
 
 //  시작중 UI 적용
