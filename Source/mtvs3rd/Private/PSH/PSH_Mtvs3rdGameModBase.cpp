@@ -155,7 +155,7 @@ void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱
 
 	LastChoiceNum++; // 함수 실행 횟수 체크
 
-	if (LastChoiceNum <= playerCount || ChoiceWidget == nullptr) // 테스트 현재 플레이어 수 현재 2
+	if (LastChoiceNum < playerCount || ChoiceWidget == nullptr) // 테스트 현재 플레이어 수 현재 2
 	{
 		return;
 	}
