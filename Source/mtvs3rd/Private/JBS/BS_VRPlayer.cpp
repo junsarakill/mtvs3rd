@@ -54,7 +54,15 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	
 	FString velStr = GetVelocity().ToString();
 	int pid = PS->GetPlayerData().Id;
-	FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d"), *moveDir.ToString(), *velStr, pid);
+	// 
+	float vrRootHeight = vrRoot->GetRelativeLocation().Z;
+	
+	// 카메라 키
+	float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
+	
+	
+	FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
+		, *moveDir.ToString(), *velStr, pid, vrRootHeight, vrHMDHeight);
 	DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
 	
 
