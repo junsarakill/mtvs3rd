@@ -4,6 +4,8 @@
 #include "JYS/MiniGameTriggerBox.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+#include "JYS/MiniGameWall.h"
 
 AMiniGameTriggerBox::AMiniGameTriggerBox()
 {
@@ -20,6 +22,11 @@ AMiniGameTriggerBox::AMiniGameTriggerBox()
 void AMiniGameTriggerBox::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(),AMiniGameWall::StaticClass(), FName(TEXT("FadeIn")), OutActors);
+
+	miniGameWallFade = Cast<AMiniGameWall>(OutActors[0]);
 }
 
 void AMiniGameTriggerBox::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -34,6 +41,8 @@ void AMiniGameTriggerBox::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent,
 			{
 				UBoxComponent* collisionComp = Cast<UBoxComponent>(GetCollisionComponent());
 				collisionComp->SetCollisionProfileName(TEXT("BlockAll"));
+				
+				miniGameWallFade->SetFadeIn();
 			}
 		}
 	}
