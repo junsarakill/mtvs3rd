@@ -42,7 +42,8 @@
 			"locale": "cpp",
 			"ratio": "cpp",
 			"tuple": "cpp",
-			"vector": "cpp"
+			"vector": "cpp",
+			"random": "cpp"
 		},
 		"search.exclude": {
 			"**/Binaries": true,

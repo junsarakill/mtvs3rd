@@ -31,9 +31,16 @@ struct FProfileData
 	FProfileData(FString name, int32 percent, FString gender)
 	{
 		this->name = name;
-		type = gender == TEXT("man") ? EPlayerType::MALE1 :EPlayerType::FEMALE1;
+		type = gender == TEXT("남") ? EPlayerType::MALE1 :EPlayerType::FEMALE1;
 		syncPercent = percent;
 	}
+};
+
+UENUM(BlueprintType)
+enum class EFinalSelectType : uint8
+{
+	NORMAL = 0
+	,DUMMY = 1
 };
 
 
@@ -42,4 +49,7 @@ class MTVS3RD_API UBS_Utility : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 	
+public:
+	static class APSH_Mtvs3rdGameModBase* GetGM(UWorld* world);
+
 };

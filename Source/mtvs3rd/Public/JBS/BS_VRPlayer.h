@@ -91,6 +91,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
 	class UStaticMeshComponent* playerUIPos1;
 
+	// 최종 선택 ui 액터
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class ABS_SelectConfirmActor* selectConfirmUIActor;
+	
+
 	
 
 #pragma endregion

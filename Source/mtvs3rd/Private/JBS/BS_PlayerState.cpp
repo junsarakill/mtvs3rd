@@ -3,7 +3,12 @@
 
 #include "JBS/BS_PlayerState.h"
 
-void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data)
+void ABS_PlayerState::SetIsAlreadySelect(bool value)
+{
+    isAlreadySelect = value;
+}
+
+void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data) 
 {
     playerData = data;
 }

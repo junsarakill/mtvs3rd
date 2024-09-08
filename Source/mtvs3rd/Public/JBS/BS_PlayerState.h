@@ -22,7 +22,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Default|Values", BlueprintGetter=GetPlayerData, BlueprintSetter=SetPlayerData)
 	FPSH_HttpDataTable playerData;
 
-	// 최종선택 여부
+	// 최종선택 시점 여부
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	bool isFinalSelect = false;
 		public:
@@ -32,6 +32,18 @@ protected:
 		return isFinalSelect;
 	}
 	void SetIsFinalSelect(bool value);
+		protected:
+
+	// 최종선택 확정 여부
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	bool isAlreadySelect = false;
+		public:
+	__declspec(property(get = GetIsAlreadySelect, put = SetIsAlreadySelect)) bool IS_ALREADY_SELECT;
+	bool GetIsAlreadySelect()
+	{
+		return isAlreadySelect;
+	}
+	void SetIsAlreadySelect(bool value);
 		protected:
 
 public:

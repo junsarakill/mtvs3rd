@@ -53,7 +53,8 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
 	
 	FString velStr = GetVelocity().ToString();
-	FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s"), *moveDir.ToString(), *velStr);
+	int pid = PS->GetPlayerData().Id;
+	FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d"), *moveDir.ToString(), *velStr, pid);
 	DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
 	
 

@@ -81,6 +81,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
 	class UBS_FinalSelectComponent* fsComp;
 
+	// FIXME 프로토 타입용 더미 데이터
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
+	FPSH_HttpDataTable dummyData;
+
+	// 더미용 id
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	int32 dummyID = 0;
+
 
 
 

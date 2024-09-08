@@ -13,6 +13,7 @@
 #include <JBS/BS_ProfileWorldUIActor.h>
 #include <JBS/BS_Utility.h>
 #include <JBS/BS_FinalSelectComponent.h>
+#include <PSH/PSH_Mtvs3rdGameModBase.h>
 
 
 // Sets default values
@@ -276,27 +277,26 @@ void ABS_Hand::LineTracePlayer()
 		// 대상이 더미라면
 		if(outHit.GetActor()->ActorHasTag(FName("Dummy")))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
-			// 내 손에 프로필 ui 생성
-			FPSH_HttpDataTable temp;
-			temp.Id = 1;
-			auto* player = Cast<ABS_VRPlayer>(this->GetOwner());
-			// ps 로 뭔가하기
-			temp.Name = TEXT("도레미");
-			temp.Gender = TEXT("man");
-			SpawnProfileUI(temp);
-			// 최종 선택인 경우 선택 UI도 생성
-			fsComp->TrySpawnSelectConfirmUI(temp.Id);
+			// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("더미 감지"));
+			auto* gm = UBS_Utility::GetGM(GetWorld());
+			FPSH_HttpDataTable dData = gm->GetData(dummyID);
 			
+			// FString debugWorldStr = FString::Printf(TEXT("id : %d\nname : %s\ngender : %s"), dData.Id, *dData.Name, *dData.Gender);
+			// DrawDebugString(GetWorld(), this->GetActorLocation(), debugWorldStr, nullptr, FColor::Green, 30.f, true);
+
+			// 내 손에 프로필 ui 생성
+			SpawnProfileUI(dData);
+			// 최종 선택인 경우 선택 UI도 생성
+			fsComp->TrySpawnSelectConfirmUI(dData.Id);
 		}
 		// 대상이 플레이어라면
 		// @@ 알파때 점검 필요
 		else if(outHit.GetActor()->ActorHasTag(FName("Player")))
 		{
-			auto* player = Cast<ABS_VRPlayer>(outHit.GetActor());
-			check(player);
+			auto* otherPlayer = Cast<ABS_VRPlayer>(outHit.GetActor());
+			check(otherPlayer);
 			// 해당 플레이어의 정보 가져오기
-			auto* otherPS = player->GetPlayerState<ABS_PlayerState>();
+			auto* otherPS = otherPlayer->GetPlayerState<ABS_PlayerState>();
 			check(otherPS);
 			// 플레이어 정보
 			auto otherPD = otherPS->GetPlayerData();
@@ -341,12 +341,12 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 	// 상대 id 찾아서 싱크로율 가져오기
 	if(ownerData.otherUserID1 == otherPlayerData.Id)
 	{
-		sync = otherPlayerData.syncPercentID1;
+		sync = ownerData.syncPercentID1;
 		
 	}
 	else if(ownerData.otherUserID2 == otherPlayerData.Id)
 	{
-		sync = otherPlayerData.syncPercentID2;
+		sync = ownerData.syncPercentID2;
 	}
 	
 	// 프로필 데이터 구조체

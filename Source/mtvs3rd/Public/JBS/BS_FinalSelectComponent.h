@@ -32,6 +32,14 @@ protected:
 	// ui 액터
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
 	class ABS_SelectConfirmActor* selectConfirmUIActor;
+		public:
+	__declspec(property(get = GetConfirmUIActor, put = SetConfirmUIActor)) class ABS_SelectConfirmActor* SELECT_CONFIRM_UI_ACTOR;
+	class ABS_SelectConfirmActor* GetConfirmUIActor()
+	{
+		return selectConfirmUIActor;
+	}
+	void SetConfirmUIActor(class ABS_SelectConfirmActor* value);
+		protected:
 
 	// 현재 선택한 플레이어 id
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
@@ -62,8 +70,15 @@ protected:
 	void OnClickSelect(bool value);
 
 	// 최종 선택을 게임모드에 넘기기
+	void SendPlayerFinalSelect(int fromId, int toId);
+
+	// 기본
 	UFUNCTION(BlueprintCallable)
 	void SendPlayerFinalSelect();
+
+	// XXX 프로토용 최종 선택 더미와 함께
+	void SendPlayerFinalSelect(EFinalSelectType type);
+
 
 public:
 	UFUNCTION(BlueprintCallable)

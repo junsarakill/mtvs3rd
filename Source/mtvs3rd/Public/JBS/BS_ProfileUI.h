@@ -24,6 +24,19 @@ public:
 	class UTextBlock* SyncPercentText;
 
 
+	// 플레이어 캡처 프리팹
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
+	TSubclassOf<class ABS_CapturePlayer> cpPrefab;
+
+	// 플레이어 캡처
+	class ABS_CapturePlayer* cp;
+		public:
+	__declspec(property(get = GetCapturePlayer, put = SetCapturePlayer)) class ABS_CapturePlayer* CP;
+	class ABS_CapturePlayer* GetCapturePlayer();
+	void SetCapturePlayer(class ABS_CapturePlayer* value);
+		protected:
+
+
 public:
 	// 이름 설정
 	void SetName(FString value);
