@@ -81,7 +81,7 @@ void AQuestionsWidgetActor::SetAnswer(int num)
 	answerNum = num;
 
 	auto * GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
-	//GM->QestButtonJson(answerNum,); 질문 번호 집어 넣기
+	// GM->QestButtonJson(answerNum, questionsNum);
 	UE_LOG(LogTemp,Warning,TEXT("%d"),answerNum);
 }
 
@@ -97,11 +97,16 @@ void AQuestionsWidgetActor::InitUI(int32 widgetNum)
 		questionsUIComp->SetWidgetClass(QuestionWidgetFactory2);
 		break;
 	}
+	//if (questionsUIComp)
+	//{
+	//	FString questionsNum = questionsUIComp->GetName();
+	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Question: %s"), *questionsNum));
+
+	//}
 
 	// VR
 	UQuestionsWidget* widgetInstance = CastChecked<UQuestionsWidget>(questionsUIComp->GetWidget());
 	widgetInstance->SetOwner(this);
 
-	// widgetInstance->AddToViewport(0);
-
 }
+

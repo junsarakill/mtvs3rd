@@ -27,6 +27,8 @@ void UQuestionsWidget::NativeConstruct()
 	}
 }
 
+
+
 // owner 함수로 관리
 void UQuestionsWidget::SetOwner(AQuestionsWidgetActor* actor)
 {
@@ -39,6 +41,7 @@ void UQuestionsWidget::OnButton1Clicked()
 {
 	// owner 인덱스 할당
 	owner->SetAnswer(1);
+
 
 	if (owner)
 	{
@@ -53,6 +56,7 @@ void UQuestionsWidget::OnButton1Clicked()
 
 void UQuestionsWidget::OnButton2Clicked()
 {
+
 	// owner 인덱스 할당
 	owner->SetAnswer(2);
 

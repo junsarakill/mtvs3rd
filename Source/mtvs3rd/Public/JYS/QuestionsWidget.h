@@ -35,7 +35,6 @@ public:
 
 	void SetOwner(class AQuestionsWidgetActor * actor);
 
-
 private: 
 	UFUNCTION()
 	void OnButton1Clicked();
