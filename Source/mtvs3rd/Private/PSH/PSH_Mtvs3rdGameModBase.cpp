@@ -180,6 +180,11 @@ void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱
 
 }
 
+FPSH_HttpDataTable APSH_Mtvs3rdGameModBase::GetData(int num)
+{
+	return Gi->GetData(num);
+}
+
 void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일 때 UI 어떻게 보여줘야 하는지 잘 모르겠어서 추후 수정
 {
 	if (ChoiceWidget)
@@ -213,12 +218,14 @@ void APSH_Mtvs3rdGameModBase::SetLastWdiget(class UPSH_LastChoiceWidget* widget)
 }
 
 //  시작중 UI 적용
-void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum)
+void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int playerID)
 {
 	TMap<FString, FString> QestData; // 제이슨에 들어갈 데이터
 	//QestData.Add("Answer", FString::FromInt(num));  // 키 , 벨류
-	QestData.Add("AffinityScore_ID1; ", "3");
-	QestData.Add("AffinityScore_ID2; ", "4");
+// 	QestData.Add("playerID", FString::FromInt(playerID));
+// 	QestData.Add("ButtonNum", FString::FromInt(ButtonNum));
+// 	QestData.Add("QestNum", FString::FromInt(QestNum));
+
 
 	// 내가 누구인지. id
 	// 버튼 무엇을 눌렀는지. button Num

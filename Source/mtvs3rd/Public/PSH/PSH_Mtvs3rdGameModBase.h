@@ -52,7 +52,7 @@ public:
 	void SetData(FPSH_HttpDataTable Data);
 
 
-	void QestButtonJson(int ButtonNum, int QestNum);
+	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
 	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	void StatDataJson();
@@ -62,16 +62,20 @@ public:
 
 	void LastChoice(int FromId, int ToId);
 
+	FPSH_HttpDataTable GetData(int num);
+
 	void ChekChoice();
 
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
+	UPROPERTY(EditAnywhere)
+	FString URLStart = "http://192.168.0.19:3111/userinfo";
+	UPROPERTY(EditAnywhere)
+	FString URLScore = "http://192.168.0.14:3111/lovescore";
 protected:
 	virtual void BeginPlay() override;
 
+
+	
 private:
-
-
-	FString URLStart = "http://192.168.0.19:3111/userinfo";
-	FString URLScore = "http://192.168.0.14:3111/lovescore";
 };
