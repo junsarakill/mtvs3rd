@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "JBS/BS_VRPlayer.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
+#include "JBS/BS_PlayerState.h"
 
 // Sets default values
 AQuestionsWidgetActor::AQuestionsWidgetActor()
@@ -75,15 +76,6 @@ void AQuestionsWidgetActor::BillBoardQuestionsWidget()
 	}
 }
 
-// 선택지 이벤트 몇번째 정답을 클릭했는지에 대한 관리
-void AQuestionsWidgetActor::SetAnswer(int num)
-{
-	answerNum = num;
-
-	auto * GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
-	// GM->QestButtonJson(answerNum, questionsNum);
-	UE_LOG(LogTemp,Warning,TEXT("%d"),answerNum);
-}
 
 void AQuestionsWidgetActor::InitUI(int32 widgetNum)
 {
@@ -97,16 +89,28 @@ void AQuestionsWidgetActor::InitUI(int32 widgetNum)
 		questionsUIComp->SetWidgetClass(QuestionWidgetFactory2);
 		break;
 	}
-	if (questionsUIComp)
-	{
-		FString questionsNum = questionsUIComp->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Question: %s"), *questionsNum));
+	//if (questionsUIComp)
+	//{
+	//	FString questionsNum = questionsUIComp->GetName();
+	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Question: %s"), *questionsNum));
 
-	}
+	//}
 
 	// VR
 	UQuestionsWidget* widgetInstance = CastChecked<UQuestionsWidget>(questionsUIComp->GetWidget());
 	widgetInstance->SetOwner(this);
 
+	getWidgetNum = widgetNum;
 }
 
+// 선택지 이벤트 몇번째 정답을 클릭했는지에 대한 관리
+void AQuestionsWidgetActor::SetAnswer(int num)
+{
+	answerNum = num;
+
+	auto* ps = player->GetPlayerState<ABS_PlayerState>();
+	
+	auto * GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
+	GM->QestButtonJson(answerNum, getWidgetNum, ps->GetPlayerData().Id);
+	UE_LOG(LogTemp,Warning,TEXT("%d"),answerNum);
+}

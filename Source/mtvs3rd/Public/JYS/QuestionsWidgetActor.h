@@ -58,4 +58,6 @@ public:
 	TSubclassOf<UQuestionsWidget> QuestionWidgetFactory2;
 
 	void InitUI(int32 widgetNum);
+
+	int32 getWidgetNum;
 };
