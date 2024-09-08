@@ -2,6 +2,7 @@
 
 
 #include "PSH/PSH_GameInstance.h"
+#include "PSH/PSH_HttpDataTable.h"
 
 void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable data)
 {
@@ -15,6 +16,17 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable data)
 
 	UE_LOG(LogTemp,Warning,TEXT("GameInstance"));
 	PlayerData.PrintStruct();
+}
+
+FPSH_HttpDataTable UPSH_GameInstance::GetData(int num)
+{
+	FString numstring = FString::FromInt(num);
+
+	// 같은 Name으로 접근하면 덮어 씌워진다.
+	FName RowName = FName(numstring); // 이름 저장 
+	FPSH_HttpDataTable* FoundData = DataTable->FindRow<FPSH_HttpDataTable>(RowName, TEXT("Looking up player data"));
+
+	return *FoundData;
 }
 
 void UPSH_GameInstance::SetdataUpdatae(FPSH_HttpDataTable data)
