@@ -97,12 +97,12 @@ void AQuestionsWidgetActor::InitUI(int32 widgetNum)
 		questionsUIComp->SetWidgetClass(QuestionWidgetFactory2);
 		break;
 	}
-	//if (questionsUIComp)
-	//{
-	//	FString questionsNum = questionsUIComp->GetName();
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Question: %s"), *questionsNum));
+	if (questionsUIComp)
+	{
+		FString questionsNum = questionsUIComp->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Question: %s"), *questionsNum));
 
-	//}
+	}
 
 	// VR
 	UQuestionsWidget* widgetInstance = CastChecked<UQuestionsWidget>(questionsUIComp->GetWidget());
