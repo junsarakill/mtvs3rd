@@ -25,6 +25,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UPROPERTY(EditDefaultsOnly)
+	class AMiniGameWall* miniGameWallFade;
+
 private:
 	// 트리거 박스 내부에 있는 액터 수
 	int32 playerCount = 0;

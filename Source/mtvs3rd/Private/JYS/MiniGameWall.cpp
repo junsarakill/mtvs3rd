@@ -25,3 +25,5 @@ void AMiniGameWall::Tick(float DeltaTime)
 
 }
 
+
+
