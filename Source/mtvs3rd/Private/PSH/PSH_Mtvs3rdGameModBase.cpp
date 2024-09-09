@@ -138,7 +138,7 @@ void APSH_Mtvs3rdGameModBase::OnStartResPost(FHttpRequestPtr Request, FHttpRespo
 	}
 }
 
-void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱신 가능.
+void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱신 가능. // 누가 , 누구를
 {
 
 	// 시연 용 ( 프로토)
@@ -197,8 +197,9 @@ void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일
 				continue;
 			}
 			else
-			{
-				if (ChoiceNum[i] == ChoiceNum[ChoiceNum[i]]) // 남자 1번과 누군가 자신을 선택했는지
+			{		// 플레이어 번호 = 3 / 1
+					// 1 2 3 4  /1     arr[1]
+				if ( i == ChoiceNum[ChoiceNum[i]]) // 남자 1번과 누군가 자신을 선택했는지
 				{
 					ChoiceWidget->SuccessChoice();
 				}
@@ -231,6 +232,7 @@ void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int pl
 	// 버튼 무엇을 눌렀는지. button Num
 	// 몇번째 퀘스트인지  Qest Num
 	TestScore += 5;
+	PlayerData.otherUserID1 = 3;
 	PlayerData.syncPercentID1 = TestScore;
 
 	Gi->SetStartData(PlayerData);
