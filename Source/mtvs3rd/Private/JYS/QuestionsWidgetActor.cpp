@@ -32,8 +32,8 @@ void AQuestionsWidgetActor::BeginPlay()
 	//	pcWiidget->AddToViewport();
 	//	pcWiidget->SetOwner(this);
 	//}
-	auto* pc = GetWorld()->GetFirstPlayerController();
-	player = Cast<ABS_VRPlayer>(pc->GetCharacter());
+
+	
 }
 
 // Called every frame
@@ -42,12 +42,12 @@ void AQuestionsWidgetActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	BillBoardQuestionsWidget();
 
-	// playerCamera 변수에 player의 카메라컴포넌트 가져오기
-	auto* playerCamera = player->GetComponentByClass<UCameraComponent>();
-	// spawnedWidgetActor(Widget UI)를 컴포넌트에 붙여주기
-	this->AttachToComponent(playerCamera, FAttachmentTransformRules::KeepRelativeTransform);
-	// Widget UI Location 위치 설정해주기
-	FVector playerUILoc = playerCamera->GetForwardVector() * 1000;
+	// // playerCamera 변수에 player의 카메라컴포넌트 가져오기
+	// auto* playerCamera = player->GetComponentByClass<UCameraComponent>();
+	// // spawnedWidgetActor(Widget UI)를 컴포넌트에 붙여주기
+	// this->AttachToComponent(playerCamera, FAttachmentTransformRules::KeepRelativeTransform);
+	// // Widget UI Location 위치 설정해주기
+	// FVector playerUILoc = playerCamera->GetForwardVector() * 1000;
 	// this->SetActorRelativeLocation(playerUILoc);
 }
 
@@ -110,7 +110,9 @@ void AQuestionsWidgetActor::SetAnswer(int num)
 {
 	answerNum = num;
 
+	check(player);
 	auto* ps = player->GetPlayerState<ABS_PlayerState>();
+	check(ps);
 	
 	auto * GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
 	GM->QestButtonJson(answerNum, getWidgetNum, ps->GetPlayerData().Id);

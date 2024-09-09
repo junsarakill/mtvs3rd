@@ -34,6 +34,11 @@ void AQuestionsTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Other
 		// for문을 돌려서 플레이어에게 해당 i번의 Widget 넣어주기
 		for (int32 i = 0; i < OutActor.Num(); i++)
 		{
+			// JBS 추가 더미 제외 처리
+			if(OutActor[i]->ActorHasTag(FName(TEXT("Dummy"))))
+				continue;
+
+
 			// spawnedWidgetActor 변수에 questionsWidgetFactory Widget UI 가져오기
 			AQuestionsWidgetActor* spawnedWidgetActor = GetWorld()->SpawnActor<AQuestionsWidgetActor>(questionsWidgetFactory);
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("num : %d"), widgetNum));
