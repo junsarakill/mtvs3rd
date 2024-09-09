@@ -24,6 +24,10 @@ void ASecondEventTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Oth
 	if (Once) {
 		if (OtherActor && OtherActor != this)
 		{
+			// JBS 추가 플레이어가 닿았는지 체크
+			if(!OtherActor->ActorHasTag(FName(TEXT("Player"))) || OtherActor->ActorHasTag(FName(TEXT("Dummy"))))
+				return;
+
 			// "Player" 태그를 가진 캐릭터 중 무작위로 하나를 선택합니다.
 			ACharacter* RandomPlayer = GetRandomPlayerWithTag(TEXT("Player"));
 			if (RandomPlayer)
@@ -42,11 +46,22 @@ void ASecondEventTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Oth
 ACharacter* ASecondEventTriggerBox::GetRandomPlayerWithTag(FName Tag)
 {
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), Tag, players);
-
-	if (players.Num() > 0)
+	// JBS 추가 더미 제외
+	TArray<AActor*> realPlayers;
+	for(AActor* player : players)
 	{
-		int32 randomIndex = FMath::RandRange(0, players.Num() - 1);
-		return Cast<ACharacter>(players[randomIndex]);
+		if(player->ActorHasTag(FName(TEXT("Dummy"))))
+			continue;
+		else
+		{
+			realPlayers.Add(player);
+		}
+	}
+	// /
+	if (realPlayers.Num() > 0)
+	{
+		int32 randomIndex = FMath::RandRange(0, realPlayers.Num() - 1);
+		return Cast<ACharacter>(realPlayers[randomIndex]);
 	}
 
 	return nullptr;
