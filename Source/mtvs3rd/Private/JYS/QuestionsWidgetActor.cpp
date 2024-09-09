@@ -32,6 +32,8 @@ void AQuestionsWidgetActor::BeginPlay()
 	//	pcWiidget->AddToViewport();
 	//	pcWiidget->SetOwner(this);
 	//}
+	auto* pc = GetWorld()->GetFirstPlayerController();
+	player = Cast<ABS_VRPlayer>(pc->GetCharacter());
 }
 
 // Called every frame
