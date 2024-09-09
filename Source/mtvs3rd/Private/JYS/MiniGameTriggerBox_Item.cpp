@@ -33,14 +33,20 @@ void AMiniGameTriggerBox_Item::Tick(float DeltaTime)
 
 void AMiniGameTriggerBox_Item::OnOverlapBegin1(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	CurrentActor1 = OtherActor;
-	CheckTags();
+	if (OtherActor->ActorHasTag(FName("CanGrab")))
+	{
+		CurrentActor1 = OtherActor;
+		CheckTags();
+	}
 }
 
 void AMiniGameTriggerBox_Item::OnOverlapBegin2(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	CurrentActor2 = OtherActor;
-	CheckTags();
+	if (OtherActor->ActorHasTag(FName("CanGrab")))
+	{
+		CurrentActor2 = OtherActor;
+		CheckTags();
+	}
 }
 
 void AMiniGameTriggerBox_Item::CheckTags()
