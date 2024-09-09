@@ -9,6 +9,7 @@
 #include "PSH/PSH_HttpActor.h"
 #include "PSH/PSH_StartDataHttpActor.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
+#include "Components/WidgetComponent.h"
 
 void UPSH_StartDataWidget::NativeConstruct()
 {
@@ -79,8 +80,13 @@ void UPSH_StartDataWidget::OnClickRequest()
 		data.Blood = BloodText;
 		data.Name = SetName(GenderText);
 		
-		
 		GM->SetStartData(data);
+		
+		if (HttpActor)
+		{
+			HttpActor->SelectComponent->SetVisibility(false);
+		}
+
 		
 		if (pc)
 		{
