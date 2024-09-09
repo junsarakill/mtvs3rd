@@ -126,7 +126,7 @@ void APSH_Mtvs3rdGameModBase::OnStartResPost(FHttpRequestPtr Request, FHttpRespo
 		UPSH_TsetJsonParseLib::JsonParse(result, PlayerData);
 
         // 시작이름
-		UGameplayStatics::OpenLevel(GetWorld(), LevelName);
+		//UGameplayStatics::OpenLevel(GetWorld(), LevelName);
 
 		// 
 		// httpUi->SetTextLog(result);
