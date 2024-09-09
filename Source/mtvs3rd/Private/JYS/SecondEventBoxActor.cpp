@@ -21,8 +21,8 @@ void ASecondEventBoxActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// 15초 뒤에 사라진다
-	SetLifeSpan(15);
+	// 15?? ??? ???????
+	SetLifeSpan(5);
 	
 	MeshComp->SetOwnerNoSee(true);
 	MeshComp->SetOnlyOwnerSee(false);
