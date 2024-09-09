@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include <JBS/BS_Utility.h>
 #include "BS_FinalSelectComponent.generated.h"
 
 

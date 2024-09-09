@@ -2,6 +2,12 @@
 
 
 #include "JBS/BS_FinalSelectComponent.h"
+#include <JBS/BS_Hand.h>
+#include <JBS/BS_VRPlayer.h>
+#include <JBS/BS_PlayerState.h>
+#include <JBS/BS_SelectConfirmActor.h>
+#include <JBS/BS_SelectConfirmUI.h>
+#include <PSH/PSH_Mtvs3rdGameModBase.h>
 
 // Sets default values for this component's properties
 UBS_FinalSelectComponent::UBS_FinalSelectComponent()
@@ -117,6 +123,10 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(int fromId, int toId)
 		auto* ownerPS = gameObject->ownerPlayer->PS;
 		// 선택 확정 하기
 		ownerPS->IS_ALREADY_SELECT = true;
+
+		FString debugWorldStr = FString::Printf(TEXT("fromid: %d, toid: %d"), fromId, toId);
+		DrawDebugString(GetWorld(), gameObject->GetActorLocation() + FVector3d(0,0,FMath::RandRange(0,10)), debugWorldStr, nullptr, FColor::Green, 5.f, true);
+
 	}
 }
 
