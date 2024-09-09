@@ -69,9 +69,9 @@ public:
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
 	UPROPERTY(EditAnywhere)
-	FString URLStart = "http://192.168.0.19:3111/userinfo";
+	FString URLStart = "http://192.168.0.25:3111/userinfo";
 	UPROPERTY(EditAnywhere)
-	FString URLScore = "http://192.168.0.14:3111/lovescore";
+	FString URLScore = "http://192.168.0.25:3111/lovescore";
 protected:
 	virtual void BeginPlay() override;
 
