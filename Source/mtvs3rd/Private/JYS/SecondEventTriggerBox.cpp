@@ -25,7 +25,7 @@ void ASecondEventTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Oth
 		if (OtherActor && OtherActor != this)
 		{
 			// JBS 추가 플레이어가 닿았는지 체크
-			if(!OtherActor->ActorHasTag(FName(TEXT("Player"))) || OtherActor->ActorHasTag(FName(TEXT("Dummy"))));
+			if(!OtherActor->ActorHasTag(FName(TEXT("Player"))) || OtherActor->ActorHasTag(FName(TEXT("Dummy"))))
 				return;
 
 			// "Player" 태그를 가진 캐릭터 중 무작위로 하나를 선택합니다.
