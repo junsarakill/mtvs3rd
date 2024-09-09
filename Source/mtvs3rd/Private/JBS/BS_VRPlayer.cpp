@@ -47,23 +47,24 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// @@ 디버그단
-	// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("액터 rot : %s"), *GetActorRotation().ToString()));
-	// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Yellow, FString::Printf(TEXT("액터 moveDir : %s"), ));
-	FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
-	
-	FString velStr = GetVelocity().ToString();
-	int pid = PS->GetPlayerData().Id;
-	// 
-	float vrRootHeight = vrRoot->GetRelativeLocation().Z;
-	
-	// 카메라 키
-	float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
-	
-	
-	FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
-		, *moveDir.ToString(), *velStr, pid, vrRootHeight, vrHMDHeight);
-	DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
+	// XXX 디버그단
+	if(enableViewPlayerStat)
+	{
+		FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
+		
+		FString velStr = GetVelocity().ToString();
+		int pid = PS->GetPlayerData().Id;
+		// 
+		float vrRootHeight = vrRoot->GetRelativeLocation().Z;
+		
+		// 카메라 키
+		float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
+		
+		
+		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
+			, *moveDir.ToString(), *velStr, pid, vrRootHeight, vrHMDHeight);
+		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
+	}
 	
 
 	// 이동 방향대로 이동

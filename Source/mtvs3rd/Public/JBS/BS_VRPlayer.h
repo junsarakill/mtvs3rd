@@ -75,7 +75,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
+	bool enableViewPlayerStat = true;
 	
 
 public:
