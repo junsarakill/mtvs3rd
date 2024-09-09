@@ -230,10 +230,14 @@ void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int pl
 	// 내가 누구인지. id
 	// 버튼 무엇을 눌렀는지. button Num
 	// 몇번째 퀘스트인지  Qest Num
+	TestScore += 5;
+	PlayerData.syncPercentID1 = TestScore;
 
-	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
-
-	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
+	Gi->SetStartData(PlayerData);
+	playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
+// 	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+// 
+// 	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
 }
 
 void APSH_Mtvs3rdGameModBase::ReqPost(FString json, FString URL)

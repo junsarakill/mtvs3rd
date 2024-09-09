@@ -37,6 +37,9 @@ public:
 
 	int32 id = 0;
 
+	UPROPERTY()
+	float TestScore = 75;
+
 	TArray<int> ChoiceNum;
 
 	int LastChoiceNum = 0;
