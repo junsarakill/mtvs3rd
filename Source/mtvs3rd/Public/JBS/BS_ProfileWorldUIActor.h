@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include <PSH/PSH_HttpDataTable.h>
 #include <JBS/BS_Utility.h>
+#include <JBS/BS_BillBoardWorldUIActor.h>
 #include "BS_ProfileWorldUIActor.generated.h"
 
 UCLASS()
