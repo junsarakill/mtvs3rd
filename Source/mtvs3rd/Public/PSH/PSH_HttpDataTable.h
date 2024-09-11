@@ -6,6 +6,7 @@
 #include "Engine/DataTable.h"
 #include "PSH_HttpDataTable.generated.h"
 
+
 USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
  struct FPSH_HttpDataTable : public FTableRowBase
  {

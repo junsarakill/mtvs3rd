@@ -20,7 +20,10 @@ void UPSH_PotalWidget::SetPlayerCount()
 	if (PlayerCount >= MaxPlayerCount)
 	{
 		FTimerHandle handle;
-		GetWorld()->GetTimerManager().SetTimer(handle,Actor,&APSH_Portal::GoPotal,2,false);
+		if (Actor)
+		{
+			GetWorld()->GetTimerManager().SetTimer(handle,Actor,&APSH_Portal::GoPotal,2,false);
+		}
 	}
 }
 

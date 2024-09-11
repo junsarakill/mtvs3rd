@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "mtvs3rdCharacter.generated.h"
 
 class USpringArmComponent;
@@ -47,6 +48,29 @@ class Amtvs3rdCharacter : public ACharacter
 public:
 	Amtvs3rdCharacter();
 	
+	void GetOnlineSubsystem();
+
+	UFUNCTION()
+	void CreateGameSession();
+
+	UFUNCTION()
+	void JoinGameSession();
+
+	void OnJoinSessionComplate(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+	
+	void OnFindSessionComplete(bool bWasSuccessful);
+
+	void OnCreateSessionComplete(FName SessionName , bool bWasSuccessful);
+
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
+
+	FOnFindSessionsCompleteDelegate FindSessionCompleteDelegate;
+
+	FOnJoinSessionCompleteDelegate JoinSessionCompleteDelegate;
+
+	IOnlineSessionPtr OnlineSessionInterface;
 
 protected:
 

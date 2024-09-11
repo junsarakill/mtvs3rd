@@ -54,6 +54,14 @@
 		{
 			"Name": "VRM4U",
 			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemOculus",
+			"Enabled": true
 		}
 	]
 }

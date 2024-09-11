@@ -53,9 +53,9 @@ void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 	
 	
 	// 데이터 테이블에 이름으로 접근 하여 해당 행을 저장
-	//TArray<FPSH_HttpDataTable*> FoundData;
 	//FPSH_HttpDataTable * FoundData  = DataTable->FindRow<FPSH_HttpDataTable>(RowName, TEXT("Looking up player data"));
 	
+	//TArray<FPSH_HttpDataTable*> FoundData;
 	//DataTable->GetAllRows(TEXT(""), FoundData);
 	
 // 	for (int i = 0; i < FoundData.Num(); i++)
