@@ -71,6 +71,7 @@ public:
 
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
+	
 	UPROPERTY(EditAnywhere)
 	FString URLStart = "http://192.168.0.25:3111/userinfo";
 	UPROPERTY(EditAnywhere)

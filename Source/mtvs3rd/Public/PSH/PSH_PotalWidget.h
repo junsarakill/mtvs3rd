@@ -22,7 +22,6 @@ public:
 	UPROPERTY()
 	class APSH_Portal * Actor;
 
-	
 	void SetPlayerCount();
 
 	UPROPERTY(meta = (BindWidget))
