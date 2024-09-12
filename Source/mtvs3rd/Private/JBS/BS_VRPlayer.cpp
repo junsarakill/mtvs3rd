@@ -5,6 +5,9 @@
 #include "Camera/CameraComponent.h"
 #include <MotionControllerComponent.h>
 #include <EnhancedInputSubsystems.h>
+#include "Components/StaticMeshComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
@@ -107,7 +110,7 @@ void ABS_VRPlayer::SetIMC(UInputMappingContext *imc)
 void ABS_VRPlayer::SetMoveSpeed(float value)
 {
 	moveSpeed = value;
-	GetCharacterMovement()->MaxWalkSpeed = moveSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = MOVE_SPEED;
 }
 
 void ABS_VRPlayer::SetMoveDir(FVector2D dir)
@@ -151,3 +154,16 @@ void ABS_VRPlayer::SnapTurn(bool isRight)
 	
 }
 
+ABS_PlayerState *ABS_VRPlayer::GetPS()
+{
+    // ps 캐시 안되있으면 가져오기
+    if (!ps)
+    {
+        auto *myPS = this->GetPlayerState<ABS_PlayerState>();
+        check(myPS);
+        // ps 로 뭔가하기
+        ps = myPS;
+    }
+
+    return ps;
+}

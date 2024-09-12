@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
+#include <Kismet/BlueprintFunctionLibrary.h>
 #include "BS_Utility.generated.h"
 
 /**
@@ -14,6 +14,8 @@ enum class EPlayerType : uint8
 {
 	MALE1 = 0
 	,FEMALE1 = 1
+	,MALE2
+	,FEMALE2
 	,DUMMY = 4
 };
 
@@ -31,7 +33,8 @@ struct FProfileData
 	FProfileData(FString name, int32 percent, FString gender)
 	{
 		this->name = name;
-		type = gender == TEXT("남") ? EPlayerType::MALE1 :EPlayerType::FEMALE1;
+		// @@ 젠더에 더불어 나이대로 얼터체크 필요
+		type = gender == TEXT("남") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
 		syncPercent = percent;
 	}
 };

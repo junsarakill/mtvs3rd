@@ -2,9 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
 #include "GameFramework/Actor.h"
-#include "BS_Utility.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include "BS_Hand.generated.h"
 
@@ -25,7 +24,7 @@ struct FControllerType
 	EMotionControllerType type;
 	// 메시
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
-	USkeletalMesh* mesh;
+	class USkeletalMesh* mesh;
 	// 위치
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	FVector loc;
@@ -101,7 +100,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintGetter)
 	bool GetEnableRay()
 	{
-		// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("adas"));
 		return enableRay;
 	}
 	UFUNCTION(BlueprintCallable, BlueprintSetter)

@@ -3,7 +3,6 @@
 
 #include "JBS/BS_ProfileWorldUIActor.h"
 #include <JBS/BS_ProfileUI.h>
-#include "Components/WidgetComponent.h"
 #include <Kismet/GameplayStatics.h>
 
 
@@ -31,26 +30,6 @@ void ABS_ProfileWorldUIActor::Tick(float DeltaTime)
 
 	BillboardUI(profileUIComp);
 }
-
-// void ABS_ProfileWorldUIActor::BillboardUI()
-// {
-// 	if(!profileUIComp) return;
-
-// 	auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-// 	if(pc)
-// 	{
-// 		//pc로 뭔가 하기
-// 		auto cam = pc->PlayerCameraManager;
-// 		if(cam)
-// 		{
-// 			FVector targetLoc = cam->GetCameraLocation();
-// 			FVector worldUILoc = profileUIComp->GetComponentLocation();
-			
-// 			FRotator lookRot = (targetLoc - worldUILoc).Rotation();
-// 			profileUIComp->SetWorldRotation(lookRot);
-// 		}
-// 	}
-// }
 
 void ABS_ProfileWorldUIActor::SetProfileUIValue(FProfileData profileData)
 {

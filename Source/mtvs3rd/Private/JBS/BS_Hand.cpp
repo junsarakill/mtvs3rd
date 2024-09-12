@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "JBS/BS_Hand.h"
+#include <JBS/BS_Hand.h>
 #include <MotionControllerComponent.h>
 #include "Components/SkeletalMeshComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
 #include <JBS/BS_GrabComponent.h>
+#include "DrawDebugHelpers.h"
 #include "JBS/BS_VRPlayer.h"
 #include <Components/WidgetInteractionComponent.h>
 #include "Components/ArrowComponent.h"
@@ -55,19 +56,19 @@ void ABS_Hand::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ENABLE_RAY = ENABLE_RAY;
+	// ray 초기값 설정
+	SetEnableRay(ENABLE_RAY);
 }
 
 void ABS_Hand::SetController(EMotionControllerType type, ABS_VRPlayer* player)
 {
 	cType = type;
 	// 컨트롤러 데이터 찾기
-	for(auto fct : typeData)
+	for(FControllerType fct : typeData)
 	{
 		if(fct.type == cType)
 		{
 			// 왼손 오른손 데이터 설정
-
 			// left, right 정하기
 			FString enumStr = UEnum::GetValueAsString(fct.type);
 			int32 idx = enumStr.Find(TEXT("::"));
@@ -197,7 +198,7 @@ UBS_GrabComponent *ABS_Hand::FindGrabComponentNearHand()
 
 	if(isHit)
 	{
-		for(const FHitResult outHit : outHitResults)
+		for(const FHitResult &outHit : outHitResults)
 		{
 			AActor* hitActor = outHit.GetActor();
 			if(hitActor)
@@ -273,7 +274,7 @@ void ABS_Hand::LineTracePlayer()
 	
 	if(isHit)
 	{
-		// @@ 프로토타입용
+		// XXX 프로토타입용
 		// 대상이 더미라면
 		if(outHit.GetActor()->ActorHasTag(FName("Dummy")))
 		{
@@ -306,17 +307,6 @@ void ABS_Hand::LineTracePlayer()
 			fsComp->TrySpawnSelectConfirmUI(otherPD.Id);
 		}
 	}
-
-	// DrawDebugLine(
-	// 	GetWorld(),
-	// 	startLocation,
-	// 	endLocation,
-	// 	isHit ? FColor::Green : FColor::Red,
-	// 	false,
-	// 	1.5f,
-	// 	0,
-	// 	.5f
-	// );
 }
 
 // 프로필 ui 생성

@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include <CoreMinimal.h>
+#include <Components/ActorComponent.h>
 #include <PSH/PSH_HttpDataTable.h>
 #include <JBS/BS_Utility.h>
 #include <JBS/BS_BillBoardWorldUIActor.h>

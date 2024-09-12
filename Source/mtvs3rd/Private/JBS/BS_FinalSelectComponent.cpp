@@ -2,6 +2,10 @@
 
 
 #include "JBS/BS_FinalSelectComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/Engine.h"
+#include "TimerManager.h"
 #include <JBS/BS_Hand.h>
 #include <JBS/BS_VRPlayer.h>
 #include <JBS/BS_PlayerState.h>
