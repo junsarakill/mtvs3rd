@@ -57,11 +57,11 @@ void AQuestionsWidgetActor::BillBoardQuestionsWidget()
 	{
 		// VR
 		// 플레이어 카메라 가져오기
-		auto* cam = Cast<ABS_VRPlayer>(pc->GetCharacter());
- 		if (cam->vrHMDCam)
+		auto* playerCam = Cast<ABS_VRPlayer>(pc->GetCharacter());
+ 		if (playerCam->vrHMDCam)
  		{
-			FVector camLoc = cam->vrHMDCam->GetComponentLocation();
-			FVector camForwardVector = cam->vrHMDCam->GetForwardVector();
+			FVector camLoc = playerCam->vrHMDCam->GetComponentLocation();
+			FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
 
 			// 위젯의 새로운 위치 설정 (카메라 앞 50cm 위치)
 			FVector questionsUILoc = camLoc + camForwardVector * 800.0f;
@@ -72,7 +72,6 @@ void AQuestionsWidgetActor::BillBoardQuestionsWidget()
 
 			// 위젯을 카메라를 바라보게 회전 (Pitch 값을 조정하여 위젯을 정확히 정면으로)
 			questionsUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
-			// questionsUIComp->SetRelativeLocation(camLoc + FVector());
 	
  		}
 	}
