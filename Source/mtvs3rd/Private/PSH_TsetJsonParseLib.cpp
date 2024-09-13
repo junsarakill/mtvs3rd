@@ -33,7 +33,6 @@ void UPSH_TsetJsonParseLib::JsonParse(const FString& json, FPSH_HttpDataTable& d
 // // 				int age = data->AsObject()->GetIntegerField("123");
 // 		
 // 		}
-		
 		data.otherUserID1 = result->GetIntegerField(TEXT("Target_1_Id"));
 		data.otherUserID2 = result->GetIntegerField(TEXT("Target_2_Id"));
 		data.syncPercentID1 = result->GetNumberField(TEXT("synchro_1"));

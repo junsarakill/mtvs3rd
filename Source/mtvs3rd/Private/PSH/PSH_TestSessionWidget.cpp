@@ -9,8 +9,8 @@ void UPSH_TestSessionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-// 	BT_Create->OnClicked.AddDynamic(this,&UPSH_TestSessionWidget::CreateSessionButtonClicked);
-// 	BT_Join->OnClicked.AddDynamic(this,&UPSH_TestSessionWidget::JoinSessionButtonClicked);
+ 	BT_Create->OnClicked.AddDynamic(this,&UPSH_TestSessionWidget::CreateSessionButtonClicked);
+ 	BT_Join->OnClicked.AddDynamic(this,&UPSH_TestSessionWidget::JoinSessionButtonClicked);
 }
 
 void UPSH_TestSessionWidget::CreateSessionButtonClicked()
@@ -19,6 +19,15 @@ void UPSH_TestSessionWidget::CreateSessionButtonClicked()
 	if (GameInstance)
 	{
 		GameInstance->CreateGameSession();
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Orange,
+				FString::Printf(TEXT("Create"))
+				);
+		}
 	}
 }
 
@@ -27,6 +36,15 @@ void UPSH_TestSessionWidget::JoinSessionButtonClicked()
 	UPSH_GameInstance* GameInstance = Cast<UPSH_GameInstance>(GetGameInstance());
 	if (GameInstance)
 	{
-		GameInstance->JoinGameSession();
+		GameInstance->FindOtherSession();
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Orange,
+				FString::Printf(TEXT("Join"))
+			);
+		}
 	}
 }

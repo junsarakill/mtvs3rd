@@ -13,7 +13,7 @@ class MTVS3RD_API UPSH_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
-	UPSH_GameInstance();
+	//UPSH_GameInstance();
 
 	virtual void Init() override;
 
@@ -25,7 +25,9 @@ public:
 	void CreateGameSession();
 
 	UFUNCTION()
-	void JoinGameSession();
+	void FindOtherSession();
+
+	/*void JoinSeesion();*/
 
 	void OnJoinSessionComplate(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 	
@@ -42,6 +44,8 @@ public:
 	FOnJoinSessionCompleteDelegate JoinSessionCompleteDelegate;
 
 	IOnlineSessionPtr OnlineSessionInterface;
+
+	FName mySessionName = "Couple";
 	
 private:
 	UPROPERTY()
@@ -49,6 +53,8 @@ private:
 
 	UPROPERTY()
 	FPSH_HttpDataTable ReturnData;
+
+
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
