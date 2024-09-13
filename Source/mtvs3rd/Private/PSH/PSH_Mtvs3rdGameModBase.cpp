@@ -51,30 +51,6 @@ void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
 	
 	StatDataJson(); // 서버 통신
 	
-	
-	// 데이터 테이블에 이름으로 접근 하여 해당 행을 저장
-	//FPSH_HttpDataTable * FoundData  = DataTable->FindRow<FPSH_HttpDataTable>(RowName, TEXT("Looking up player data"));
-	
-	//TArray<FPSH_HttpDataTable*> FoundData;
-	//DataTable->GetAllRows(TEXT(""), FoundData);
-	
-// 	for (int i = 0; i < FoundData.Num(); i++)
-// 	{
-// 		UE_LOG(LogTemp, Warning, TEXT("Name: %s, Age: %d, Gender: %s, MBTI : %s"),
-// 			*FoundData[i]->Name, FoundData[i]->Age, *FoundData[i]->Gender, *FoundData[i]->MBTI);
-// 	}
-
-// 	if (FoundData)
-// 	{
-// 		// 해당 행에 저장된 값을 가져온다.
-// 		UE_LOG(LogTemp, Warning, TEXT("Name: %s, Age: %d, Gender: %s, MBTI : %s"),
-// 			*FoundData->Name, FoundData->Age, *FoundData->Gender,*FoundData->MBTI);
-// 	}
-// 	else
-// 	{
-// 		UE_LOG(LogTemp, Warning, TEXT("Row not found in DataTable."));
-// 	}
-
 }
 
 void APSH_Mtvs3rdGameModBase::StatDataJson()
@@ -209,7 +185,6 @@ void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일
 				}
 			}
 		}
-
 	}
 }
 
@@ -222,12 +197,10 @@ void APSH_Mtvs3rdGameModBase::SetLastWdiget(class UPSH_LastChoiceWidget* widget)
 void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int playerID)
 {
 	TMap<FString, FString> QestData; // 제이슨에 들어갈 데이터
-	//QestData.Add("Answer", FString::FromInt(num));  // 키 , 벨류
-// 	QestData.Add("playerID", FString::FromInt(playerID));
-// 	QestData.Add("ButtonNum", FString::FromInt(ButtonNum));
-// 	QestData.Add("QestNum", FString::FromInt(QestNum));
-
-
+	QestData.Add("playerID", FString::FromInt(playerID)); // 어떤 플레이어가
+	QestData.Add("QestNum", FString::FromInt(QestNum)); // 몇번째 퀘스트에
+	QestData.Add("Answer", FString::FromInt(ButtonNum)); // 몇번을 눌렀는지
+	
 	// 내가 누구인지. id
 	// 버튼 무엇을 눌렀는지. button Num
 	// 몇번째 퀘스트인지  Qest Num
@@ -237,9 +210,9 @@ void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int pl
 
 	Gi->SetStartData(PlayerData);
 	playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
-// 	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
-// 
-// 	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
+	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+
+	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
 }
 
 void APSH_Mtvs3rdGameModBase::ReqPost(FString json, FString URL)

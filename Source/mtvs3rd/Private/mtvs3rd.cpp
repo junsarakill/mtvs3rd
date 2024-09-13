@@ -5,3 +5,4 @@
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, mtvs3rd, "mtvs3rd" );
  
+DEFINE_LOG_CATEGORY(NetLog);

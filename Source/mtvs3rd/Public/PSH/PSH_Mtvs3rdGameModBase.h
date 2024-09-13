@@ -50,17 +50,17 @@ public:
 	UPROPERTY()
 	class UPSH_LastChoiceWidget * ChoiceWidget;
 
-	void ReqPost(FString json, FString URL);
 
 	void SetData(FPSH_HttpDataTable Data);
 
 
 	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
+	void ReqPost(FString json, FString URL);
 	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
 
 	void StatDataJson();
 	void ReqStartPost(FString json, FString URL);
-	// ������� �Լ�
 	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	void LastChoice(int FromId, int ToId);
