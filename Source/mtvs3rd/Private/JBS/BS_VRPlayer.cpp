@@ -113,7 +113,7 @@ void ABS_VRPlayer::SetMoveSpeed(float value)
 	GetCharacterMovement()->MaxWalkSpeed = MOVE_SPEED;
 }
 
-void ABS_VRPlayer::SetMoveDir(FVector2D dir)
+void ABS_VRPlayer::EventMove(FVector2D dir)
 {
 	// 입력 값
 	FVector inputDir = FVector(dir.X,dir.Y,0.f).GetSafeNormal();
@@ -138,7 +138,7 @@ void ABS_VRPlayer::EventTurn(float value)
 	// @@나중엔 자연스러운 회전?
 	else
 	{
-		
+		SmoothTurn(value);
 	}
 }
 
@@ -151,6 +151,19 @@ void ABS_VRPlayer::SnapTurn(bool isRight)
 	// SetActorRotation(GetActorRotation() + turnRot);
 	AddActorWorldRotation(turnRot);
 
+	
+}
+
+void ABS_VRPlayer::SmoothTurn(float value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%.2f"), value));
+	this->AddControllerYawInput(value * smoothTurnMulti);
+}
+
+void ABS_VRPlayer::EventLookup(FVector2D value)
+{
+	AddControllerYawInput(value.X);
+	AddControllerPitchInput(-value.Y);
 	
 }
 

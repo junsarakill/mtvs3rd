@@ -18,6 +18,30 @@ class MTVS3RD_API ABS_PlayerState : public APlayerState
 public:
 	
 protected:
+	// 플레이어 데이터
+	// id
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	int id;
+	// 이름
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FString name;
+	// 나이
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	int age;
+	// 성별 : 남, 녀
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FString gender;
+	// mbti
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FString mbti;
+	// 혈액형
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FString blood;
+	// 상대 id, 호감도
+	// otherUserID1 : syncPercentID1
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	TMap<int, float> syncMap;
+	
 	// 플레이어 데이터 구조체
 	UPROPERTY(VisibleAnywhere, Category="Default|Values", BlueprintGetter=GetPlayerData, BlueprintSetter=SetPlayerData)
 	FPSH_HttpDataTable playerData;
@@ -48,10 +72,7 @@ protected:
 
 public:
 	UFUNCTION(BlueprintGetter)
-	FPSH_HttpDataTable GetPlayerData()
-	{
-		return playerData;
-	}
+	FPSH_HttpDataTable GetPlayerData();
 	UFUNCTION(BlueprintSetter)
 	void SetPlayerData(FPSH_HttpDataTable data);
 

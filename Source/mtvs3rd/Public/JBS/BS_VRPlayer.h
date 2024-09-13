@@ -57,6 +57,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float snapTurnDeg = 45.f;
 
+	// 회전 배율
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	float smoothTurnMulti = 5.f;
+
 #pragma region 프리팹
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
@@ -78,8 +82,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
 
+	// pc 모드
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
+	bool playOnPC = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
+
 	
 
 public:
@@ -104,13 +113,20 @@ public:
 protected:
 	// 이동방향 설정
 	UFUNCTION(BlueprintCallable)
-	void SetMoveDir(FVector2D dir);
+	void EventMove(FVector2D dir);
 
 	// 썸스틱으로 회전
 	UFUNCTION(BlueprintCallable)
 	void EventTurn(float value);
 
 	void SnapTurn(bool isRight);
+
+	//자연스러운 회전
+	void SmoothTurn(float value);
+
+	// 마우스 회전
+	UFUNCTION(BlueprintCallable)
+	void EventLookup(FVector2D value);
 
 public:
 	// imc 추가

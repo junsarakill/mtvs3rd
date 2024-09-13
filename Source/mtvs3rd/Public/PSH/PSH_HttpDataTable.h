@@ -49,6 +49,20 @@ USTRUCT(Atomic,BlueprintType) // 최초 통신 데이터
 	 int ToUserAffinityScore_2;
 
 	  void PrintStruct();
+
+	// JBS 추가 생성자
+	FPSH_HttpDataTable() {}
+	
+	FPSH_HttpDataTable(int Id, FString Name, int Age, FString Gender
+					, FString MBTI, FString Blood
+					, int otherUserID1, float syncPercentID1
+					, int otherUserID2, float syncPercentID2
+					, float ToUserAffinityScore_1 = 0.f
+					, float ToUserAffinityScore_2 = 0.f)
+		: Id(Id), Name(Name), Age(Age), Gender(Gender)
+		, MBTI(MBTI), Blood(Blood)
+		, otherUserID1(otherUserID1), syncPercentID1(syncPercentID1)
+		, otherUserID2(otherUserID2), syncPercentID2(syncPercentID2) {}
  };
 
 
