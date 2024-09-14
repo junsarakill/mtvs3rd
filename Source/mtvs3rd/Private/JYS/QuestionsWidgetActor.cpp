@@ -41,14 +41,6 @@ void AQuestionsWidgetActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	BillBoardQuestionsWidget();
-
-	// // playerCamera 변수에 player의 카메라컴포넌트 가져오기
-	// auto* playerCamera = player->GetComponentByClass<UCameraComponent>();
-	// // spawnedWidgetActor(Widget UI)를 컴포넌트에 붙여주기
-	// this->AttachToComponent(playerCamera, FAttachmentTransformRules::KeepRelativeTransform);
-	// // Widget UI Location 위치 설정해주기
-	// FVector playerUILoc = playerCamera->GetForwardVector() * 1000;
-	// this->SetActorRelativeLocation(playerUILoc);
 }
 
 void AQuestionsWidgetActor::BillBoardQuestionsWidget()

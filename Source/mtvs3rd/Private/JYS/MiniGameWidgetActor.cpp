@@ -23,6 +23,7 @@ AMiniGameWidgetActor::AMiniGameWidgetActor()
 void AMiniGameWidgetActor::BeginPlay()
 {
 	Super::BeginPlay();
+	InitUI();
 	////// PC
 	//pcWiidget = Cast<UQuestionsWidget>(CreateWidget(GetWorld(), pcWidgetFactory));
 	//if (pcWiidget)
@@ -36,7 +37,13 @@ void AMiniGameWidgetActor::BeginPlay()
 void AMiniGameWidgetActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	BillBoardQuestionsWidget();
 
+	destroyTime -= DeltaTime;
+	if (destroyTime <= 0.0f)
+	{
+
+	}
 }
 
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
@@ -61,3 +68,8 @@ void AMiniGameWidgetActor::BillBoardQuestionsWidget()
 	}
 }
 
+void AMiniGameWidgetActor::InitUI()
+{
+	bCheck = true;
+
+}
