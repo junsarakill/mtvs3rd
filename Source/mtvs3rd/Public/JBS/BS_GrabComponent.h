@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Components/SceneComponent.h"
+#include <CoreMinimal.h>
+#include <Components/SceneComponent.h>
+#include <InputCoreTypes.h>
 #include "BS_GrabComponent.generated.h"
 
 UENUM(BlueprintType)

@@ -17,7 +17,7 @@ struct FCapturePlayer
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
 	class USkeletalMesh* mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
-	TSubclassOf<UAnimInstance> anim;
+	TSubclassOf<class UAnimInstance> anim;
 };
 
 UCLASS()

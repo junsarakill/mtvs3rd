@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "JBS/BS_GrabComponent.h"
+#include <JBS/BS_GrabComponent.h>
 #include "Kismet/KismetMathLibrary.h"
 #include <MotionControllerComponent.h>
 #include "Kismet/KismetSystemLibrary.h"

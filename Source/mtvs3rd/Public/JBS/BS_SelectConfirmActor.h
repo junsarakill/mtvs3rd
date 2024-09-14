@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "JBS/BS_BillBoardWorldUIActor.h"
+#include <CoreMinimal.h>
+#include <Components/ActorComponent.h>
+#include <JBS/BS_BillBoardWorldUIActor.h>
 #include "BS_SelectConfirmActor.generated.h"
 
 

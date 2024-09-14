@@ -3,7 +3,7 @@
 
 #include "JBS/BS_ProfileUI.h"
 #include "Components/TextBlock.h"
-#include "JBS/BS_CapturePlayer.h"
+#include <JBS/BS_CapturePlayer.h>
 #include <Kismet/GameplayStatics.h>
 
 

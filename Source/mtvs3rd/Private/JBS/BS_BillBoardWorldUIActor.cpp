@@ -31,6 +31,7 @@ void ABS_BillBoardWorldUIActor::BillboardUI(UWidgetComponent *uiComp)
 {
 	if(!uiComp) return;
 
+	// 로컬 클라이언트 플레이어를 바라보기
 	auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if(pc)
 	{

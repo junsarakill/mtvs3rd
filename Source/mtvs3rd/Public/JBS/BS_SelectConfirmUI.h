@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
 #include "Blueprint/UserWidget.h"
 #include "BS_SelectConfirmUI.generated.h"
 

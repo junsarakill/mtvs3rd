@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
 #include "GameFramework/Character.h"
 #include "BS_VRPlayer.generated.h"
 
@@ -31,8 +31,19 @@ protected:
 	float cameraHeight = 166.f;
 	// 이동 속도
 	// @@ 트리거 세기에 따라 이동속도 조절되면 좋을듯?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values", BlueprintGetter=GetMoveSpeed, BlueprintSetter=SetMoveSpeed)
 	float moveSpeed = 600.f;
+		public:
+	__declspec(property(get = GetMoveSpeed, put = SetMoveSpeed)) float MOVE_SPEED;
+	UFUNCTION(BlueprintGetter)
+	float GetMoveSpeed()
+	{
+		return moveSpeed;
+	}
+	UFUNCTION(BlueprintSetter)
+	void SetMoveSpeed(float value);
+		protected:
+
 	// 이동 방향
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	FVector moveDir;
@@ -46,28 +57,24 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float snapTurnDeg = 45.f;
 
+	// 회전 배율
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	float smoothTurnMulti = 5.f;
+
+#pragma region 프리팹
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
 	class UInputMappingContext* imcDefault;
+
+#pragma endregion
 
 	// 플레이어 상태
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
 	class ABS_PlayerState* ps;
 		public:
 	__declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
-	ABS_PlayerState* GetPS()
-	{
-		// ps 캐시 안되있으면 가져오기
-		if(!ps)
-		{
-			auto* myPS = this->GetPlayerState<ABS_PlayerState>();
-			check(myPS);
-			// ps 로 뭔가하기
-			ps = myPS;
-		}
-
-		return ps;
-	}
-	void SetPS(ABS_PlayerState* value);
+        ABS_PlayerState *GetPS();
+        void SetPS(ABS_PlayerState* value);
 		protected:
 
 
@@ -75,8 +82,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
 
+	// pc 모드
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
+	bool playOnPC = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
+
 	
 
 public:
@@ -96,21 +108,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
 	class ABS_SelectConfirmActor* selectConfirmUIActor;
 	
-
-	
-
 #pragma endregion
 #pragma region 함수 영역
 protected:
-	// imc 추가
-	UFUNCTION(BlueprintCallable)
-	void SetIMC(UInputMappingContext* imc);
-
-	// 이동속도 설정
-	void SetMoveSpeed(float value);
 	// 이동방향 설정
 	UFUNCTION(BlueprintCallable)
-	void SetMoveDir(FVector2D dir);
+	void EventMove(FVector2D dir);
 
 	// 썸스틱으로 회전
 	UFUNCTION(BlueprintCallable)
@@ -118,7 +121,17 @@ protected:
 
 	void SnapTurn(bool isRight);
 
+	//자연스러운 회전
+	void SmoothTurn(float value);
+
+	// 마우스 회전
+	UFUNCTION(BlueprintCallable)
+	void EventLookup(FVector2D value);
+
 public:
+	// imc 추가
+	UFUNCTION(BlueprintCallable)
+	void SetIMC(UInputMappingContext* imc);
 
 #pragma endregion
 
