@@ -10,16 +10,11 @@ AMiniGameTriggerBox_Item::AMiniGameTriggerBox_Item()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	itemBox1 = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox1"));
-	itemBox1->SetupAttachment(RootComponent);
-	itemBox1->SetCollisionProfileName("OverlapAllDynamic");
+	itemBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
+	itemBox->SetupAttachment(RootComponent);
+	itemBox->SetCollisionProfileName("OverlapAllDynamic");
 
-	itemBox2 = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox2"));
-	itemBox2->SetupAttachment(RootComponent);
-	itemBox2->SetCollisionProfileName("OverlapAllDynamic");
-
-	itemBox1->OnComponentBeginOverlap.AddDynamic(this, &AMiniGameTriggerBox_Item::OnOverlapBegin1);
-	itemBox2->OnComponentBeginOverlap.AddDynamic(this, &AMiniGameTriggerBox_Item::OnOverlapBegin2);
+	itemBox->OnComponentBeginOverlap.AddDynamic(this, &AMiniGameTriggerBox_Item::OnOverlapBegin);
 
 }
 
@@ -29,38 +24,20 @@ void AMiniGameTriggerBox_Item::BeginPlay()
 
 void AMiniGameTriggerBox_Item::Tick(float DeltaTime)
 {
+
 }
 
-void AMiniGameTriggerBox_Item::OnOverlapBegin1(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AMiniGameTriggerBox_Item::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor->ActorHasTag(FName("CanGrab")))
 	{
-		CurrentActor1 = OtherActor;
+		CurrentActor = OtherActor;
 		CheckTags();
 	}
 }
 
-void AMiniGameTriggerBox_Item::OnOverlapBegin2(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor->ActorHasTag(FName("CanGrab")))
-	{
-		CurrentActor2 = OtherActor;
-		CheckTags();
-	}
-}
 
 void AMiniGameTriggerBox_Item::CheckTags()
 {
-	TArray<AActor*> tag;
-	if(!CurrentActor1 || !CurrentActor2)
-		return;
-		
-	if (CurrentActor1->Tags[1] == CurrentActor2->Tags[1])
-	{
-		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-		if(tag.Num() <= 0) return;
-
-		AMiniGameWall* fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-		fadeOutWall->SetFadeOut();
-	}
+	overlapActorTag = CurrentActor->Tags[0];
 }

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MiniGameMissionWidget.h"
+#include "MiniGameQuestionWidget.h"
 #include "MiniGameWidgetActor.generated.h"
 
 UCLASS()
@@ -46,5 +48,15 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class ACharacter* player;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UMiniGameMissionWidget> MissionWidgetFactory;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UMiniGameQuestionWidget> QuestionWidgetFactory;
+
+	void InitUI();
+
+	float destroyTime = 15.0f;
+
+	bool bCheck = false;
 };
