@@ -24,7 +24,7 @@ public:
 	UPROPERTY()
 	class UPSH_GameInstance * Gi;
 
-	void SetStartData(FPSH_HttpDataTable Data);
+	
 	FPSH_HttpDataTable PlayerData;
 
 	UPROPERTY()
@@ -32,10 +32,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	FName LevelName;
-
-	UPROPERTY(EditDefaultsOnly)
-
-	int32 id = 0;
 
 	UPROPERTY()
 	float TestScore = 75;
@@ -59,9 +55,7 @@ public:
 	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 
-	void StatDataJson();
-	void ReqStartPost(FString json, FString URL);
-	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
 
 	void LastChoice(int FromId, int ToId);
 
@@ -72,10 +66,7 @@ public:
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
 	
-	UPROPERTY(EditAnywhere)
-	FString URLStart = "http://192.168.0.25:3111/userinfo";
-	UPROPERTY(EditAnywhere)
-	FString URLScore = "http://192.168.0.25:3111/lovescore";
+
 protected:
 	virtual void BeginPlay() override;
 

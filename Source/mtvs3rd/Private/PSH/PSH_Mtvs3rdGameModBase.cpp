@@ -37,83 +37,6 @@ void APSH_Mtvs3rdGameModBase::SetData(FPSH_HttpDataTable Data)
 	PlayerData = Data;
 }
 
-//  시작시 
-void APSH_Mtvs3rdGameModBase::SetStartData(FPSH_HttpDataTable Data)
-{
-	PlayerData = Data; // 데이터 가져오기
-	id++;
-	PlayerData.Id = id; // id 할당
-	
-	Gi->SetStartData(PlayerData); // 데이터 갱신 및 저장
-
-	if(playerState)
-	playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
-	
-	StatDataJson(); // 서버 통신
-	
-}
-
-void APSH_Mtvs3rdGameModBase::StatDataJson()
-{
-	TMap<FString, FString> StartData; // 제이슨에 들어갈 데이터
-	StartData.Add("ID", FString::FromInt(PlayerData.Id));  // 키 , 벨류
-	StartData.Add("Age", FString::FromInt(PlayerData.Age));
-	StartData.Add("Name", PlayerData.Name);
-	StartData.Add("Gender", PlayerData.Gender);
-	StartData.Add("MBTI", PlayerData.MBTI);
-	StartData.Add("blood", PlayerData.Blood);
-
-// 	TMap<FString, FPSH_HttpDataTable> StudentData; // 제이슨에 들어갈 데이터
-// 	StudentData.Add("" , PlayerData);
-
-	FString json = UPSH_TsetJsonParseLib::MakeJson(StartData);
-	ReqStartPost(json, URLStart); // 만든 제이슨 보내주는거
-}
-
-void APSH_Mtvs3rdGameModBase::ReqStartPost(FString json, FString URL)
-{
-	FHttpModule& httpModule = FHttpModule::Get();
-	TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
-
-	// 	// 요청할 정보를 설정
-	req->SetURL(URL);
-	req->SetVerb(TEXT("Post"));
-	req->SetHeader(TEXT("Content-Type"), TEXT("Application/json"));
-
-	req->SetContentAsString(json); // 내용
-
-	//req->SetTimeout(); 세션 유지 시간 설정.
-	// 응답받을 함수를 연결
-	req->OnProcessRequestComplete().BindUObject(this, &APSH_Mtvs3rdGameModBase::OnStartResPost);
-
-	// 서버에 요청
-	req->ProcessRequest();
-}
-
-void APSH_Mtvs3rdGameModBase::OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
-{
-	if (bConnectedSuccessfully)
-	{
-		// 성공
-		// actorv controll
-		// Json을 파싱해서 필요한 정보만 뽑아서 화면에 출력하고싶다.
-		UE_LOG(LogTemp, Warning, TEXT("creal"));
-		FString result = Response->GetContentAsString();
-		UPSH_TsetJsonParseLib::JsonParse(result, PlayerData);
-
-        // 시작이름
-		//UGameplayStatics::OpenLevel(GetWorld(), LevelName);
-
-		// 
-		// httpUi->SetTextLog(result);
-	}
-	else
-	{
-		// 실패
-		UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
-	}
-}
-
 void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱신 가능. // 누가 , 누구를
 {
 
@@ -212,7 +135,7 @@ void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int pl
 	playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
 	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
 
-	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
+//	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
 }
 
 void APSH_Mtvs3rdGameModBase::ReqPost(FString json, FString URL)

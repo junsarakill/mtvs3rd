@@ -9,12 +9,16 @@
 #include "Kismet/GameplayStatics.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
 #include "../../../../Plugins/Online/OnlineBase/Source/Public/Online/OnlineSessionNames.h"
+#include "HttpModule.h"
+#include "PSH_TsetJsonParseLib.h"
+#include "JBS/BS_PlayerState.h"
 
 
 void UPSH_GameInstance::Init()
 {
 	Super::Init();
 	GetOnlineSubsystem();
+	 
 }
 
 void UPSH_GameInstance::OnStart()
@@ -108,6 +112,7 @@ void UPSH_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSucc
 		if (World)
 		{
 			World->ServerTravel(FString("/Game/Main/MainMap?listen"));
+                
 		}
 		
 	}
@@ -141,7 +146,8 @@ void UPSH_GameInstance::FindOtherSession() // FindOtherSession
 	SessionSearch->QuerySettings.Set(FName("SESSION_NAME"), mySessionName.ToString(), EOnlineComparisonOp::Equals);
 	// 찾을 세션 쿼리를 현재로 설정한다
 
-	const FUniqueNetIdPtr netID = GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
+        const FUniqueNetIdPtr netID =
+            GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 	OnlineSessionInterface->FindSessions(*netID, SessionSearch.ToSharedRef());
 
 }
@@ -166,8 +172,6 @@ void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 			// 세션의 매치 타입이 "FreeForAll"일 경우 세션 참가
 			if (MatchType == FString("FreeForAll") && FindSessionName == mySessionName)
 			{
-				const FUniqueNetIdPtr netID = GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
-
 				PRINTLOG(TEXT("JoinSession"));
 				OnlineSessionInterface->JoinSession(0, mySessionName, Result);
 			}
@@ -207,6 +211,7 @@ void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionC
 			if (false == Address.IsEmpty())
 			{
 				pc->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+                           
 			}
 	
 		}
@@ -230,24 +235,93 @@ void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionC
 		break;
 	}
 	
-	
-	
 }
 
-
-
-void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable data)
+/// 시작 데이터 등록 과 통신
+void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
 {
-	PlayerData = data; // 데이터 저장
+    PlayerData = Data; // 데이터 가져오기
+    const FUniqueNetIdPtr netID =
+        GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
+   
+   PlayerData.Id = FCString::Atoi(*netID->ToString()); // Id 할당
 
-	FString num = FString::FromInt(PlayerData.Id);
+    if (GEngine)
+       GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("ID : %d"), PlayerData.Id)); // 스팀에 고유 ID
 
-	// 같은 Name으로 접근하면 덮어 씌워진다.
-	FName RowName = FName(num); // 이름 저장 
-	DataTable->AddRow(RowName, PlayerData); // 데이터 테이블에 추가.//
+    StatDataJson(); // 서버 통신
 
-	UE_LOG(LogTemp,Warning,TEXT("GameInstance"));
-	PlayerData.PrintStruct();
+    FString num = FString::FromInt(PlayerData.Id); // ID 로 키 저장 
+
+    // 같은 Name으로 접근하면 덮어 씌워진다.
+    FName RowName = FName(num);             // 이름 저장
+    DataTable->AddRow(RowName, PlayerData); // 데이터 테이블에 추가.//
+
+    PlayerData.PrintStruct();
+}
+
+void UPSH_GameInstance::StatDataJson()
+{
+    TMap<FString, FString> StartData;                     // 제이슨에 들어갈 데이터
+    StartData.Add("ID", FString::FromInt(PlayerData.Id)); // 키 , 벨류
+    StartData.Add("Age", FString::FromInt(PlayerData.Age));
+    StartData.Add("Name", PlayerData.Name);
+    StartData.Add("Gender", PlayerData.Gender);
+    StartData.Add("MBTI", PlayerData.MBTI);
+    StartData.Add("blood", PlayerData.Blood);
+
+    // 	TMap<FString, FPSH_HttpDataTable> StudentData; // 제이슨에 들어갈 데이터
+    // 	StudentData.Add("" , PlayerData);
+
+    FString json = UPSH_TsetJsonParseLib::MakeJson(StartData);
+    ReqStartPost(json); // 만든 제이슨 보내주는거
+}
+
+void UPSH_GameInstance::ReqStartPost(FString json)
+{
+    FHttpModule &httpModule = FHttpModule::Get();
+    TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
+
+    // 	// 요청할 정보를 설정
+    req->SetURL(URLStart);
+    req->SetVerb(TEXT("Post"));
+    req->SetHeader(TEXT("Content-Type"), TEXT("Application/json"));
+
+    req->SetContentAsString(json); // 내용
+
+    // req->SetTimeout(); 세션 유지 시간 설정.
+    //  응답받을 함수를 연결
+    req->OnProcessRequestComplete().BindUObject(this, &UPSH_GameInstance::OnStartResPost);
+
+    // 서버에 요청
+    req->ProcessRequest();
+}
+
+void UPSH_GameInstance::OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response,
+                                             bool bConnectedSuccessfully)
+{
+    if (bConnectedSuccessfully)
+    {
+        // 성공
+        // actorv controll
+        // Json을 파싱해서 필요한 정보만 뽑아서 화면에 출력하고싶다.
+        UE_LOG(LogTemp, Warning, TEXT("creal"));
+        FString result = Response->GetContentAsString();
+       FString Protocol = UPSH_TsetJsonParseLib::ProtocolJson(result); // 성공실패 확인
+        if (Protocol == "Success")
+        {
+			// 성공
+        }
+        else
+        {
+			// 실패
+        }
+    }
+    else
+    {
+        // 실패
+        UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
+    }
 }
 
 FPSH_HttpDataTable UPSH_GameInstance::GetData(int num)
@@ -259,6 +333,11 @@ FPSH_HttpDataTable UPSH_GameInstance::GetData(int num)
 	FPSH_HttpDataTable* FoundData = DataTable->FindRow<FPSH_HttpDataTable>(RowName, TEXT("Looking up player data"));
 
 	return *FoundData;
+}
+
+FPSH_HttpDataTable UPSH_GameInstance::GetStartData() // 플레이어 스테이트 / 플레이어 시작할때 호출
+{
+	return PlayerData;
 }
 
 void UPSH_GameInstance::SetdataUpdatae(FPSH_HttpDataTable data)
