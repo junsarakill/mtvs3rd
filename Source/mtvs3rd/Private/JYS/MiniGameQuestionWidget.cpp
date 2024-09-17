@@ -49,8 +49,7 @@ void UMiniGameQuestionWidget::SetOwner(AQuestionsWidgetActor* actor)
 
 void UMiniGameQuestionWidget::Onbtn_1Clicked()
 {
-	if (triggerBox->overlapActorTag == FName("shoes")) 
-	{
+	if (triggerBox->overlapActorTag == FName("신발")) {
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
 		if (tag.Num() <= 0) return;
 
@@ -61,8 +60,7 @@ void UMiniGameQuestionWidget::Onbtn_1Clicked()
 
 void UMiniGameQuestionWidget::Onbtn_2Clicked()
 {
-	if (triggerBox->overlapActorTag == FName("clothes")) 
-	{
+	if (triggerBox->overlapActorTag == FName("옷")) {
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
 		if (tag.Num() <= 0) return;
 
@@ -73,8 +71,7 @@ void UMiniGameQuestionWidget::Onbtn_2Clicked()
 
 void UMiniGameQuestionWidget::Onbtn_3Clicked()
 {
-	if (triggerBox->overlapActorTag == FName("hat")) 
-	{
+	if (triggerBox->overlapActorTag == FName("모자")) {
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
 		if (tag.Num() <= 0) return;
 
@@ -85,8 +82,7 @@ void UMiniGameQuestionWidget::Onbtn_3Clicked()
 
 void UMiniGameQuestionWidget::Onbtn_4Clicked()
 {
-	if (triggerBox->overlapActorTag == FName("bag")) 
-	{
+	if (triggerBox->overlapActorTag == FName("가방")) {
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
 		if (tag.Num() <= 0) return;
 
@@ -97,8 +93,7 @@ void UMiniGameQuestionWidget::Onbtn_4Clicked()
 
 void UMiniGameQuestionWidget::Onbtn_5Clicked()
 {
-	if (triggerBox->overlapActorTag == FName("Muffler")) 
-	{
+	if (triggerBox->overlapActorTag == FName("목도리")) {
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
 		if (tag.Num() <= 0) return;
 
@@ -109,8 +104,7 @@ void UMiniGameQuestionWidget::Onbtn_5Clicked()
 
 void UMiniGameQuestionWidget::Onbtn_6Clicked()
 {
-	if (triggerBox->overlapActorTag == FName("watch")) 
-	{
+	if (triggerBox->overlapActorTag == FName("시계")) {
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
 		if (tag.Num() <= 0) return;
 
