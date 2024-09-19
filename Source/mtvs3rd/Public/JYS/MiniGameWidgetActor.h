@@ -59,4 +59,14 @@ public:
 	float destroyTime = 15.0f;
 
 	bool bCheck = false;
+
+public:
+	// countdown
+	void CountDown();
+
+	UPROPERTY(BlueprintReadOnly)
+	int32 minutes = 2;
+	UPROPERTY(BlueprintReadOnly)
+	int32 second = 0;
+
 };
