@@ -40,4 +40,14 @@ void AMiniGameTriggerBox_Item::OnOverlapBegin(UPrimitiveComponent* OverlappedCom
 void AMiniGameTriggerBox_Item::CheckTags()
 {
 	overlapActorTag = CurrentActor->Tags[0];
+	//if (overlapActorTag == // Tags[0])
+	//{
+	//	TArray<AActor*> OutActors;
+	//	UGameplayStatics::GetAllActorsWithTag(GetWorld(),FName("FadeOut"), OutActors);
+	//	auto* miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
+	//	if (miniGameWall) 
+	//	{
+	//		miniGameWall->SetFadeOut();
+	//	}
+	//}
 }

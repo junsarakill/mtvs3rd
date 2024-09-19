@@ -40,6 +40,7 @@ void UMiniGameQuestionWidget::NativeConstruct()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName(TEXT("Table")), outActor);
 	
 	triggerBox = Cast<AMiniGameTriggerBox_Item>(outActor[0]);
+
 }
 
 void UMiniGameQuestionWidget::SetOwner(AQuestionsWidgetActor* actor)
