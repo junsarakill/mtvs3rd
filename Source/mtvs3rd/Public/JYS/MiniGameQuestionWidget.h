@@ -66,4 +66,6 @@ private:
 	class AQuestionsWidgetActor* owner;
 
 	class AMiniGameTriggerBox_Item* triggerBox;
+
+
 };

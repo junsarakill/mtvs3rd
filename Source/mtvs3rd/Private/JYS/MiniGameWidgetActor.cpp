@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "JBS/BS_PlayerState.h"
+#include "Kismet/GameplayStatics.h"
+#include "JYS/MiniGameWall.h"
 
 
 // Sets default values
@@ -31,6 +33,9 @@ void AMiniGameWidgetActor::BeginPlay()
 	//	pcWiidget->AddToViewport();
 	//	pcWiidget->SetOwner(this);
 	//}
+
+	FTimerHandle handle;
+	GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.f, true, 0);
 }
 
 // Called every frame
@@ -72,4 +77,30 @@ void AMiniGameWidgetActor::InitUI()
 {
 	bCheck = true;
 
+}
+
+void AMiniGameWidgetActor::CountDown()
+{
+	if (second != 0)
+	{
+		second = second - 1;
+	}
+	else
+	{
+		if (minutes == 0)
+		{
+			TArray<AActor*> OutActors;
+			UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("FadeOut"), OutActors);
+			auto* miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
+			if (miniGameWall)
+			{
+				miniGameWall->SetFadeOut();
+			}
+		}
+		else
+		{
+			minutes = minutes - 1;
+			second = 59;
+		}
+	}
 }
