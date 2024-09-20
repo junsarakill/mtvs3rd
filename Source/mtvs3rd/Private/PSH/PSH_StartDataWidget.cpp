@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "PSH/PSH_StartDataWidget.h"
@@ -10,12 +10,16 @@
 #include "PSH/PSH_StartDataHttpActor.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
 #include "Components/WidgetComponent.h"
+#include "PSH/PSH_GameInstance.h"
 
 void UPSH_StartDataWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
+    Gi = Cast<UPSH_GameInstance>(GetWorld()->GetGameInstance());
+
+	BT_Name->SetVisibility(ESlateVisibility::Hidden);
 
 	// Age Button FUNCTION
 	BT_0->OnClicked.AddDynamic(this,&UPSH_StartDataWidget::OnClick0);
@@ -66,6 +70,20 @@ void UPSH_StartDataWidget::NativeConstruct()
 	BT_AB->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickAB);
 	BT_O->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickO);
 	
+	// Name Button Fuction Man
+	BT_Name->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickName);
+    BT_Man_Name1->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName1);
+    BT_Man_Name2->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName2);
+    BT_Man_Name3->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName3);
+    BT_Man_Name4->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName4);
+   
+	// Name Button Button WoMan
+    BT_Woman_1->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickWoManName1);
+    BT_Woman_2->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickWoManName2);
+    BT_Woman_3->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickWoManName3);
+    BT_Woman_4->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickWoManName4);
+
+
 }
 
 void UPSH_StartDataWidget::OnClickRequest()
@@ -78,9 +96,9 @@ void UPSH_StartDataWidget::OnClickRequest()
 		data.MBTI = MBTIText;
 		data.Gender = GenderText;
 		data.Blood = BloodText;
-		data.Name = SetName(GenderText);
+		data.Name = NameText;
 		
-		GM->SetStartData(data);
+		Gi->SetStartData(data);
 		
 		if (HttpActor)
 		{
@@ -261,11 +279,13 @@ void UPSH_StartDataWidget::OnClickAge()
 void UPSH_StartDataWidget::OnClickMan()
 {
 	GenderText = "Man";
+	BT_Name->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UPSH_StartDataWidget::OnClickGirl()
 {
 	GenderText = "Woman";
+    BT_Name->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UPSH_StartDataWidget::OnClickISTJ()
@@ -401,6 +421,76 @@ void UPSH_StartDataWidget::OnClickBlood()
 	SwichSlot(3);
 }
 
+void UPSH_StartDataWidget::OnClickName() 
+{ 
+	if (GenderText == "Man")
+    {
+        SwichSlot(4);
+    }
+	else if (GenderText == "Woman")
+    {
+        SwichSlot(5);
+    }
+    
+}
+
+void UPSH_StartDataWidget::OnClickWoManName1() 
+{
+    SwichSlot(0);
+    NameText = TEXT("영숙");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
+void UPSH_StartDataWidget::OnClickWoManName2()
+{
+    SwichSlot(0);
+    NameText = TEXT("옥순");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
+void UPSH_StartDataWidget::OnClickWoManName3()
+{
+    SwichSlot(0);
+    NameText = TEXT("순자");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
+void UPSH_StartDataWidget::OnClickWoManName4() 
+{
+    SwichSlot(0);
+    NameText = TEXT("현숙");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
+
+void UPSH_StartDataWidget::OnClickManName1() 
+{
+    SwichSlot(0);
+    NameText = TEXT("영철");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
+void UPSH_StartDataWidget::OnClickManName2() 
+{
+    SwichSlot(0);
+    NameText = TEXT("영수");
+    TB_Name->SetText(FText::FromString(NameText));
+}	
+
+void UPSH_StartDataWidget::OnClickManName3() 
+{
+    SwichSlot(0);
+    NameText = TEXT("광수");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
+void UPSH_StartDataWidget::OnClickManName4()
+{
+    SwichSlot(0);
+    NameText = TEXT("상철");
+    TB_Name->SetText(FText::FromString(NameText));
+}
+
 void UPSH_StartDataWidget::OnClickA()
 {
 	BloodText = "A";
@@ -441,16 +531,4 @@ void UPSH_StartDataWidget::SetHttpACtor(class APSH_StartDataHttpActor* Owner)
 void UPSH_StartDataWidget::SwichSlot(int num)
 {
 	SelectSwicher->SetActiveWidgetIndex(num);
-}
-
-FString UPSH_StartDataWidget::SetName(FString Gender)
-{
-	if (Gender == "Man")
-	{
-		return "YeongCheol";
-	}
-	else
-	{
-		return "Oksun";
-	}
 }

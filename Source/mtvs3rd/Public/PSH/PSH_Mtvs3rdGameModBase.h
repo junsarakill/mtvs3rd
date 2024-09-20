@@ -21,10 +21,15 @@ public:
 
 // 	FHttopStartData GetStartData();
 
+	// 플레이어 로그인 시도 할때
+	/*virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;*/
+
+	// 플레이어 로그인 이후
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 	UPROPERTY()
 	class UPSH_GameInstance * Gi;
 
-	void SetStartData(FPSH_HttpDataTable Data);
+	
 	FPSH_HttpDataTable PlayerData;
 
 	UPROPERTY()
@@ -32,10 +37,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	FName LevelName;
-
-	UPROPERTY(EditDefaultsOnly)
-
-	int32 id = 0;
 
 	UPROPERTY()
 	float TestScore = 75;
@@ -45,7 +46,7 @@ public:
 	int LastChoiceNum = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int playerCount = 2;
+	int playerCount = 0;
 
 	UPROPERTY()
 	class UPSH_LastChoiceWidget * ChoiceWidget;
@@ -55,13 +56,6 @@ public:
 
 
 	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
-	void ReqPost(FString json, FString URL);
-	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
-
-
-	void StatDataJson();
-	void ReqStartPost(FString json, FString URL);
-	void OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	void LastChoice(int FromId, int ToId);
 
@@ -72,10 +66,6 @@ public:
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
 	
-	UPROPERTY(EditAnywhere)
-	FString URLStart = "http://192.168.0.25:3111/userinfo";
-	UPROPERTY(EditAnywhere)
-	FString URLScore = "http://192.168.0.25:3111/lovescore";
 protected:
 	virtual void BeginPlay() override;
 

@@ -9,11 +9,11 @@
 void UPSH_PotalWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+    TB_PlayerCount->SetText(FText::FromString(FString::Printf(TEXT("Player : %d / %d"), 0, MaxPlayerCount)));
 }
 
-void UPSH_PotalWidget::SetPlayerCount()
+void UPSH_PotalWidget::SetPlayerCount(int32 PlayerCount)
 {
-	PlayerCount++;
 
 	TB_PlayerCount->SetText(FText::FromString(FString::Printf(TEXT("Player : %d / %d"),PlayerCount , MaxPlayerCount)));
 

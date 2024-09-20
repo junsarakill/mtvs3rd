@@ -22,14 +22,13 @@ public:
 	UPROPERTY()
 	class APSH_Portal * Actor;
 
-	void SetPlayerCount();
+	void SetPlayerCount(int32 PlayerCount);
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock * TB_PlayerCount;
 
-	int PlayerCount = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int MaxPlayerCount = 1;
+	int MaxPlayerCount = 2;
 	
 };

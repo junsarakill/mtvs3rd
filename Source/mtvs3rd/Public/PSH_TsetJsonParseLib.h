@@ -23,5 +23,7 @@ public:
 
 	static FString MakeJson(const TMap<FString, FString> source);
 
+	static FString ProtocolJson(const FString &json);
+
 
 };

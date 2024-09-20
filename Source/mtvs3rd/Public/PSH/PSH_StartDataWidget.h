@@ -20,6 +20,9 @@ class MTVS3RD_API UPSH_StartDataWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY()
+	class UPSH_GameInstance * Gi;
 	
 	class APSH_StartDataHttpActor* HttpActor;
 
@@ -83,6 +86,22 @@ public:
 	UPROPERTY(meta = (BindWidget)) UButton* BT_AB;
 	UPROPERTY(meta = (BindWidget)) UButton* BT_O;
 
+	// Name Button Button Man
+
+	FString NameText;
+    UPROPERTY(meta = (BindWidget)) class UTextBlock * TB_Name;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Name;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name1;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name2;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name3;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name4;
+
+	// Name Button Button WoMan
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Woman_1;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Woman_2;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Woman_3;
+    UPROPERTY(meta = (BindWidget)) UButton *BT_Woman_4;
+
 public:
 	virtual void NativeConstruct() override;
 
@@ -134,6 +153,19 @@ public:
 	UFUNCTION() void OnClickO();
 	UFUNCTION() void OnClickAB();
 
+	// Name Button Fuction Man
+	UFUNCTION() void OnClickName();
+	UFUNCTION() void OnClickManName1();
+    UFUNCTION() void OnClickManName2();
+    UFUNCTION() void OnClickManName3();
+    UFUNCTION() void OnClickManName4();
+	 
+	// Name Button Fuction WoMan
+	UFUNCTION() void OnClickWoManName1();
+    UFUNCTION() void OnClickWoManName2();
+    UFUNCTION() void OnClickWoManName3();
+    UFUNCTION() void OnClickWoManName4();
+
 	void SetHttpACtor(class APSH_StartDataHttpActor* Owner);
 
 	//Swicher  Button FUNCTION
@@ -141,7 +173,6 @@ public:
 
 
 private:
-	FString SetName(FString Gender);
 
 	FPSH_HttpDataTable data;
 	UPROPERTY()

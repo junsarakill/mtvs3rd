@@ -41,6 +41,14 @@ public:
 	UPROPERTY(EditAnywhere , Category = Tags)
 	FName TagetName;
 
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerPotal)
+	int32 PlayerCount;
+
+	UPROPERTY()
+	TArray<class ABS_VRPlayer*> playerArray; // 플레이어
+
+	UFUNCTION()
+    void OnRep_PlayerPotal();
 
 	UFUNCTION()
 	void OnComponentBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -51,7 +59,13 @@ public:
 	void SetPortal();
 	
 	void GoPotal();
+	UFUNCTION(Server,Reliable)
+	void SRPC_GoPotal();
+	UFUNCTION(NetMulticast,Reliable)
+	void MRPC_GoPotal();
 
+	
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const;
 
 private:
 
