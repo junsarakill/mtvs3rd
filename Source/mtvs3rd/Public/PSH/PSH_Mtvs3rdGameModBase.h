@@ -21,6 +21,11 @@ public:
 
 // 	FHttopStartData GetStartData();
 
+	// 플레이어 로그인 시도 할때
+	/*virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;*/
+
+	// 플레이어 로그인 이후
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 	UPROPERTY()
 	class UPSH_GameInstance * Gi;
 
@@ -41,7 +46,7 @@ public:
 	int LastChoiceNum = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int playerCount = 2;
+	int playerCount = 0;
 
 	UPROPERTY()
 	class UPSH_LastChoiceWidget * ChoiceWidget;
@@ -51,11 +56,6 @@ public:
 
 
 	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
-	void ReqPost(FString json, FString URL);
-	void OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
-
-
-
 
 	void LastChoice(int FromId, int ToId);
 
@@ -66,7 +66,6 @@ public:
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
 	
-
 protected:
 	virtual void BeginPlay() override;
 

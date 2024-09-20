@@ -32,6 +32,21 @@ void APSH_Mtvs3rdGameModBase::BeginPlay()
 	
 }
 
+// void APSH_Mtvs3rdGameModBase::PreLogin(const FString &Options, const FString &Address, const FUniqueNetIdRepl &UniqueId, FString &ErrorMessage)
+// {
+// //     서버에 접근 시도중인 플레이어를 수락 또는 거부합니다
+// //         .ErrorMessage 에 공백이 아닌 스트링을 입력하면 Login 함수가 실패하도록 만듭니다.PreLogin 은 Login 전 호출되며,
+// //         참가하는 플레이어가 게임 콘텐츠를 다운로드해야 하는 경우 시간이 한참 지나서야 Login 이 호출될 수도 있습니다.
+// }
+
+void APSH_Mtvs3rdGameModBase::PostLogin(APlayerController *NewPlayer) 
+{
+    Super::PostLogin(NewPlayer);
+    //     로그인 성공 이후 호출됩니다.PlayerController 에서 리플리케이트되는 함수 호출을 하기에 안전한 첫 번째
+//         장소입니다.블루프린트로 OnPostLogin 을 구현하여 부가 로직을 추가할 수 있습니다.
+
+}
+
 void APSH_Mtvs3rdGameModBase::SetData(FPSH_HttpDataTable Data)
 {
 	PlayerData = Data;
@@ -138,44 +153,3 @@ void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int pl
 //	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
 }
 
-void APSH_Mtvs3rdGameModBase::ReqPost(FString json, FString URL)
-{
-	FHttpModule& httpModule = FHttpModule::Get();
-	TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
-
-	// 	// 요청할 정보를 설정
-	req->SetURL(URL);
-	req->SetVerb(TEXT("Post"));
-	req->SetHeader(TEXT("Content-Type"), TEXT("Application/json"));
-
-	req->SetContentAsString(json); // 내용
-
-	//req->SetTimeout(); 세션 유지 시간 설정.
-	// 응답받을 함수를 연결
-	req->OnProcessRequestComplete().BindUObject(this, &APSH_Mtvs3rdGameModBase::OnResPost);
-
-	// 서버에 요청
-	req->ProcessRequest();
-}
-void APSH_Mtvs3rdGameModBase::OnResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
-{
-	if (bConnectedSuccessfully)
-	{
-		// 성공
-		// actorv controll
-		// Json을 파싱해서 필요한 정보만 뽑아서 화면에 출력하고싶다.
-		UE_LOG(LogTemp, Warning, TEXT("creal"));
-		FString result = Response->GetContentAsString();
-		UPSH_TsetJsonParseLib::JsonParse(result, PlayerData);
-
-		Gi->SetStartData(PlayerData);
-		playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
-		// 
-		// httpUi->SetTextLog(result);
-	}
-	else
-	{
-		// 실패
-		UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
-	}
-}

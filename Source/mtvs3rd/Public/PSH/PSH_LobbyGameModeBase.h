@@ -13,5 +13,11 @@ UCLASS()
 class MTVS3RD_API APSH_LobbyGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+	// 플레이어 로그인 이후
+    virtual void PostLogin(APlayerController *NewPlayer) override;
+
+	UPROPERTY(EditDefaultsOnly)
+	int playerCount = 0;
 	
 };

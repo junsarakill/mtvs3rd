@@ -108,13 +108,8 @@ void UPSH_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSucc
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Created session : %s"), *SessionName.ToString()));
 
-		UWorld* World = GetWorld();
-		if (World)
-		{
-			World->ServerTravel(FString("/Game/Main/MainMap?listen"));
-                
-		}
-		
+			GetWorld()->ServerTravel(FString("/Game/PSH/Map/WaitRoom?listen"));
+
 	}
 	else
 	{
@@ -316,6 +311,119 @@ void UPSH_GameInstance::OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr
         {
 			// 실패
         }
+    }
+    else
+    {
+        // 실패
+        UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
+    }
+}
+
+void UPSH_GameInstance::QuestButtonJson(int ButtonNum, int QestNum, int playerID) 
+{
+    TMap<FString, FString> QestData;                      // 제이슨에 들어갈 데이터
+    QestData.Add("playerID", FString::FromInt(playerID)); // 어떤 플레이어가
+    QestData.Add("QestNum", FString::FromInt(QestNum));   // 몇번째 퀘스트에
+    QestData.Add("Answer", FString::FromInt(ButtonNum));  // 몇번을 눌렀는지
+
+    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+
+    ReqQuestPost(json); // 만든 제이슨 보내주는거
+}
+
+void UPSH_GameInstance::ReqQuestPost(FString json)
+{
+    FHttpModule &httpModule = FHttpModule::Get();
+    TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
+
+    // 	// 요청할 정보를 설정
+    req->SetURL(URLQuest);
+    req->SetVerb(TEXT("Post"));
+    req->SetHeader(TEXT("Content-Type"), TEXT("Application/json"));
+
+    req->SetContentAsString(json); // 내용
+
+    // req->SetTimeout(); 세션 유지 시간 설정.
+    //  응답받을 함수를 연결
+    req->OnProcessRequestComplete().BindUObject(this, &UPSH_GameInstance::OnResQuestPost);
+
+    // 서버에 요청
+    req->ProcessRequest();
+}
+
+void UPSH_GameInstance::OnResQuestPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+    if (bConnectedSuccessfully)
+    {
+
+        FString result = Response->GetContentAsString();
+        FString Protocol = UPSH_TsetJsonParseLib::ProtocolJson(result); // 성공실패 확인
+        if (Protocol == "Success")
+        {
+            QuestStateButtonJson();
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Failed"));
+        }
+		
+    }
+    else
+    {
+        // 실패
+        UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
+    }
+}
+
+void UPSH_GameInstance::QuestStateButtonJson() 
+{
+	SRPC_QuestStateButtonJson();
+}
+
+void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation() 
+{
+	MRPC_QuestStateButtonJson();
+}
+
+void UPSH_GameInstance::MRPC_QuestStateButtonJson_Implementation() 
+{
+    TMap<FString, FString> QestData;                     // 제이슨에 들어갈 데이터
+    QestData.Add("Id", FString::FromInt(PlayerData.Id)); // 어떤 플레이어가
+    QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
+
+    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+
+    ReqQuestPost(json); // 만든 제이슨 보내주는거
+}
+
+void UPSH_GameInstance::ReqQuestStatePost(FString json) 
+{
+    FHttpModule &httpModule = FHttpModule::Get();
+    TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
+
+    // 	// 요청할 정보를 설정
+    req->SetURL(URLState);
+    req->SetVerb(TEXT("Post"));
+    req->SetHeader(TEXT("Content-Type"), TEXT("Application/json"));
+
+    req->SetContentAsString(json); // 내용
+
+    // req->SetTimeout(); 세션 유지 시간 설정.
+    //  응답받을 함수를 연결
+    req->OnProcessRequestComplete().BindUObject(this, &UPSH_GameInstance::OnResQuestPost);
+
+    // 서버에 요청
+    req->ProcessRequest();
+}
+
+void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+    if (bConnectedSuccessfully) 
+    {
+        FString result = Response->GetContentAsString();
+        UPSH_TsetJsonParseLib::JsonParse(result, PlayerData); // 점수 갱신 요청
+        playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
+      
     }
     else
     {

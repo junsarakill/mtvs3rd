@@ -7,6 +7,7 @@
 #include "JBS/BS_VRPlayer.h"
 #include "mtvs3rdCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "JBS/BS_PlayerState.h"
 
 // Sets default values
@@ -23,6 +24,7 @@ APSH_Portal::APSH_Portal()
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Plane"));
 	mesh->SetupAttachment(RootComponent);
+    bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -58,6 +60,7 @@ void APSH_Portal::Tick(float DeltaTime)
 
 }
 
+
 void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//ABS_VRPlayer * player = Cast<ABS_VRPlayer>(OtherActor);
@@ -65,15 +68,29 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	//player = Cast<Amtvs3rdCharacter>(OtherActor);
 
 	player = Cast<ABS_VRPlayer>(OtherActor);
+
 	if (player)
 	{
-		 // 플레이어가 부딫히면 카운트를 올림
-		 PotalWidget->SetPlayerCount();
-		 // 올리고 콜리전을 끔.
-		Setvisilbe(false);
-	}
-}
+            UE_LOG(LogTemp,Warning,TEXT("Acotr : %s"),*OtherActor->GetName());
+            if (HasAuthority())
+            {
+                // 플레이어가 부딫히면 카운트를 올림
+                /*PotalWidget->SetPlayerCount();*/
+                // 올리고 콜리전을 끔.
+                PlayerCount++;
+                OnRep_PlayerPotal();
+               // Setvisilbe(false);
+            }
 
+	}
+	
+
+	
+}
+void APSH_Portal::OnRep_PlayerPotal()
+{ 
+	PotalWidget->SetPlayerCount(PlayerCount); 
+}
 void APSH_Portal::Setvisilbe(bool chek)
 {
 	//mesh->SetVisibility(chek);
@@ -100,3 +117,10 @@ void APSH_Portal::GoPotal()
 	}
 }
 
+void APSH_Portal::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(APSH_Portal,PlayerCount);
+   
+}

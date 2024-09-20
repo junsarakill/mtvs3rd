@@ -76,7 +76,10 @@ FString UPSH_TsetJsonParseLib::ProtocolJson(const FString &json)
     /*FPSH_HttpDataTable* newRow = new FPSH_HttpDataTable();*/
     if (FJsonSerializer::Deserialize(reader, result))
     {
-        return result->GetStringField(TEXT("synchro_1")); // 성공 실패 여부
+        return result->GetStringField(TEXT("SuccessFailed")); // 성공 실패 여부
 	}
-    return "Fail";
+	else
+    {    
+		 return "Null";
+	}
 }
