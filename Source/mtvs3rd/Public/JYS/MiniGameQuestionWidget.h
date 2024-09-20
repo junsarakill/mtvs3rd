@@ -7,65 +7,73 @@
 #include "MiniGameQuestionWidget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MTVS3RD_API UMiniGameQuestionWidget : public UUserWidget
 {
-	GENERATED_BODY()
-	
-public: 
+    GENERATED_BODY()
 
-	virtual void NativeConstruct() override;
+public:
+    virtual void NativeConstruct() override;
+    virtual void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* btn_1;
+    UPROPERTY(meta = (BindWidget))
+    class UButton *btn_1;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* btn_2;
+    UPROPERTY(meta = (BindWidget))
+    class UButton *btn_2;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* btn_3;
+    UPROPERTY(meta = (BindWidget))
+    class UButton *btn_3;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* btn_4;
+    UPROPERTY(meta = (BindWidget))
+    class UButton *btn_4;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* btn_5;
+    UPROPERTY(meta = (BindWidget))
+    class UButton *btn_5;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* btn_6;
+    UPROPERTY(meta = (BindWidget))
+    class UButton *btn_6;
 
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* QuestionBtn;
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock *QuestionBtn;
 
-	void SetOwner(class AQuestionsWidgetActor* actor);
+    void SetOwner(class AMiniGameWidgetActor *miniActor);
 
-	TArray<class AActor*> tag;
-private: 
+    TArray<class AActor *> tag;
 
-	UFUNCTION()
-	void Onbtn_1Clicked();
+private:
+    UFUNCTION()
+    void Onbtn_1Clicked();
 
-	UFUNCTION()
-	void Onbtn_2Clicked();
+    UFUNCTION()
+    void Onbtn_2Clicked();
 
-	UFUNCTION()
-	void Onbtn_3Clicked();
+    UFUNCTION()
+    void Onbtn_3Clicked();
 
-	UFUNCTION()
-	void Onbtn_4Clicked();
+    UFUNCTION()
+    void Onbtn_4Clicked();
 
-	UFUNCTION()
-	void Onbtn_5Clicked();
+    UFUNCTION()
+    void Onbtn_5Clicked();
 
-	UFUNCTION()
-	void Onbtn_6Clicked();
+    UFUNCTION()
+    void Onbtn_6Clicked();
 
-	UPROPERTY(EditDefaultsOnly)
-	class AQuestionsWidgetActor* owner;
+    UPROPERTY(EditDefaultsOnly)
+    class AMiniGameWidgetActor *owner;
 
-	class AMiniGameTriggerBox_Item* triggerBox;
+    UPROPERTY(EditDefaultsOnly)
+    class AMiniGameTriggerBox_Item *triggerBox;
 
 
+    UFUNCTION()
+    void StartCountDown();
+
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<AActor> actor;
+
+    TArray<AActor *> findTB;
 };

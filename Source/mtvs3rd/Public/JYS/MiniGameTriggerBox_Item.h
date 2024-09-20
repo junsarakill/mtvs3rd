@@ -37,7 +37,7 @@ public:
 private:
 
 	// 태그가 같은지 확인하는 함수
-	void CheckTags();
+	void CheckTags(FName checkTag);
 
 	AActor* CurrentActor;
 };

@@ -32,12 +32,11 @@ void AMiniGameTriggerBox_Item::OnOverlapBegin(UPrimitiveComponent* OverlappedCom
 	if (OtherActor->ActorHasTag(FName("CanGrab")))
 	{
 		CurrentActor = OtherActor;
-		CheckTags();
 	}
 }
 
 
-void AMiniGameTriggerBox_Item::CheckTags()
+void AMiniGameTriggerBox_Item::CheckTags(FName checkTag)
 {
 	overlapActorTag = CurrentActor->Tags[0];
 	//if (overlapActorTag == // Tags[0])
@@ -48,6 +47,7 @@ void AMiniGameTriggerBox_Item::CheckTags()
 	//	if (miniGameWall) 
 	//	{
 	//		miniGameWall->SetFadeOut();
+	//		// CountDown도 없어져야함
 	//	}
 	//}
 }

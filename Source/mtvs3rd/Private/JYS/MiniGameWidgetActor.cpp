@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "JYS/MiniGameWall.h"
 #include "PSH/PSH_HttpDataTable.h"
+#include "JYS/MiniGameMissionWidget.h"
 
 // Sets default values
 AMiniGameWidgetActor::AMiniGameWidgetActor()
@@ -25,6 +26,11 @@ void AMiniGameWidgetActor::BeginPlay()
 {
     Super::BeginPlay();
     InitUI();
+    auto* questionWidget = Cast<UMiniGameQuestionWidget>(miniGameUIComp->GetWidget());
+    if (questionWidget)
+    {
+        questionWidget->SetOwner(this);
+    }
     ////// PC
     // pcWiidget = Cast<UQuestionsWidget>(CreateWidget(GetWorld(), pcWidgetFactory));
     // if (pcWiidget)
@@ -33,19 +39,19 @@ void AMiniGameWidgetActor::BeginPlay()
     //	pcWiidget->SetOwner(this);
     // }
 
+    missionWidget = CreateWidget<UMiniGameMissionWidget>(GetWorld(), MissionWidgetFactory);
+    if (missionWidget)
+    {
+        missionWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+
+    FTimerHandle missionTimeHandle;
+    GetWorldTimerManager().SetTimer(missionTimeHandle, this, &AMiniGameWidgetActor::HideMissionWidget, 10.0, false);
+
     FTimerHandle handle;
-    GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.f, true, 0);
+    GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.0f, true, 0.0f);
 
-    FPSH_HttpDataTable pd = Cast<ABS_VRPlayer>(GetOwner())->GetPS()->GetPlayerData();
-
-    if (pd.Gender == "Man")
-    {
-        miniGameUIComp->SetVisibility(true);
-    }
-    else
-    {
-        miniGameUIComp->SetVisibility(false);
-    }
+    miniGameUIComp->SetVisibility(false);
 }
 
 // Called every frame
@@ -53,11 +59,6 @@ void AMiniGameWidgetActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
     BillBoardQuestionsWidget();
-
-    destroyTime -= DeltaTime;
-    if (destroyTime <= 0.0f)
-    {
-    }
 }
 
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
@@ -107,5 +108,20 @@ void AMiniGameWidgetActor::CountDown()
             minutes = minutes - 1;
             second = 59;
         }
+    }
+}
+
+void AMiniGameWidgetActor::HideMissionWidget()
+{
+    if (missionWidget)
+    {
+        missionWidget->RemoveFromViewport();
+    }
+
+    FPSH_HttpDataTable pd = Cast<ABS_VRPlayer>(GetOwner())->GetPS()->GetPlayerData();
+
+    if (pd.Gender == "Man")
+    {
+        miniGameUIComp->SetVisibility(true);
     }
 }
