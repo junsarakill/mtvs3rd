@@ -61,18 +61,31 @@ private:
 
 	int testNum = 0;
 
+// 	UPROPERTY(EditAnywhere) // 최초 통신
+// 	FString URLStart = "http://192.168.0.25:3111/userinfo";
+// 	
+// 	UPROPERTY(EditAnywhere) // 버튼 전부 클릭했음
+// 	FString URLQuest = "http://192.168.0.25:3111/survey";
+// 	UPROPERTY(EditAnywhere) // 스테이트 갱신 요청
+// 	FString URLState = "http://192.168.0.25:3111/calculate_affinity";
+// 	UPROPERTY(EditAnywhere) // 최종 선택 후 
+// 	FString URLChoose = "http://192.168.0.25:3111/match_status";
+// 
+// 	UPROPERTY(EditAnywhere) // 직접 호감도 통신
+// 	FString URLScore = "http://192.168.0.25:3111/interview_event";
+
 	UPROPERTY(EditAnywhere) // 최초 통신
-	FString URLStart = "http://192.168.0.25:3111/userinfo";
+	FString URLStart = "https://2a72-59-13-225-125.ngrok-free.app/userinfo";
 	
 	UPROPERTY(EditAnywhere) // 버튼 전부 클릭했음
-	FString URLQuest = "http://192.168.0.25:3111/survey";
+	FString URLQuest = "https://2a72-59-13-225-125.ngrok-free.app/survey";
 	UPROPERTY(EditAnywhere) // 스테이트 갱신 요청
-	FString URLState = "http://192.168.0.25:3111/calculate_affinity";
+	FString URLState = "https://2a72-59-13-225-125.ngrok-free.app/calculate_affinity";
 	UPROPERTY(EditAnywhere) // 최종 선택 후 
-	FString URLChoose = "http://192.168.0.25:3111/match_status";
+	FString URLChoose = "https://2a72-59-13-225-125.ngrok-free.app/match_status";
 
 	UPROPERTY(EditAnywhere) // 직접 호감도 통신
-	FString URLScore = "http://192.168.0.25:3111/interview_event";
+	FString URLScore = "https://2a72-59-13-225-125.ngrok-free.app/interview_event";
 	
 
 public:
@@ -96,7 +109,13 @@ public:
     UFUNCTION(NetMulticast,Reliable)
 	void MRPC_QuestStateButtonJson();
     void ReqQuestStatePost(FString json);
+
     void OnResQuestStatePost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	// 매칭 성공 통신
+	void MatchDataJson();
+    void ReqMatchDataJson(FString json);
+	void OnResMatchDataJson(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 	
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Data")

@@ -44,7 +44,9 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_PlayerPotal)
 	int32 PlayerCount;
 
-	TArray<ABS_VRPlayer*> playerArray;
+	UPROPERTY()
+	TArray<class ABS_VRPlayer*> playerArray; // 플레이어
+
 	UFUNCTION()
     void OnRep_PlayerPotal();
 
@@ -57,6 +59,10 @@ public:
 	void SetPortal();
 	
 	void GoPotal();
+	UFUNCTION(Server,Reliable)
+	void SRPC_GoPotal();
+	UFUNCTION(NetMulticast,Reliable)
+	void MRPC_GoPotal();
 
 	
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const;

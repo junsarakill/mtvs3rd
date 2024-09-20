@@ -258,12 +258,13 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
 void UPSH_GameInstance::StatDataJson()
 {
     TMap<FString, FString> StartData;                     // 제이슨에 들어갈 데이터
-    StartData.Add("ID", FString::FromInt(PlayerData.Id)); // 키 , 벨류
-    StartData.Add("Age", FString::FromInt(PlayerData.Age));
+    StartData.Add("Id", FString::FromInt(PlayerData.Id)); // 키 , 벨류
+    StartData.Add("GroupID", mySessionName.ToString());
     StartData.Add("Name", PlayerData.Name);
+    StartData.Add("Age", FString::FromInt(PlayerData.Age));
     StartData.Add("Gender", PlayerData.Gender);
     StartData.Add("MBTI", PlayerData.MBTI);
-    StartData.Add("blood", PlayerData.Blood);
+    StartData.Add("Blood", PlayerData.Blood);
 
     // 	TMap<FString, FPSH_HttpDataTable> StudentData; // 제이슨에 들어갈 데이터
     // 	StudentData.Add("" , PlayerData);
@@ -423,6 +424,50 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
         FString result = Response->GetContentAsString();
         UPSH_TsetJsonParseLib::JsonParse(result, PlayerData); // 점수 갱신 요청
         playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
+      
+    }
+    else
+    {
+        // 실패
+        UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
+    }
+}
+
+void UPSH_GameInstance::MatchDataJson() 
+{
+    TMap<FString, FString> QestData;                     // 제이슨에 들어갈 데이터
+    QestData.Add("Id", FString::FromInt(PlayerData.Id)); // 어떤 플레이어가
+    QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
+
+    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+
+    ReqQuestPost(json); // 만든 제이슨 보내주는거
+}
+
+void UPSH_GameInstance::ReqMatchDataJson(FString json) 
+{
+    FHttpModule &httpModule = FHttpModule::Get();
+    TSharedPtr<IHttpRequest> req = httpModule.CreateRequest();
+
+    // 	// 요청할 정보를 설정
+    req->SetURL(URLChoose);
+    req->SetVerb(TEXT("Post"));
+    req->SetHeader(TEXT("Content-Type"), TEXT("Application/json"));
+
+    req->SetContentAsString(json); // 내용
+
+    // req->SetTimeout(); 세션 유지 시간 설정.
+    //  응답받을 함수를 연결
+    req->OnProcessRequestComplete().BindUObject(this, &UPSH_GameInstance::OnResQuestPost);
+
+    // 서버에 요청
+    req->ProcessRequest();
+}
+
+void UPSH_GameInstance::OnResMatchDataJson(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+    if (bConnectedSuccessfully)
+    {
       
     }
     else

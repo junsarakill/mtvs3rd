@@ -68,17 +68,28 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	//player = Cast<Amtvs3rdCharacter>(OtherActor);
 
 	player = Cast<ABS_VRPlayer>(OtherActor);
-
+	
+	// 서버에서 배열에 들어간 애를 제외하고 배열에 들어가지 않은 애들이 왔을때 playerCount를 증가 시키고 싶다.
 	if (player)
 	{
-            UE_LOG(LogTemp,Warning,TEXT("Acotr : %s"),*OtherActor->GetName());
-            if (HasAuthority())
+           
+            if (HasAuthority()) // 서버에서
             {
-                // 플레이어가 부딫히면 카운트를 올림
-                /*PotalWidget->SetPlayerCount();*/
-                // 올리고 콜리전을 끔.
-                PlayerCount++;
-                OnRep_PlayerPotal();
+                if (playerArray.Find(player) != INDEX_NONE) // 배열에 있다면
+                {
+                    for (auto * cehk : playerArray)
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Acotr : %s"), *cehk->GetName());
+					}
+                    return;
+				}
+				else // 배열에 없다면
+				{
+					playerArray.Add(player);
+					PlayerCount++;
+					OnRep_PlayerPotal();
+					UE_LOG(LogTemp, Warning, TEXT("Acotr : %s"), *player->GetName());
+				}
                // Setvisilbe(false);
             }
 
@@ -104,17 +115,29 @@ void APSH_Portal::SetPortal()
 
 void APSH_Portal::GoPotal()
 {
-	if (player)
-	{
-		player->SetActorLocation(EndPotal[0]->GetActorLocation());
+    SRPC_GoPotal();
+}
+
+void APSH_Portal::SRPC_GoPotal_Implementation() 
+{
+	for(auto * playerList : playerArray)
+    {
+        playerList->SetActorLocation(EndPotal[0]->GetActorLocation());
 	}
 
 	if (TagetName == TEXT("EndPotal"))
-	{
-		player->SetActorLocation(EndPotal[0]->GetActorLocation());
-		auto * state = Cast<ABS_PlayerState>(player->GetPlayerState());
-		state->SetIsFinalSelect(true);
-	}
+    {
+       MRPC_GoPotal();
+    }
+}
+
+void APSH_Portal::MRPC_GoPotal_Implementation() 
+{
+    if (TagetName == TEXT("EndPotal"))
+    {
+        auto *state = Cast<ABS_PlayerState>(player->GetPlayerState());
+        state->SetIsFinalSelect(true);
+    }
 }
 
 void APSH_Portal::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

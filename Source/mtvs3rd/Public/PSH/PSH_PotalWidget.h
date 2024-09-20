@@ -29,6 +29,6 @@ public:
 
 
 	UPROPERTY(EditDefaultsOnly)
-	int MaxPlayerCount = 4;
+	int MaxPlayerCount = 2;
 	
 };
