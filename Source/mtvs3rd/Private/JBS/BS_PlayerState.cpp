@@ -9,12 +9,12 @@ void ABS_PlayerState::SetIsAlreadySelect(bool value)
     isAlreadySelect = value;
 }
 
-FPSH_HttpDataTable ABS_PlayerState::GetPlayerData()
-{
-    // syncMap.GetKeys(TSet<int, Allocator> &OutKeys)
-    // 구조체 화 하고 return
-    FPSH_HttpDataTable playerD(id, name, age, gender, mbti, blood, )
-}
+//FPSH_HttpDataTable ABS_PlayerState::GetPlayerData()
+//{
+//    // syncMap.GetKeys(TSet<int, Allocator> &OutKeys)
+//    // 구조체 화 하고 return
+////    FPSH_HttpDataTable playerD(id, name, age, gender, mbti, blood, )
+//}
 
 void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data) 
 {
