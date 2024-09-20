@@ -12,12 +12,6 @@
 	"settings": {
 		"typescript.tsc.autoDetect": "off",
 		"npm.autoDetect": "off",
-		"clangd.detectExtensionConflicts": false,
-		"files.associations": {
-			"*.clangd": "yaml",
-			"*.clang-format": "yaml",
-			"*.clang-tidy": "yaml"
-		},
 		"clangd.arguments": [
 			"-header-insertion=iwyu",
 			"-header-insertion-decorators=true",
@@ -30,11 +24,18 @@
 			"-log=info"
 		],
 		"clangd.path": "c:\\Program Files\\LLVM\\bin\\clangd.exe",
+		"clangd.detectExtensionConflicts": false,
+		"files.associations": {
+			"*.clangd": "yaml",
+			"*.clang-format": "yaml",
+			"*.clang-tidy": "yaml"
+		},
 		"workbench.colorCustomizations": {
 			"editorInlayHint.foreground": "#a2a2a2c0",
 			"editorInlayHint.background": "#00000000"
 		},
-		"editor.suggestFontSize": 0
+		"editor.suggestFontSize": 0,
+		"dotnet.defaultSolution": "disable"
 	},
 	"extensions": {
 		"recommendations": [
@@ -53,7 +54,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Debug",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -70,7 +71,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Debug",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -90,7 +91,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Debug",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -107,7 +108,7 @@
 					"mtvs3rd",
 					"Win64",
 					"DebugGame",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -124,7 +125,7 @@
 					"mtvs3rd",
 					"Win64",
 					"DebugGame",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -144,7 +145,7 @@
 					"mtvs3rd",
 					"Win64",
 					"DebugGame",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -161,7 +162,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Development",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -178,7 +179,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Development",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -198,7 +199,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Development",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -215,7 +216,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Test",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -232,7 +233,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Test",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -252,7 +253,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Test",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -269,7 +270,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Shipping",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -286,7 +287,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Shipping",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -306,7 +307,7 @@
 					"mtvs3rd",
 					"Win64",
 					"Shipping",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -323,7 +324,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"Debug",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -340,7 +341,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"Debug",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -360,7 +361,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"Debug",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -377,7 +378,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"DebugGame",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -394,7 +395,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"DebugGame",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -414,7 +415,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"DebugGame",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -431,7 +432,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"Development",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -448,7 +449,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"Development",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -468,7 +469,7 @@
 					"mtvs3rdEditor",
 					"Win64",
 					"Development",
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -485,7 +486,7 @@
 			{
 				"name": "Launch mtvs3rd (Debug)",
 				"request": "launch",
-				"program": "C:\\JKAKK\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-Debug.exe",
+				"program": "C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-Debug.exe",
 				"preLaunchTask": "mtvs3rd Win64 Debug Build",
 				"args": [
 				],
@@ -501,7 +502,7 @@
 			{
 				"name": "Launch mtvs3rd (DebugGame)",
 				"request": "launch",
-				"program": "C:\\JKAKK\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-DebugGame.exe",
+				"program": "C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-DebugGame.exe",
 				"preLaunchTask": "mtvs3rd Win64 DebugGame Build",
 				"args": [
 				],
@@ -517,7 +518,7 @@
 			{
 				"name": "Launch mtvs3rd (Development)",
 				"request": "launch",
-				"program": "C:\\JKAKK\\mtvs3rd\\Binaries\\Win64\\UnrealGame.exe",
+				"program": "C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\Binaries\\Win64\\UnrealGame.exe",
 				"preLaunchTask": "mtvs3rd Win64 Development Build",
 				"args": [
 				],
@@ -533,7 +534,7 @@
 			{
 				"name": "Launch mtvs3rd (Test)",
 				"request": "launch",
-				"program": "C:\\JKAKK\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-Test.exe",
+				"program": "C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-Test.exe",
 				"preLaunchTask": "mtvs3rd Win64 Test Build",
 				"args": [
 				],
@@ -549,7 +550,7 @@
 			{
 				"name": "Launch mtvs3rd (Shipping)",
 				"request": "launch",
-				"program": "C:\\JKAKK\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-Shipping.exe",
+				"program": "C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\Binaries\\Win64\\UnrealGame-Win64-Shipping.exe",
 				"preLaunchTask": "mtvs3rd Win64 Shipping Build",
 				"args": [
 				],
@@ -568,7 +569,7 @@
 				"program": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-Debug.exe",
 				"preLaunchTask": "mtvs3rdEditor Win64 Debug Build",
 				"args": [
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject"
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject"
 				],
 				"cwd": "C:\\Program Files\\Epic Games\\UE_5.4",
 				"stopAtEntry": false,
@@ -585,7 +586,7 @@
 				"program": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-DebugGame.exe",
 				"preLaunchTask": "mtvs3rdEditor Win64 DebugGame Build",
 				"args": [
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject"
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject"
 				],
 				"cwd": "C:\\Program Files\\Epic Games\\UE_5.4",
 				"stopAtEntry": false,
@@ -602,7 +603,7 @@
 				"program": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
 				"preLaunchTask": "mtvs3rdEditor Win64 Development Build",
 				"args": [
-					"C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject"
+					"C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject"
 				],
 				"cwd": "C:\\Program Files\\Epic Games\\UE_5.4",
 				"stopAtEntry": false,
@@ -622,7 +623,7 @@
 				"args": [
 					"-projectfiles",
 					"-vscode",
-					"-project=C:\\JKAKK\\mtvs3rd\\mtvs3rd.uproject",
+					"-project=C:\\Users\\wjs96\\Documents\\JK_Project\\mtvs3rd\\mtvs3rd.uproject",
 					"-game",
 					"-engine",
 					"-dotnet"

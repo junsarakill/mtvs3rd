@@ -139,7 +139,7 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect()
 	// 주인 정보
 	auto* ownerPS = gameObject->ownerPlayer->PS;
 	// 주인 플레이어 id
-	int32 playerId = ownerPS->GetPlayerData().Id;
+	int32 playerId = ownerPS->id;
 
 	SendPlayerFinalSelect(playerId, CUR_SELECT_PLAYER_ID);
 }
@@ -161,7 +161,7 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(EFinalSelectType type)
 			// 주인 정보
 			auto* ownerPS = gameObject->ownerPlayer->PS;
 			// 주인 플레이어 id
-			int32 playerId = ownerPS->GetPlayerData().Id;
+			int32 playerId = ownerPS->id;
 
 			SendPlayerFinalSelect(CUR_SELECT_PLAYER_ID, playerId);
 		}, 1.5f, false);
