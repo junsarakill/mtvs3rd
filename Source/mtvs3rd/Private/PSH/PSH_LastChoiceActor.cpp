@@ -38,6 +38,7 @@ void APSH_LastChoiceActor::BeginPlay()
 	}
 }
 
+
 // Called every frame
 void APSH_LastChoiceActor::Tick(float DeltaTime)
 {

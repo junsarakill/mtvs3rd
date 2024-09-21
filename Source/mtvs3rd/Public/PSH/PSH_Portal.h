@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PSH_HttpDataTable.h"
 #include "PSH_Portal.generated.h"
 
 UCLASS()
@@ -45,7 +46,13 @@ public:
 	int32 PlayerCount;
 
 	UPROPERTY()
-	TArray<class ABS_VRPlayer*> playerArray; // 플레이어
+	TArray<class ABS_VRPlayer*> PlayerArray; // 플레이어
+
+	TArray<FPSH_HttpDataTable> PlayerDataArray;
+
+	int32 TestScroe = 50;
+
+	int SetMeshPlayerID;
 
 	UFUNCTION()
     void OnRep_PlayerPotal();

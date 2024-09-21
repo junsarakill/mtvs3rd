@@ -423,6 +423,7 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
     {
         FString result = Response->GetContentAsString();
         UPSH_TsetJsonParseLib::JsonParse(result, PlayerData); // 점수 갱신 요청
+        PlayerData.PrintStruct();
         playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
       
     }
@@ -475,6 +476,11 @@ void UPSH_GameInstance::OnResMatchDataJson(FHttpRequestPtr Request, FHttpRespons
         // 실패
         UE_LOG(LogTemp, Warning, TEXT("ReQuestFailed..."));
     }
+}
+
+void UPSH_GameInstance::LastChoise(int FromId, int ToId) 
+{
+	
 }
 
 FPSH_HttpDataTable UPSH_GameInstance::GetData(int num)

@@ -76,12 +76,6 @@ void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱
 
 	ChekChoice();
 	
-
-	// 1, 2 남자
-	
-
-	// 3. 4 여자
-	
 	// for문을 돌리면서 Toid
 	// 미리 만들어 놓고 비교
 	// 각 id 를 비교

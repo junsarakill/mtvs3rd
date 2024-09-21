@@ -19,8 +19,6 @@ void UPSH_StartDataWidget::NativeConstruct()
 	GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
     Gi = Cast<UPSH_GameInstance>(GetWorld()->GetGameInstance());
 
-	BT_Name->SetVisibility(ESlateVisibility::Hidden);
-
 	// Age Button FUNCTION
 	BT_0->OnClicked.AddDynamic(this,&UPSH_StartDataWidget::OnClick0);
 	BT_1->OnClicked.AddDynamic(this,&UPSH_StartDataWidget::OnClick1);
@@ -71,7 +69,6 @@ void UPSH_StartDataWidget::NativeConstruct()
 	BT_O->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickO);
 	
 	// Name Button Fuction Man
-	BT_Name->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickName);
     BT_Man_Name1->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName1);
     BT_Man_Name2->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName2);
     BT_Man_Name3->OnClicked.AddDynamic(this, &UPSH_StartDataWidget::OnClickManName3);
@@ -279,13 +276,13 @@ void UPSH_StartDataWidget::OnClickAge()
 void UPSH_StartDataWidget::OnClickMan()
 {
 	GenderText = "Man";
-	BT_Name->SetVisibility(ESlateVisibility::Visible);
+    SwichSlot(4);
 }
 
 void UPSH_StartDataWidget::OnClickGirl()
 {
 	GenderText = "Woman";
-    BT_Name->SetVisibility(ESlateVisibility::Visible);
+    SwichSlot(5);
 }
 
 void UPSH_StartDataWidget::OnClickISTJ()
@@ -421,45 +418,28 @@ void UPSH_StartDataWidget::OnClickBlood()
 	SwichSlot(3);
 }
 
-void UPSH_StartDataWidget::OnClickName() 
-{ 
-	if (GenderText == "Man")
-    {
-        SwichSlot(4);
-    }
-	else if (GenderText == "Woman")
-    {
-        SwichSlot(5);
-    }
-    
-}
-
 void UPSH_StartDataWidget::OnClickWoManName1() 
 {
     SwichSlot(0);
     NameText = TEXT("영숙");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 void UPSH_StartDataWidget::OnClickWoManName2()
 {
     SwichSlot(0);
     NameText = TEXT("옥순");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 void UPSH_StartDataWidget::OnClickWoManName3()
 {
     SwichSlot(0);
     NameText = TEXT("순자");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 void UPSH_StartDataWidget::OnClickWoManName4() 
 {
     SwichSlot(0);
     NameText = TEXT("현숙");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 
@@ -467,28 +447,24 @@ void UPSH_StartDataWidget::OnClickManName1()
 {
     SwichSlot(0);
     NameText = TEXT("영철");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 void UPSH_StartDataWidget::OnClickManName2() 
 {
     SwichSlot(0);
     NameText = TEXT("영수");
-    TB_Name->SetText(FText::FromString(NameText));
 }	
 
 void UPSH_StartDataWidget::OnClickManName3() 
 {
     SwichSlot(0);
     NameText = TEXT("광수");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 void UPSH_StartDataWidget::OnClickManName4()
 {
     SwichSlot(0);
     NameText = TEXT("상철");
-    TB_Name->SetText(FText::FromString(NameText));
 }
 
 void UPSH_StartDataWidget::OnClickA()
