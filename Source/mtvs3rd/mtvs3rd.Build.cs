@@ -22,6 +22,7 @@ public class mtvs3rd : ModuleRules
 		, "JsonUtilities"
 		, "OnlineSubsystem"
 		, "OnlineSubsystemSteam"
+		, "Networking"
          });
 
 	}

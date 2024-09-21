@@ -4,6 +4,7 @@
 
 #include <CoreMinimal.h>
 #include "GameFramework/Character.h"
+#include <PSH/PSH_HttpDataTable.h>
 #include "BS_VRPlayer.generated.h"
 
 UCLASS()
@@ -76,6 +77,16 @@ protected:
         ABS_PlayerState *GetPS();
         void SetPS(ABS_PlayerState* value);
 		protected:
+
+	// 플레이어 데이터
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FPSH_HttpDataTable data;
+		public:
+	__declspec(property(get = GetPlayerData, put = SetPlayerData)) FPSH_HttpDataTable DATA;
+	FPSH_HttpDataTable GetPlayerData();
+
+    protected:
+
 
 
 	// XXX 디버그용 최종 선택 가능

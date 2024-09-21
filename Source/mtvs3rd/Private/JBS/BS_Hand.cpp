@@ -7,14 +7,18 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include <JBS/BS_GrabComponent.h>
 #include "DrawDebugHelpers.h"
+#include "Engine/EngineTypes.h"
+#include "JBS/BS_GrabbableActor.h"
 #include "JBS/BS_VRPlayer.h"
 #include <Components/WidgetInteractionComponent.h>
 #include "Components/ArrowComponent.h"
+#include "Templates/Casts.h"
 #include <JBS/BS_PlayerState.h>
 #include <JBS/BS_ProfileWorldUIActor.h>
 #include <JBS/BS_Utility.h>
 #include <JBS/BS_FinalSelectComponent.h>
 #include <PSH/PSH_Mtvs3rdGameModBase.h>
+#include <JBS/BS_GrabHoverUIActor.h>
 
 
 // Sets default values
@@ -99,7 +103,8 @@ void ABS_Hand::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	
-
+	// 원거리 물건 잡기용 힛
+	FindGrabComponentByRay(curFindGrabComp);
 }
 
 void ABS_Hand::SetRayInteractDis(float value)
@@ -131,24 +136,25 @@ bool ABS_Hand::TryGrab()
 	auto* grabComp = FindGrabComponentNearHand();
 	if(grabComp)
 	{
-		// 잡기 시도
-		hasGrab = grabComp->TryGrab(motionController);
-		if(hasGrab)
-		{
-			// 잡기
-			curGrabComp = grabComp;
-
-			// 주인의 반대 손이 같은걸 잡고 있다면 해제 시키기
-			auto* owner = Cast<ABS_VRPlayer>(this->GetOwner());
-			auto* otherHand = cType == EMotionControllerType::LEFT ? owner->rightController : owner->leftController;
-			
-			if(otherHand->curGrabComp == this->curGrabComp)
-				otherHand->curGrabComp = nullptr;
-		}
+		hasGrab = Grab(grabComp);
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, TEXT("잡을게 없음"));
+		// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("주변 잡을게 없음"));
+		// trigger 하고 있으면 원거리 잡기 시도
+		if(CAN_RANGE_GRAB && curFindGrabComp)
+		{
+			hasGrab = Grab(curFindGrabComp);
+			// @@ snap 아니면 내 손 위치로 가져오게 바꿀 필요있음.
+		}
+		else
+		{
+			// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("crg : %s\ncomp : %s")
+			// , CAN_RANGE_GRAB ? TEXT("true") : TEXT("false")
+			// , curFindGrabComp ? *curFindGrabComp->GetName() : TEXT("nullptr")
+			// ));
+			// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("원거리도 잡을게 없음"));
+		}
 	}
 	
 
@@ -297,14 +303,11 @@ void ABS_Hand::LineTracePlayer()
 			auto* otherPlayer = Cast<ABS_VRPlayer>(outHit.GetActor());
 			check(otherPlayer);
 			// 해당 플레이어의 정보 가져오기
-			auto* otherPS = otherPlayer->GetPlayerState<ABS_PlayerState>();
-			check(otherPS);
-			// 플레이어 정보
-			auto otherPD = otherPS->GetPlayerData();
+			auto otherPlayerData = otherPlayer->GetPlayerData();
 			// 프로필 ui 생성
-			SpawnProfileUI(otherPD);
+			SpawnProfileUI(otherPlayerData);
 			// 최종 선택인 경우 선택 UI도 생성
-			fsComp->TrySpawnSelectConfirmUI(otherPD.Id);
+			fsComp->TrySpawnSelectConfirmUI(otherPlayerData.Id);
 		}
 	}
 }
@@ -352,4 +355,92 @@ void ABS_Hand::DeleteProfileUI()
 	// 액터 제거 및 초기화
 	profileUIActor->Destroy();
 	profileUIActor = nullptr;
+}
+
+void ABS_Hand::SetCanRangeGrab(bool value)
+{
+    bool check = value;
+
+    if (isGrab || curGrabComp || grabActor)
+    {
+        check = false;
+    }
+
+    canRangeGrab = check;
+}
+void ABS_Hand::FindGrabComponentByRay(UBS_GrabComponent*& findGrabComp)
+{
+	if(!CAN_RANGE_GRAB)
+	{
+		CUR_FIND_GRAB_COMP = nullptr;
+		return;
+	}
+
+	FHitResult outHit;
+	ECollisionChannel traceChl = ECC_Visibility;
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+	// 히트 하는 위치 설정
+	FVector startLocation = aimMC->GetComponentLocation();
+	FVector endLocation = startLocation + aimMC->GetForwardVector() * RAY_INTERACT_DIS;
+	bool isHit = GetWorld()->LineTraceSingleByChannel(
+		outHit,
+		startLocation,
+		endLocation,
+		traceChl,
+		params
+	);
+	
+	if(isHit)
+	{
+		// 액터의 모든 잡기 컴포넌트 가져오기
+		TArray<UActorComponent*> grabComps = outHit.GetActor()->K2_GetComponentsByClass(UBS_GrabComponent::StaticClass());
+		// 가장 가까운 잡기 컴포 구하기
+		CUR_FIND_GRAB_COMP = Cast<UBS_GrabComponent>(UBS_Utility::GetNearestGrabComp(grabComps, startLocation));
+	}
+	else {
+		CUR_FIND_GRAB_COMP = nullptr;
+	}
+}
+
+bool ABS_Hand::Grab(UBS_GrabComponent* grabComp)
+{
+	// 잡기 시도
+	bool hasGrab = grabComp->TryGrab(motionController);
+	if(hasGrab)
+	{
+		// 잡기
+		curGrabComp = grabComp;
+
+		// 주인의 반대 손이 같은걸 잡고 있다면 해제 시키기
+		auto* owner = Cast<ABS_VRPlayer>(this->GetOwner());
+		auto* otherHand = cType == EMotionControllerType::LEFT ? owner->rightController : owner->leftController;
+		
+		if(otherHand->curGrabComp == this->curGrabComp)
+			otherHand->curGrabComp = nullptr;
+	}
+
+	return hasGrab;
+}
+
+void ABS_Hand::SetCurFindGrabComp(UBS_GrabComponent *value)
+{
+    // 값이 변경되는 경우 이전 컴포넌트 hover ui 비활성화
+    if (curFindGrabComp != value && curFindGrabComp)
+    {
+        auto* gcompOwner = CUR_FIND_GRAB_COMP->GetOwner<ABS_GrabbableActor>();
+		check(gcompOwner);
+		gcompOwner->grabHoverUIActor->IS_VISIBLE = false;
+    }
+
+	// 값 설정
+    curFindGrabComp = value;
+	
+	// 새 값 hover ui 활성화
+	if(curFindGrabComp != nullptr)
+	{
+		auto* gcompOwner = CUR_FIND_GRAB_COMP->GetOwner<ABS_GrabbableActor>();
+		check(gcompOwner);
+		gcompOwner->grabHoverUIActor->IS_VISIBLE = true;
+	}
 }

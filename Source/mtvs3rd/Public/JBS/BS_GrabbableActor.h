@@ -14,13 +14,13 @@ class MTVS3RD_API ABS_GrabbableActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABS_GrabbableActor();
-
 protected:
 	
 
 
 public:
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
+	class ABS_GrabHoverUIActor* grabHoverUIActor;
 
 
 protected:

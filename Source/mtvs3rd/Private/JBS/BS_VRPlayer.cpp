@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "JBS/BS_Hand.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "PSH/PSH_HttpDataTable.h"
 #include <JBS/BS_PlayerState.h>
 
 // Sets default values
@@ -43,7 +44,7 @@ void ABS_VRPlayer::BeginPlay()
 
 	if(enableDebugFinalSelect)
 	{
-		PS->IS_FINAL_SELECT = enableDebugFinalSelect;
+		// PS->IS_FINAL_SELECT = enableDebugFinalSelect;
 	}
 
 	if(playOnPC)
@@ -67,7 +68,6 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
 		
 		FString velStr = GetVelocity().ToString();
-		int pid = PS->id;
 		// 
 		float vrRootHeight = vrRoot->GetRelativeLocation().Z;
 		
@@ -76,7 +76,7 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		
 		
 		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
-			, *moveDir.ToString(), *velStr, pid, vrRootHeight, vrHMDHeight);
+			, *moveDir.ToString(), *velStr, DATA.Id, vrRootHeight, vrHMDHeight);
 		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
 	}
 
@@ -213,7 +213,24 @@ ABS_PlayerState *ABS_VRPlayer::GetPS()
 
     return ps;
 }
+
 void ABS_VRPlayer::StartTrip()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("넘어짐"));
+}
+FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
+{
+	auto* pc = Cast<APlayerController>(this->GetController());
+	if(pc)
+	{
+		//pc로 뭔가 하기
+		auto* aps = pc->GetPlayerState<ABS_PlayerState>();
+		if(aps)
+		{
+			return aps->GetPlayerData();
+		}
+	}
+
+
+	return FPSH_HttpDataTable(); 
 }

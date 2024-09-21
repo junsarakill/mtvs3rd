@@ -25,13 +25,21 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FVector uiDefaultScale;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	float desireDistance = 200.f;
+
 
 public:
 
 protected:
 	// 빌보드
 	void BillboardUI(class UWidgetComponent* uiComp);
+	// 크기 고정
+	void FixSize(class UWidgetComponent *uiComp, float desireDis);
 
-public:
+    public:
 
 };

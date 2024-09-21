@@ -55,4 +55,6 @@ class MTVS3RD_API UBS_Utility : public UBlueprintFunctionLibrary
 public:
 	static class APSH_Mtvs3rdGameModBase* GetGM(UWorld* world);
 
+	// 컴포넌트 중 가장 가까운 거 구하기
+	static class UActorComponent *GetNearestGrabComp(TArray<UActorComponent *> comps, FVector targetLoc);
 };

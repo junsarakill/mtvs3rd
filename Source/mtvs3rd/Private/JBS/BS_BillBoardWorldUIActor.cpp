@@ -47,3 +47,27 @@ void ABS_BillBoardWorldUIActor::BillboardUI(UWidgetComponent *uiComp)
 		}
 	}
 }
+
+void ABS_BillBoardWorldUIActor::FixSize(class UWidgetComponent *uiComp, float desireDis)
+{
+	if(!uiComp) return;
+
+	auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if(pc)
+	{
+		//pc로 뭔가 하기
+		auto cam = pc->PlayerCameraManager;
+		if(cam)
+		{
+			FVector camLoc = cam->GetCameraLocation();
+			// 크기 일정하게 조정
+			// 캠과의 거리 구하기
+			float toCamDis = FVector::Dist(camLoc, uiComp->GetComponentLocation());
+			// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("거리 : %.2f"), toCamDis));
+			// 크기 구하기
+			float newScale = toCamDis / desireDis;
+			// 크기 적용
+			uiComp->SetWorldScale3D(FVector(newScale) * uiDefaultScale);
+		}
+	}
+}

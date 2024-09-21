@@ -114,7 +114,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	TArray<FControllerType> typeData;
 
-	// 잡기 가능 여부
+	// 물건 잡았는지 여부
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	bool isGrab = false;
 	// 현재 잡은 액터
@@ -127,7 +127,36 @@ public:
 
 	// 현재 잡은 그랩 컴포
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
-	class UBS_GrabComponent* curGrabComp;	
+	class UBS_GrabComponent* curGrabComp;
+		
+
+	// 원거리 잡기 가능 여부
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values", BlueprintGetter=GetCanRangeGrab, BlueprintSetter=SetCanRangeGrab)
+	bool canRangeGrab = false;
+		public:
+	__declspec(property(get = GetCanRangeGrab, put = SetCanRangeGrab)) bool CAN_RANGE_GRAB;
+	UFUNCTION(BlueprintGetter)
+	bool GetCanRangeGrab()
+	{
+		return canRangeGrab;
+	}
+	UFUNCTION(BlueprintSetter)
+	void SetCanRangeGrab(bool value);
+
+    protected:
+
+	// 찾은 원거리 grabcomp
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class UBS_GrabComponent* curFindGrabComp;
+		public:
+	__declspec(property(get = GetCurFindGrabComp, put = SetCurFindGrabComp)) class UBS_GrabComponent* CUR_FIND_GRAB_COMP;
+	class UBS_GrabComponent* GetCurFindGrabComp()
+	{
+		return curFindGrabComp;
+	}
+	void SetCurFindGrabComp(class UBS_GrabComponent *value);
+
+		protected:
 
 	// XXX 디버그용 잡기 범위 표시
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
@@ -171,9 +200,12 @@ public:
 	// 해당 액터 잡기로 설정
 	void SetGrabActor(ABS_GrabbableActor* actor);
 
-	// 잡기
+	// 잡기 시도
 	UFUNCTION(BlueprintCallable)
 	bool TryGrab();
+	// 잡기
+	UFUNCTION(BlueprintCallable)
+	bool Grab(class UBS_GrabComponent* grabComp);
 	// 놓기
 	UFUNCTION(BlueprintCallable)
 	bool TryRelease();
@@ -197,8 +229,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeleteProfileUI();
 
-	// 
-
-
-	
+	// 원거리 물건 잡기용 물건 찾기
+	void FindGrabComponentByRay(class UBS_GrabComponent*& findGrabComp);
 };
