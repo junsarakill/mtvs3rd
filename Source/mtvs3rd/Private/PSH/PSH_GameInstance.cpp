@@ -128,13 +128,13 @@ void UPSH_GameInstance::FindOtherSession() // FindOtherSession
 
 		return;
 	}
-
+        PRINTLOG(TEXT("FindOtherSession"));
 	// Find Session Complete Delegate 등록
 	//OnlineSessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionCompleteDelegate);
 
 	// Find Game Session
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	SessionSearch->MaxSearchResults = 100; // 검색 결과로 나오는 세션 수 최대값
+	SessionSearch->MaxSearchResults = 40; // 검색 결과로 나오는 세션 수 최대값
 	SessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL";  // LAN 사용 여부
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 	SessionSearch->QuerySettings.Set(FName("MatchType"), FString("FreeForAll"), EOnlineComparisonOp::Equals);
@@ -148,9 +148,10 @@ void UPSH_GameInstance::FindOtherSession() // FindOtherSession
 }
 void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 {
+     
 	if (!OnlineSessionInterface.IsValid())
 		return;
-
+       
 	if (bWasSuccessful)
 	{
 		for (auto Result : SessionSearch->SearchResults)
@@ -169,11 +170,15 @@ void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 			{
 				PRINTLOG(TEXT("JoinSession"));
 				OnlineSessionInterface->JoinSession(0, mySessionName, Result);
+				break;
 			}
 		}
+
+         CreateGameSession();
 	}
 	else
 	{
+       
 		PRINTLOG(TEXT("FindFailed"));
 	}
 
@@ -424,6 +429,12 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
         FString result = Response->GetContentAsString();
         UPSH_TsetJsonParseLib::JsonParse(result, PlayerData); // 점수 갱신 요청
         PlayerData.PrintStruct();
+
+		auto *pc = GetWorld()->GetFirstPlayerController();
+        if (pc)
+        {
+            playerState = Cast<ABS_PlayerState>(pc->PlayerState);
+        }
         playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
       
     }

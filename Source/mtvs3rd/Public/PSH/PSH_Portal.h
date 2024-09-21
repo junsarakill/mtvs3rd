@@ -50,6 +50,8 @@ public:
 
 	TArray<FPSH_HttpDataTable> PlayerDataArray;
 
+	TArray<int> PlayerIdArray;
+
 	int32 TestScroe = 50;
 
 	int SetMeshPlayerID;

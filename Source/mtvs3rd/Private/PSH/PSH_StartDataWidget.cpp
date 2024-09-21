@@ -96,6 +96,7 @@ void UPSH_StartDataWidget::OnClickRequest()
 		data.Name = NameText;
 		
 		Gi->SetStartData(data);
+		Gi->FindOtherSession();
 		
 		if (HttpActor)
 		{

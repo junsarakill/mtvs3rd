@@ -22,11 +22,11 @@ void APSH_Mtvs3rdGameModBase::BeginPlay()
 
 	Gi = Cast<UPSH_GameInstance>(GetGameInstance());
 
-	auto * pc = GetWorld()->GetFirstPlayerController();
-	if (pc)
-	{
-		playerState = Cast<ABS_PlayerState>(pc->PlayerState);
-	}
+// 	auto * pc = GetWorld()->GetFirstPlayerController();
+// 	if (pc)
+// 	{
+// 		playerState = Cast<ABS_PlayerState>(pc->PlayerState);
+// 	}
 	
 	ChoiceNum.Init(0, 5); // 플레이어 수만큼 만들기로 변경.
 	
@@ -42,6 +42,18 @@ void APSH_Mtvs3rdGameModBase::BeginPlay()
 void APSH_Mtvs3rdGameModBase::PostLogin(APlayerController *NewPlayer) 
 {
     Super::PostLogin(NewPlayer);
+    Gi = Cast<UPSH_GameInstance>(GetGameInstance());
+	// 새로 들어온 플레이어에게 GI에 있는 데이터를 넣어주고 싶다.
+    auto *pc = NewPlayer;
+    if (pc)
+    {
+        playerState = Cast<ABS_PlayerState>(pc->PlayerState);
+        if (playerState != nullptr)
+        {
+            playerState->SetPlayerData(Gi->GetStartData());
+        }
+    }
+	
     //     로그인 성공 이후 호출됩니다.PlayerController 에서 리플리케이트되는 함수 호출을 하기에 안전한 첫 번째
 //         장소입니다.블루프린트로 OnPostLogin 을 구현하여 부가 로직을 추가할 수 있습니다.
 
@@ -51,6 +63,7 @@ void APSH_Mtvs3rdGameModBase::SetData(FPSH_HttpDataTable Data)
 {
 	PlayerData = Data;
 }
+
 
 void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱신 가능. // 누가 , 누구를
 {
@@ -141,7 +154,6 @@ void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int pl
 	PlayerData.syncPercentID1 = TestScore;
 
 	Gi->SetStartData(PlayerData);
-	playerState->SetPlayerData(PlayerData); // 플레이어 데이터 저장
 	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
 
 //	ReqPost(json, URLScore); // 만든 제이슨 보내주는거

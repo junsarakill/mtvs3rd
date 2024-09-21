@@ -92,7 +92,9 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 					
 					auto playerData = player->PS->GetPlayerData(); // 상대의 데이터를 가져옴
 					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
-					
+					//auto playerData = player->PS->syncPercentID1; // 상대의 데이터를 가져옴
+					//PlayerIdArray.Add(playerData);
+                                      
 					PlayerArray.Add(player);
 					PlayerCount++;
 					OnRep_PlayerPotal();
