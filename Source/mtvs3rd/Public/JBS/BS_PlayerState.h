@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "PSH/PSH_HttpDataTable.h"
+#include <Containers/Map.h>
 #include "BS_PlayerState.generated.h"
 
 /**
@@ -16,35 +17,32 @@ class MTVS3RD_API ABS_PlayerState : public APlayerState
 	GENERATED_BODY()
 	
 public:
-	
-protected:
 	// 플레이어 데이터
 	// id
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	int id;
+	int id = -1;
 	// 이름
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FString name;
+	FString name = TEXT("미설정");
 	// 나이
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	int age;
+	int age = -1;
 	// 성별 : 남, 녀
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FString gender;
+	FString gender = TEXT("미설정");
 	// mbti
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FString mbti;
+	FString mbti = TEXT("미설정");
 	// 혈액형
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FString blood;
-	// 상대 id, 호감도
+	FString blood = TEXT("미설정");
+	// 상대 id, 호감도 맵
 	// otherUserID1 : syncPercentID1
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	TMap<int, float> syncMap;
-	
-	// 플레이어 데이터 구조체
-	UPROPERTY(VisibleAnywhere, Category="Default|Values", BlueprintGetter=GetPlayerData, BlueprintSetter=SetPlayerData)
-	FPSH_HttpDataTable playerData;
+	// id 순서 배열
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	TArray<int> idOrderAry = {-1,-1};
 
 	// 최종선택 시점 여부
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
@@ -56,7 +54,6 @@ protected:
 		return isFinalSelect;
 	}
 	void SetIsFinalSelect(bool value);
-		protected:
 
 	// 최종선택 확정 여부
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
@@ -68,7 +65,8 @@ protected:
 		return isAlreadySelect;
 	}
 	void SetIsAlreadySelect(bool value);
-		protected:
+	
+protected:
 
 public:
 	UFUNCTION(BlueprintGetter)
@@ -76,4 +74,7 @@ public:
 	UFUNCTION(BlueprintSetter)
 	void SetPlayerData(FPSH_HttpDataTable data);
 
+	// 싱크로 맵에 요소 추가 : id , 해당유저에 대한 싱크로율
+	UFUNCTION(BlueprintCallable)
+	void AddSyncMap(int userId, float value);
 };

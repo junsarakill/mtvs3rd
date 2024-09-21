@@ -133,6 +133,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);
 
+	// 돌발이벤트용 넘어지기 시작
+	UFUNCTION(BlueprintCallable)
+	void StartTrip();
+
 #pragma endregion
 
 };

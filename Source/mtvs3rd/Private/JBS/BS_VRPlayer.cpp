@@ -11,6 +11,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
+#include "JBS/BS_Hand.h"
+#include "Kismet/KismetMathLibrary.h"
 #include <JBS/BS_PlayerState.h>
 
 // Sets default values
@@ -44,6 +46,14 @@ void ABS_VRPlayer::BeginPlay()
 		PS->IS_FINAL_SELECT = enableDebugFinalSelect;
 	}
 
+	if(playOnPC)
+	{
+		vrRoot->SetRelativeLocation(FVector(-276,0,138));
+		vrRoot->SetRelativeRotation(FRotator(-15,0,0));
+		
+	}
+	this->bUseControllerRotationYaw = playOnPC;
+	vrHMDCam->bUsePawnControlRotation = playOnPC;
 }
 
 // Called every frame
@@ -52,23 +62,43 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// XXX 디버그단
-// 	if(enableViewPlayerStat)
-// 	{
-// 		FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
-// 		
-// 		FString velStr = GetVelocity().ToString();
-// 		int pid = PS->GetPlayerData().Id;
-// 		// 
-// 		float vrRootHeight = vrRoot->GetRelativeLocation().Z;
-// 		
-// 		// 카메라 키
-// 		float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
-// 		
-// 		
-// 		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
-// 			, *moveDir.ToString(), *velStr, pid, vrRootHeight, vrHMDHeight);
-// 		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
-// 	}
+	if(enableViewPlayerStat)
+	{
+		FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
+		
+		FString velStr = GetVelocity().ToString();
+		int pid = PS->id;
+		// 
+		float vrRootHeight = vrRoot->GetRelativeLocation().Z;
+		
+		// 카메라 키
+		float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
+		
+		
+		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
+			, *moveDir.ToString(), *velStr, pid, vrRootHeight, vrHMDHeight);
+		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
+	}
+
+	if(playOnPC)
+	{
+		if(leftController)
+		{
+			FVector camFV = vrHMDCam->GetForwardVector();
+			FVector lookPos = camFV * 1000.f + vrHMDCam->GetComponentLocation();
+
+			FVector newLoc = camFV * 100.f + vrHMDCam->GetComponentLocation();
+			FRotator newRot = UKismetMathLibrary::FindLookAtRotation(leftController->GetActorLocation(), lookPos);
+
+			leftController->SetActorLocationAndRotation(newLoc, newRot);
+		}
+	}
+	else 
+	{
+		// vrHMDCam->GetComponentRotation()
+		// this->AddActorWorldRotation(FRotator DeltaRotation)
+
+	}
 	
 
 	// 이동 방향대로 이동
@@ -133,6 +163,7 @@ void ABS_VRPlayer::EventTurn(float value)
 	// 스냅턴 켜져있으면 스냅턴으로
 	if(isSnapTurn)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("스냅턴"));
 		bool isRight = value > 0.f;
 		SnapTurn(isRight);
 	}
@@ -145,6 +176,7 @@ void ABS_VRPlayer::EventTurn(float value)
 
 void ABS_VRPlayer::SnapTurn(bool isRight)
 {
+	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("턴"));
 	// z 축으로 회전
 	FRotator turnRot = FRotator(0, snapTurnDeg * (isRight ? 1 : -1) ,0);
 
@@ -157,7 +189,7 @@ void ABS_VRPlayer::SnapTurn(bool isRight)
 
 void ABS_VRPlayer::SmoothTurn(float value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%.2f"), value));
+	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%.2f"), value));
 	this->AddControllerYawInput(value * smoothTurnMulti);
 }
 
@@ -180,4 +212,8 @@ ABS_PlayerState *ABS_VRPlayer::GetPS()
     }
 
     return ps;
+}
+void ABS_VRPlayer::StartTrip()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("넘어짐"));
 }
