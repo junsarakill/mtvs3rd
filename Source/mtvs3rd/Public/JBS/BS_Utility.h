@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include <Kismet/BlueprintFunctionLibrary.h>
+#include <JBS/BS_PlayerBaseAnimInstance.h>
 #include "BS_Utility.generated.h"
 
 /**
@@ -17,6 +18,22 @@ enum class EPlayerType : uint8
 	,MALE2
 	,FEMALE2
 	,DUMMY = 4
+};
+
+// 플레이어 외형 데이터
+USTRUCT(BlueprintType)
+struct FPlayerAppearanceData
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	EPlayerType type;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	class USkeletalMesh* mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+	TSubclassOf<class UBS_PlayerBaseAnimInstance> anim;
+
+	FPlayerAppearanceData() {}
 };
 
 USTRUCT(BlueprintType)
@@ -34,7 +51,7 @@ struct FProfileData
 	{
 		this->name = name;
 		// @@ 젠더에 더불어 나이대로 얼터체크 필요
-		type = gender == TEXT("남") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+		type = gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
 		syncPercent = percent;
 	}
 };

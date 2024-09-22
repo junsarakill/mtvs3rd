@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include <MotionControllerComponent.h>
 #include <EnhancedInputSubsystems.h>
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/LocalPlayer.h"
@@ -12,9 +13,12 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
 #include "JBS/BS_Hand.h"
+#include "JBS/BS_Utility.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PSH/PSH_HttpDataTable.h"
+#include "TimerManager.h"
 #include <JBS/BS_PlayerState.h>
+#include <JBS/BS_PlayerBaseAnimInstance.h>
 
 // Sets default values
 ABS_VRPlayer::ABS_VRPlayer()
@@ -55,6 +59,8 @@ void ABS_VRPlayer::BeginPlay()
 	}
 	this->bUseControllerRotationYaw = playOnPC;
 	vrHMDCam->bUsePawnControlRotation = playOnPC;
+
+	GetAnim()->isPlayOnPC = playOnPC;
 }
 
 // Called every frame
@@ -106,7 +112,22 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	// if(moveDir != FVector::ZeroVector)
 	// 	moveDir = FVector::ZeroVector;
 
+	if(this->IsLocallyControlled())
+	{
+		// 이동 방향 값 애니메이션에 전달
+		FVector vel = GetVelocity();
+		FVector fv = GetActorForwardVector();
+		FVector rv = GetActorRightVector();
+		
+		GetAnim()->vertical = FVector::DotProduct(fv, vel);
+		GetAnim()->horizontal = FVector::DotProduct(rv, vel);
+
+		// 컨트롤러 위치 값 애니메이션에 전달
+		GetAnim()->leftControllerTR = leftController->handWorldTR;
+		GetAnim()->rightControllerTR = rightController->handWorldTR;
+	}
 	
+
 }
 
 // Called to bind functionality to input
@@ -217,7 +238,18 @@ ABS_PlayerState *ABS_VRPlayer::GetPS()
 void ABS_VRPlayer::StartTrip()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("넘어짐"));
+
+	GetAnim()->isFall = true;
+	FTimerHandle timerHandle;
+	GetWorld()->GetTimerManager()
+		.SetTimer(timerHandle, [this]() mutable
+	{
+		//타이머에서 할 거
+		// FIXME 시간 확인 필요
+		GetAnim()->isFall = false;
+	}, 3.f, false);
 }
+// FIXME 이거 좋은 타이밍에 가져오기
 FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
 {
 	auto* pc = Cast<APlayerController>(this->GetController());
@@ -233,4 +265,13 @@ FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
 
 
 	return FPSH_HttpDataTable(); 
+}
+class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
+{
+    if (!anim)
+    {
+        anim = Cast<UBS_PlayerBaseAnimInstance>(GetMesh()->GetAnimInstance());
+    }
+
+    return anim;
 }
