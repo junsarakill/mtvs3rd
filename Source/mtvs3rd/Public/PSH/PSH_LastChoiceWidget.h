@@ -28,14 +28,14 @@ public:
 	UPROPERTY()
 	class APSH_Mtvs3rdGameModBase* GM;
 
-	UPROPERTY(meta =(BindWidget))
-	class UTextBlock * TB_Result;
-
-	UPROPERTY(meta =(BindWidget))
-	class UTextBlock * TB_MName;
-
-	UPROPERTY(meta =(BindWidget))
-	class UTextBlock * TB_FName;
+// 	UPROPERTY(meta =(BindWidget))
+// 	class UTextBlock * TB_Result;
+// 
+// 	UPROPERTY(meta =(BindWidget))
+// 	class UTextBlock * TB_MName;
+// 
+// 	UPROPERTY(meta =(BindWidget))
+// 	class UTextBlock * TB_FName;
 
 	void VisibleName(bool chek);
 

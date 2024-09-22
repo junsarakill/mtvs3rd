@@ -41,15 +41,18 @@ public:
 	UPROPERTY()
 	float TestScore = 75;
 
-	TArray<int> ChoiceNum;
+	TMap<int,int> ChoiceNum;
 
 	int LastChoiceNum = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int playerCount = 0;
+	int playerCount = 4;
 
 	UPROPERTY()
 	class UPSH_LastChoiceWidget * ChoiceWidget;
+
+	UPROPERTY()
+	class APSH_LastChoiceActor * ChoiceActor;
 
 
 	void SetData(FPSH_HttpDataTable Data);
@@ -65,7 +68,9 @@ public:
 
 	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
 
-	
+	void SetActor(class APSH_LastChoiceActor * Actor);
+
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -105,6 +105,9 @@ public:
 	void QuestStateButtonJson();
 
     UFUNCTION(Server,Reliable)
+	void SRPC_SaveData();
+
+    UFUNCTION(Server,Reliable)
 	void SRPC_QuestStateButtonJson();
     UFUNCTION(NetMulticast,Reliable)
 	void MRPC_QuestStateButtonJson();

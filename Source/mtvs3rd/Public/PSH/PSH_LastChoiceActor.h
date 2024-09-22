@@ -32,5 +32,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
  	class UWidgetComponent * ChoiceWidgetComponent;
 
+	void SetPlayerName(FString Name);
 
 };

@@ -143,7 +143,7 @@ void UPSH_GameInstance::FindOtherSession() // FindOtherSession
 
         const FUniqueNetIdPtr netID =
             GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
-	OnlineSessionInterface->FindSessions(*netID, SessionSearch.ToSharedRef());
+	OnlineSessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 
 }
 void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
@@ -170,7 +170,7 @@ void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 			{
 				PRINTLOG(TEXT("JoinSession"));
 				OnlineSessionInterface->JoinSession(0, mySessionName, Result);
-				break;
+				return;
 			}
 		}
 
@@ -243,8 +243,14 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
     PlayerData = Data; // 데이터 가져오기
     const FUniqueNetIdPtr netID =
         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
-   
-   PlayerData.Id = FCString::Atoi(*netID->ToString()); // Id 할당
+    if (netID)
+    {
+        PlayerData.Id = FCString::Atoi(*netID->ToString()); // Id 할당
+    }
+    else
+    {
+        PlayerData.Id = 0;
+    }
 
     if (GEngine)
        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("ID : %d"), PlayerData.Id)); // 스팀에 고유 ID
@@ -254,10 +260,8 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
     FString num = FString::FromInt(PlayerData.Id); // ID 로 키 저장 
 
     // 같은 Name으로 접근하면 덮어 씌워진다.
-    FName RowName = FName(num);             // 이름 저장
-    DataTable->AddRow(RowName, PlayerData); // 데이터 테이블에 추가.//
-
-    PlayerData.PrintStruct();
+   
+	SRPC_SaveData();
 }
 
 void UPSH_GameInstance::StatDataJson()
@@ -384,6 +388,14 @@ void UPSH_GameInstance::OnResQuestPost(FHttpRequestPtr Request, FHttpResponsePtr
 void UPSH_GameInstance::QuestStateButtonJson() 
 {
 	SRPC_QuestStateButtonJson();
+}
+
+void UPSH_GameInstance::SRPC_SaveData_Implementation() 
+{
+    FName RowName = FName(FString::FromInt(PlayerData.Id)); // 이름 저장
+    DataTable->AddRow(RowName, PlayerData);                 // 데이터 테이블에 추가.//
+
+    PlayerData.PrintStruct();
 }
 
 void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation() 

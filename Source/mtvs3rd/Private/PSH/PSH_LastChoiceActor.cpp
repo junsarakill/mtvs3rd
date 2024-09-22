@@ -4,6 +4,7 @@
 #include "PSH/PSH_LastChoiceActor.h"
 #include "Components/WidgetComponent.h"
 #include "PSH/PSH_LastChoiceWidget.h"
+#include "PSH/PSH_Mtvs3rdGameModBase.h"
 
 // Sets default values
 APSH_LastChoiceActor::APSH_LastChoiceActor()
@@ -36,6 +37,13 @@ void APSH_LastChoiceActor::BeginPlay()
 			ChoiceWidget->SetActor(this);
 		}
 	}
+
+	if (HasAuthority())
+	{
+		
+		auto* Gm = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
+		Gm->SetActor(this);
+	}
 }
 
 
@@ -44,5 +52,13 @@ void APSH_LastChoiceActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void APSH_LastChoiceActor::SetPlayerName(FString Name) 
+{
+	UE_LOG(LogTemp,Warning,TEXT("Name : %s"),*Name);
+
+	// 첫번째는 왼쪽 Text에
+	// 두번째는 오른쪽 Text에
 }
 
