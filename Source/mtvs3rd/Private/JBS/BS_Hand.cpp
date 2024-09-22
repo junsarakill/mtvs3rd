@@ -62,6 +62,20 @@ void ABS_Hand::BeginPlay()
 
 	// ray 초기값 설정
 	SetEnableRay(ENABLE_RAY);
+
+	// 
+	// if(!HasAuthority())
+	// {
+	// 	uiInteractComp->SetActive(false);
+	// }
+	ownerPlayer = Cast<ABS_VRPlayer>(this->GetOwner());
+	if(ownerPlayer)
+	{
+		if(!ownerPlayer->IsLocallyControlled())
+		{
+			uiInteractComp->DestroyComponent();
+		}
+	}
 }
 
 void ABS_Hand::SetController(EMotionControllerType type, ABS_VRPlayer* player)
@@ -86,7 +100,8 @@ void ABS_Hand::SetController(EMotionControllerType type, ABS_VRPlayer* player)
 			
 			// 에임 컨트롤러 설정
 			aimMC->MotionSource = FName(cTypeStr + TEXT("Aim"));
-			uiInteractComp->PointerIndex = type == EMotionControllerType::LEFT ? 0 : 1;
+			if(uiInteractComp)
+				uiInteractComp->PointerIndex = type == EMotionControllerType::LEFT ? 1: 2;
 
 			break;
 		}
@@ -111,13 +126,15 @@ void ABS_Hand::SetRayInteractDis(float value)
 {
 	rayInteractDis = value;
 	// uiinteractcomp 도 동기화
-	uiInteractComp->InteractionDistance = RAY_INTERACT_DIS;
+	if(uiInteractComp)
+		uiInteractComp->InteractionDistance = RAY_INTERACT_DIS;
 }
 // 레이 활/비
 void ABS_Hand::SetEnableRay(bool value)
 {
 	enableRay = value;
-	uiInteractComp->bShowDebug = ENABLE_RAY;
+	if(uiInteractComp)
+		uiInteractComp->bShowDebug = ENABLE_RAY;
 }
 
 void ABS_Hand::SetGrabActor(ABS_GrabbableActor *actor)
@@ -251,11 +268,13 @@ UBS_GrabComponent *ABS_Hand::FindGrabComponentNearHand()
 
 void ABS_Hand::EventPressLMB()
 {
-	uiInteractComp->PressPointerKey(EKeys::LeftMouseButton);
+	if(uiInteractComp)
+		uiInteractComp->PressPointerKey(EKeys::LeftMouseButton);
 }
 void ABS_Hand::EventReleaseLMB()
 {
-	uiInteractComp->ReleasePointerKey(EKeys::LeftMouseButton);
+	if(uiInteractComp)
+		uiInteractComp->ReleasePointerKey(EKeys::LeftMouseButton);
 
 	// 플레이어 감지해서 프로필 뜨게하기
 	LineTracePlayer();
