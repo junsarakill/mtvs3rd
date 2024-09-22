@@ -89,8 +89,7 @@ public:
 	// Name Button Button Man
 
 	FString NameText;
-    UPROPERTY(meta = (BindWidget)) class UTextBlock * TB_Name;
-    UPROPERTY(meta = (BindWidget)) UButton *BT_Name;
+    
     UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name1;
     UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name2;
     UPROPERTY(meta = (BindWidget)) UButton *BT_Man_Name3;
@@ -154,7 +153,6 @@ public:
 	UFUNCTION() void OnClickAB();
 
 	// Name Button Fuction Man
-	UFUNCTION() void OnClickName();
 	UFUNCTION() void OnClickManName1();
     UFUNCTION() void OnClickManName2();
     UFUNCTION() void OnClickManName3();

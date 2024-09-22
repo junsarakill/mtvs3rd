@@ -105,6 +105,9 @@ public:
 	void QuestStateButtonJson();
 
     UFUNCTION(Server,Reliable)
+	void SRPC_SaveData();
+
+    UFUNCTION(Server,Reliable)
 	void SRPC_QuestStateButtonJson();
     UFUNCTION(NetMulticast,Reliable)
 	void MRPC_QuestStateButtonJson();
@@ -116,6 +119,8 @@ public:
 	void MatchDataJson();
     void ReqMatchDataJson(FString json);
 	void OnResMatchDataJson(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	void LastChoise(int FromId, int ToId);
 	
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Data")

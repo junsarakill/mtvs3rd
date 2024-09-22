@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "PSH/PSH_Portal.h"
@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "JBS/BS_PlayerState.h"
+#include "PSH/PSH_GameInstance.h"
 
 // Sets default values
 APSH_Portal::APSH_Portal()
@@ -69,26 +70,40 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 
 	player = Cast<ABS_VRPlayer>(OtherActor);
 	
-	// �������� �迭�� �� �ָ� �����ϰ� �迭�� ���� ���� �ֵ��� ������ playerCount�� ���� ��Ű�� �ʹ�.
+	// 서버에서 배열에 들어간 애를 제외하고 배열에 들어가지 않은 애들이 왔을때 playerCount를 증가 시키고 싶다.
 	if (player)
 	{
            
-            if (HasAuthority()) // ��������
+            if (HasAuthority()) // 서버에서
             {
-                if (playerArray.Find(player) != INDEX_NONE) // �迭�� �ִٸ�
+                if (PlayerArray.Find(player) != INDEX_NONE) // 배열에 있다면
                 {
-                    for (auto * cehk : playerArray)
+                    for (auto *cehk : PlayerArray)
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Acotr : %s"), *cehk->GetName());
+                       
 					}
+
+
                     return;
 				}
-				else // �迭�� ���ٸ�
+				else // 배열에 없다면
 				{
-					playerArray.Add(player);
+					
+					auto playerData = player->PS->GetPlayerData(); // 상대의 데이터를 가져옴
+					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
+					//auto playerData = player->PS->syncPercentID1; // 상대의 데이터를 가져옴
+					//PlayerIdArray.Add(playerData);
+                                      
+					PlayerArray.Add(player);
 					PlayerCount++;
 					OnRep_PlayerPotal();
 					UE_LOG(LogTemp, Warning, TEXT("Acotr : %s"), *player->GetName());
+                                        // 					auto  playerState =
+                                        // Cast<ABS_PlayerState>(player->GetPlayerState());
+                                        // auto * GI = Cast<UPSH_GameInstance>(GetWorld()->GetGameInstance());
+                                        // auto playerdata = GI->GetData();
+                                        //                     playerState->SetPlayerData();
 				}
                // Setvisilbe(false);
             }
@@ -115,12 +130,44 @@ void APSH_Portal::SetPortal()
 
 void APSH_Portal::GoPotal()
 {
+	// 맨처음 플레이어를 기준으로 호감도 높은 ID를 판별
+    if (!PlayerDataArray.IsEmpty())
+        {
+        if (PlayerDataArray[0].syncPercentID1 >= PlayerDataArray[0].syncPercentID2) // 호감도 비교.
+        {
+            SetMeshPlayerID = PlayerDataArray[0].otherUserID1; // 높은 호감도 ID
+        }
+        else
+        {
+            SetMeshPlayerID = PlayerDataArray[0].otherUserID2; // 높은 호감도 ID
+        }
+
+
+
+
+
+		}
+    
+
+    // 베타에 설문 추가
+    for (auto PlayerChek : PlayerArray) // 플레이어 의 배열
+    {
+        auto playerDataChek = PlayerChek->PS->GetPlayerData();
+        if (SetMeshPlayerID == playerDataChek.Id) // 가장 호감도가 높은 ID와 ID를 비교
+        {
+			//PlayerArray[0]-> // 0번을 기준으로 찾았기 때문에 0번의 매쉬를 변경
+            //PlayerChek->   // 0번 기준 호감도가 가장 높은 플레이어의 매쉬를 변경 
+			break;
+		}
+        playerDataChek.PrintStruct();
+    }
+
     SRPC_GoPotal();
 }
 
 void APSH_Portal::SRPC_GoPotal_Implementation() 
 {
-	for(auto * playerList : playerArray)
+    for (auto *playerList : PlayerArray)
     {
         playerList->SetActorLocation(EndPotal[0]->GetActorLocation());
 	}
@@ -147,3 +194,9 @@ void APSH_Portal::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(APSH_Portal,PlayerCount);
    
 }
+
+
+// 플레이어의 호감도가 가장 높은 그룹을 짝지어 매쉬를 바꾸고 싶다.
+// 메쉬는 플레이어, 호감도는 게임 인스턴스 또는 플레이어 스테이트.
+// 4명의 호감도를 비교하는 방법.
+// 플레이어 ID 와 플레이어를 
