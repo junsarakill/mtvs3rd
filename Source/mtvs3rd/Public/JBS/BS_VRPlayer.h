@@ -5,6 +5,7 @@
 #include <CoreMinimal.h>
 #include "GameFramework/Character.h"
 #include <PSH/PSH_HttpDataTable.h>
+#include <JBS/BS_Utility.h>
 #include "BS_VRPlayer.generated.h"
 
 UCLASS()
@@ -62,33 +63,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float smoothTurnMulti = 5.f;
 
-#pragma region 프리팹
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
-	class UInputMappingContext* imcDefault;
-
-#pragma endregion
-
-	// 플레이어 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
-	class ABS_PlayerState* ps;
-		public:
-	__declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
-        ABS_PlayerState *GetPS();
-        void SetPS(ABS_PlayerState* value);
-		protected:
-
-	// 플레이어 데이터
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FPSH_HttpDataTable data;
-		public:
-	__declspec(property(get = GetPlayerData, put = SetPlayerData)) FPSH_HttpDataTable DATA;
-	FPSH_HttpDataTable GetPlayerData();
-
-    protected:
-
-
-
 	// XXX 디버그용 최종 선택 가능
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
@@ -100,7 +74,52 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
 
+	// 플레이어 데이터
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	FPSH_HttpDataTable data;
+		public:
+	__declspec(property(get = GetPlayerData, put = SetPlayerData)) FPSH_HttpDataTable DATA;
+	FPSH_HttpDataTable GetPlayerData();
+
+    protected:
+
 	
+
+#pragma region 프리팹
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
+	class UInputMappingContext* imcDefault;
+
+	// 플레이어 외형 데이터 맵
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Classes")
+	TMap<EPlayerType, FPlayerAppearanceData> playerAppearanceMap;
+	
+
+#pragma endregion
+
+#pragma region 컴포넌트, 오브젝트
+	// 플레이어 상태
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	class ABS_PlayerState* ps;
+		public:
+	__declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
+        ABS_PlayerState *GetPS();
+        void SetPS(ABS_PlayerState* value);
+		protected:
+
+	// 애니메이션
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Components", BlueprintGetter=GetAnim, BlueprintSetter=SetAnim)
+	class UBS_PlayerBaseAnimInstance* anim;
+		public:
+	__declspec(property(get = GetAnim, put = SetAnim)) class UBS_PlayerBaseAnimInstance* ANIM;
+	UFUNCTION(BlueprintGetter)
+	class UBS_PlayerBaseAnimInstance *GetAnim();
+	UFUNCTION(BlueprintSetter)
+	void SetAnim(class UBS_PlayerBaseAnimInstance* value)
+	{
+		anim = value;
+	}
+		protected:
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
@@ -118,7 +137,10 @@ public:
 	// 최종 선택 ui 액터
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
 	class ABS_SelectConfirmActor* selectConfirmUIActor;
+
 	
+	
+#pragma endregion
 #pragma endregion
 #pragma region 함수 영역
 protected:
@@ -147,6 +169,10 @@ public:
 	// 돌발이벤트용 넘어지기 시작
 	UFUNCTION(BlueprintCallable)
 	void StartTrip();
+
+	// 프로필에 따른 겉모습 수정
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetPlayerAppearance();
 
 #pragma endregion
 
