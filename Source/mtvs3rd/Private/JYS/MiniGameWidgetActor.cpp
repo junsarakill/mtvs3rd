@@ -115,7 +115,7 @@ void AMiniGameWidgetActor::HideMissionWidget()
 {
     if (missionWidget)
     {
-        missionWidget->RemoveFromViewport();
+        missionWidget->RemoveFromParent();
     }
 
     FPSH_HttpDataTable pd = Cast<ABS_VRPlayer>(GetOwner())->GetPS()->GetPlayerData();

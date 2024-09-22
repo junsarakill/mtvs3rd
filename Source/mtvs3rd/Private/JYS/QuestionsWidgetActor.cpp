@@ -9,6 +9,7 @@
 #include "JBS/BS_VRPlayer.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
 #include "JBS/BS_PlayerState.h"
+#include "PSH/PSH_GameInstance.h"
 
 // Sets default values
 AQuestionsWidgetActor::AQuestionsWidgetActor()
@@ -105,7 +106,7 @@ void AQuestionsWidgetActor::SetAnswer(int num)
 	auto* ps = player->GetPlayerState<ABS_PlayerState>();
 	check(ps);
 	
-	auto * GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
-	GM->QestButtonJson(answerNum, getWidgetNum, ps->GetPlayerData().Id);
+	auto *GI = Cast<UPSH_GameInstance>(GetWorld()->GetGameInstance());
+	GI->QuestButtonJson(answerNum, getWidgetNum, ps->GetPlayerData().Id);
 	UE_LOG(LogTemp,Warning,TEXT("%d"),answerNum);
 }
