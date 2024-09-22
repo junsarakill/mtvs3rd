@@ -12,7 +12,7 @@
 UCLASS()
 class MTVS3RD_API UPSH_GameInstance : public UGameInstance
 {
-	GENERATED_BODY()
+	GENERATED_BODY() // 서버게임인스턴스1  
 public:
 /// 게임 섹션 열기
 

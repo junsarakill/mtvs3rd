@@ -57,6 +57,8 @@ public:
 
 	void SetData(FPSH_HttpDataTable Data);
 
+	UFUNCTION(Client,Reliable)
+	void CRPC_SetstartData(APlayerController *NewPlayer);
 
 	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
 

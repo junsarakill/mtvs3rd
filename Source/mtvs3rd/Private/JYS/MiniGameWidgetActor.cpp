@@ -58,7 +58,7 @@ void AMiniGameWidgetActor::BeginPlay()
 void AMiniGameWidgetActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    BillBoardQuestionsWidget();
+   // BillBoardQuestionsWidget();
 }
 
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
@@ -118,7 +118,7 @@ void AMiniGameWidgetActor::HideMissionWidget()
         missionWidget->RemoveFromParent();
     }
 
-    FPSH_HttpDataTable pd = Cast<ABS_VRPlayer>(GetOwner())->GetPS()->GetPlayerData();
+    FPSH_HttpDataTable pd = Cast<ABS_VRPlayer>(GetOwner())->DATA;
 
     if (pd.Gender == "Man")
     {
