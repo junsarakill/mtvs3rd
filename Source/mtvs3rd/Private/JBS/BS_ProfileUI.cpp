@@ -41,7 +41,7 @@ void UBS_ProfileUI::SetName(FString value)
 void UBS_ProfileUI::SetSyncPercent(int32 value)
 {
     // "value %"
-    FString str = FString::Printf(TEXT("%d %%"), value);
+    FString str = FString::Printf(TEXT("%d"), value);
     SyncPercentText->SetText(FText::FromString(str));
 
 }
