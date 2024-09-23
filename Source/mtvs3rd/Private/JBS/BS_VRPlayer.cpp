@@ -252,7 +252,7 @@ void ABS_VRPlayer::StartTrip()
 		//타이머에서 할 거
 		// FIXME 시간 확인 필요
 		GetAnim()->isFall = false;
-	}, 3.f, false);
+	}, 5.f, false);
 }
 // FIXME 이거 좋은 타이밍에 가져오기
 FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
