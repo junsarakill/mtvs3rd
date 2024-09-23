@@ -29,6 +29,10 @@ public:
 
 #pragma region 변수 영역
 protected:
+	// 플레이어 id
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	int id;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
 	// 이동 속도
@@ -122,6 +126,8 @@ protected:
 		protected:
 
 public:
+	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* vrRoot;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
@@ -161,7 +167,14 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EventLookup(FVector2D value);
 
-public:
+	// 플레이어 id 설정하기
+	UFUNCTION(Server, Reliable)
+	void SRPC_SetPlayerId();
+
+	UFUNCTION(Client, Reliable)
+	void MRPC_SetPlayerId(int playerId);
+
+    public:
 	// imc 추가
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);

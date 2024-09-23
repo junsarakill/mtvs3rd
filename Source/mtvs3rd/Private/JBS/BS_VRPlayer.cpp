@@ -12,6 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/GameModeBase.h"
 #include "JBS/BS_Hand.h"
 #include "JBS/BS_Utility.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -43,6 +44,13 @@ ABS_VRPlayer::ABS_VRPlayer()
 void ABS_VRPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 로컬 플레이어
+	if(IsLocallyControlled())
+	{
+		// id 가져오기
+		SRPC_SetPlayerId();
+	}
 
 	SetMoveSpeed(moveSpeed);
 
@@ -86,8 +94,8 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
 		
 		
-		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f")
-			, *moveDir.ToString(), *velStr, DATA.Id, vrRootHeight, vrHMDHeight);
+		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f\n플레이어 id2 : %d")
+			, *moveDir.ToString(), *velStr, DATA.Id, vrRootHeight, vrHMDHeight, this->id);
 		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
 	}
 
@@ -267,11 +275,10 @@ FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
 			return aps->GetPlayerData();
 		}
 	}
-
-
+	
 	return FPSH_HttpDataTable(); 
-	return data;
 }
+
 class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
 {
     if (!anim)
@@ -280,4 +287,15 @@ class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
     }
 
     return anim;
+}
+void ABS_VRPlayer::SRPC_SetPlayerId_Implementation()
+{
+	auto* aps = this->GetPlayerState<ABS_PlayerState>();
+	check(aps);
+	// ps 로 뭔가하기
+	MRPC_SetPlayerId(aps->id);
+}
+void ABS_VRPlayer::MRPC_SetPlayerId_Implementation(int playerId)
+{
+	id = playerId;
 }
