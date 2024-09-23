@@ -77,9 +77,5 @@ private:
 
     TArray<AActor *> findTB;
 
-    
-    UPROPERTY(BlueprintReadOnly)
-    int32 minutes = 2;
-    UPROPERTY(BlueprintReadOnly)
-    int32 second = 59;
+   
 };
