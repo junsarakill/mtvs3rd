@@ -48,8 +48,8 @@ void AMiniGameWidgetActor::BeginPlay()
     FTimerHandle missionTimeHandle;
     GetWorldTimerManager().SetTimer(missionTimeHandle, this, &AMiniGameWidgetActor::HideMissionWidget, 10.0, false);
 
-    FTimerHandle handle;
-    GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.0f, true, 0.0f);
+    //FTimerHandle handle;
+    //GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.0f, true, 0.0f);
 
     miniGameUIComp->SetVisibility(false);
 }
