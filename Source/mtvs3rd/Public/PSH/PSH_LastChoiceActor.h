@@ -34,4 +34,15 @@ public:
 
 	void SetPlayerName(FString Name);
 
+	UPROPERTY(EditAnywhere,Replicated)
+	int playerCount = 0;
+
+	UFUNCTION(Server,Reliable)
+	void SRPC_Visible();
+
+	UFUNCTION(NetMulticast,Reliable)
+	void MRPC_Visible();
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const;
+
 };

@@ -76,4 +76,6 @@ private:
     TSubclassOf<AActor> actor;
 
     TArray<AActor *> findTB;
+
+   
 };

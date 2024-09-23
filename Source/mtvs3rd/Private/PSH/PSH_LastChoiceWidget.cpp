@@ -16,7 +16,7 @@ void UPSH_LastChoiceWidget::NativeConstruct()
 		GM->SetLastWdiget(this);
 	}
 
-	VisibleName(false);
+	
 
 }
 
