@@ -41,6 +41,7 @@ void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data)
     
     SRPC_AddSyncMap(data.otherUserID1, data.syncPercentID1);
     SRPC_AddSyncMap(data.otherUserID2, data.syncPercentID2);
+
 }
 
 void ABS_PlayerState::SetIsFinalSelect(bool value)

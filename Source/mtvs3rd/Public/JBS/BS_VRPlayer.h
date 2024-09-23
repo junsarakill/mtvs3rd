@@ -80,7 +80,7 @@ protected:
 		public:
 	__declspec(property(get = GetPlayerData, put = SetPlayerData)) FPSH_HttpDataTable DATA;
 	FPSH_HttpDataTable GetPlayerData();
-
+	
     protected:
 
 	
@@ -172,7 +172,7 @@ public:
 
 	// 프로필에 따른 겉모습 수정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void SetPlayerAppearance();
+	void SetPlayerAppearance(EPlayerType type);
 
 #pragma endregion
 

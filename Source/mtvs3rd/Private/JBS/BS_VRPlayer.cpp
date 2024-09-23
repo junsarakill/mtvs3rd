@@ -60,6 +60,11 @@ void ABS_VRPlayer::BeginPlay()
 	this->bUseControllerRotationYaw = playOnPC;
 	vrHMDCam->bUsePawnControlRotation = playOnPC;
 
+	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
+	// FIXME 성별 + 조건 하나 더 필요
+	EPlayerType pType = DATA.Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+	SetPlayerAppearance(pType);
+
 	GetAnim()->isPlayOnPC = playOnPC;
 }
 
@@ -265,6 +270,7 @@ FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
 
 
 	return FPSH_HttpDataTable(); 
+	return data;
 }
 class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
 {
