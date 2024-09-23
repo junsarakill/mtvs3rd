@@ -75,17 +75,20 @@ private:
 // 	FString URLScore = "http://192.168.0.25:3111/interview_event";
 
 	UPROPERTY(EditAnywhere) // 최초 통신
-	FString URLStart = "https://2a72-59-13-225-125.ngrok-free.app/userinfo";
+	FString URLStart = "https://0094-59-13-225-125.ngrok-free.app/userinfo";
 	
 	UPROPERTY(EditAnywhere) // 버튼 전부 클릭했음
-	FString URLQuest = "https://2a72-59-13-225-125.ngrok-free.app/survey";
+	FString URLQuest = "https://0094-59-13-225-125.ngrok-free.app/survey";
 	UPROPERTY(EditAnywhere) // 스테이트 갱신 요청
-	FString URLState = "https://2a72-59-13-225-125.ngrok-free.app/calculate_affinity";
+	FString URLState = "https://0094-59-13-225-125.ngrok-free.app/calculate_affinity";
 	UPROPERTY(EditAnywhere) // 최종 선택 후 
-	FString URLChoose = "https://2a72-59-13-225-125.ngrok-free.app/match_status";
+	FString URLChoose = "https://0094-59-13-225-125.ngrok-free.app/match_status";
 
 	UPROPERTY(EditAnywhere) // 직접 호감도 통신
-	FString URLScore = "https://2a72-59-13-225-125.ngrok-free.app/interview_event";
+	FString URLScore = "https://0094-59-13-225-125.ngrok-free.app/interview_event";
+
+	UPROPERTY(EditAnywhere) // 시작 데이터 받기  통신
+	FString URLStartRequest = "https://0094-59-13-225-125.ngrok-free.app/get_user_info_by_id_groupid";
 	
 
 public:
@@ -122,6 +125,10 @@ public:
 
 	void LastChoise(int FromId, int ToId);
 	
+	void StartDataReQestJson();
+	void ReqStartDataReQestPost(FString json);
+    void OnStartDataReQestResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	class UDataTable * DataTable;

@@ -29,7 +29,8 @@ public:
 	UPROPERTY()
 	class UPSH_GameInstance * Gi;
 
-	
+	int Id = 0;
+
 	FPSH_HttpDataTable PlayerData;
 
 	UPROPERTY()
@@ -46,7 +47,7 @@ public:
 	int LastChoiceNum = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int playerCount = 4;
+	int playerCount = 2;
 
 	UPROPERTY()
 	class UPSH_LastChoiceWidget * ChoiceWidget;
@@ -56,9 +57,6 @@ public:
 
 
 	void SetData(FPSH_HttpDataTable Data);
-
-	UFUNCTION(Client,Reliable)
-	void CRPC_SetstartData(APlayerController *NewPlayer);
 
 	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
 

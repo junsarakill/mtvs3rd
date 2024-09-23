@@ -5,6 +5,7 @@
 #include "Components/WidgetComponent.h"
 #include "PSH/PSH_LastChoiceWidget.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 APSH_LastChoiceActor::APSH_LastChoiceActor()
@@ -22,19 +23,23 @@ APSH_LastChoiceActor::APSH_LastChoiceActor()
 		ChoiceWidgetComponent->SetWidgetClass(TempWidget.Class);
 		ChoiceWidgetComponent->SetDrawSize(FVector2D(500, 500));
 	}
+
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
 void APSH_LastChoiceActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+
 	if (ChoiceWidgetComponent)
 	{
 		ChoiceWidget = Cast<UPSH_LastChoiceWidget>(ChoiceWidgetComponent->GetWidget());
 		if (ChoiceWidget)
 		{
 			ChoiceWidget->SetActor(this);
+            ChoiceWidget->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 
@@ -56,9 +61,34 @@ void APSH_LastChoiceActor::Tick(float DeltaTime)
 
 void APSH_LastChoiceActor::SetPlayerName(FString Name) 
 {
+    playerCount++;
+
+    if (playerCount > 1)
+    {
+        SRPC_Visible();
+	}
 	UE_LOG(LogTemp,Warning,TEXT("Name : %s"),*Name);
 
+	
 	// 첫번째는 왼쪽 Text에
 	// 두번째는 오른쪽 Text에
+}
+
+void APSH_LastChoiceActor::SRPC_Visible_Implementation()
+{
+	MRPC_Visible();
+}
+
+void APSH_LastChoiceActor::MRPC_Visible_Implementation() 
+{
+	ChoiceWidget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void APSH_LastChoiceActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const 
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+
+    DOREPLIFETIME(APSH_LastChoiceActor, playerCount);
 }
 
