@@ -27,7 +27,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock * TB_PlayerCount;
 
-
 	UPROPERTY(EditDefaultsOnly)
 	int MaxPlayerCount = 2;
 	
