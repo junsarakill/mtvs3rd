@@ -88,31 +88,11 @@ void UPSH_TsetJsonParseLib::StartJsonParse(const FString &json, FPSH_HttpDataTab
 {
     TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
 
-    // �Ľ� ����� ���� ���� ���� . MakeShareable ����Ʈ ����Ʈ ������ ���� ���.
-    TSharedPtr<FJsonObject> result = MakeShareable(new FJsonObject()); // �޸� ����
-    // �ؼ��� �Ѵ�.
-    /*FPSH_HttpDataTable* newRow = new FPSH_HttpDataTable();*/
+    TSharedPtr<FJsonObject> result = MakeShareable(new FJsonObject());
+  
     if (FJsonSerializer::Deserialize(reader, result))
     {
-        // 		TArray<TSharedPtr<FJsonValue>> ParseDatList = result->GetArrayField(TEXT("items"));
-        // 		for (TSharedPtr<FJsonValue> data : ParseDatList)
-        // 		{
-        // 			// å�� �̸��� ����.
-        //
-        //  			FString id = data->AsObject()->GetStringField("id");
-        //  			FString pw = data->AsObject()->GetStringField("pw");
-        // // 			FString authorName = data->AsObject()->GetStringField("aut_nm");
-        //  			//returnValue.Append(FString::Printf(TEXT("BookName : %s / AuthrName : %s\n"),
-        //  *bookName, *authorName)); 			returnValue.Append(FString::Printf(TEXT("id : %s \n pw : 5s"), *id, *pw));
-        // 			// å�� �̸��� ����.
-        // // 			if (data->AsObject()->HasField("bk_nm")) // �ִ��� Ȯ��
-        // // 				int age = data->AsObject()->GetIntegerField("123");
-        //
-        // 		}
-        // 만약 데이터가 True일 경우
-
         data.Name = *result->GetStringField(TEXT("Name"));
         data.Gender = *result->GetStringField(TEXT("Gender"));
-      
     }
 }

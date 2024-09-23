@@ -21,12 +21,6 @@ void UPSH_GameInstance::Init()
 	 
 }
 
-void UPSH_GameInstance::OnStart()
-{
-	Super::OnStart();
-	
-}
-
 void UPSH_GameInstance::GetOnlineSubsystem()
 {
 	// IOnlineSubsystem 받아오기
@@ -40,16 +34,6 @@ void UPSH_GameInstance::GetOnlineSubsystem()
 		OnlineSessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPSH_GameInstance::OnFindSessionComplete);
 		OnlineSessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPSH_GameInstance::OnJoinSessionComplate);
 		//IOnlineSessionPtr 이름 출력
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(
-				-1,
-				15.f,
-				FColor::Orange,
-				FString::Printf(TEXT("Subsystem 이름 : %s"), *OnlineSubSystem->GetSubsystemName().ToString()
-				)
-			);
-		}
 	}
 
 }
@@ -60,18 +44,6 @@ void UPSH_GameInstance::CreateGameSession()
 	{
 		return;
 	}
-
-// 	auto ExistingSession = OnlineSessionInterface->GetNamedSession(mySessionName);
-// 	if (ExistingSession != nullptr) // 이미 세션이 존재한다면 
-// 	{
-// 		OnlineSessionInterface->DestroySession(NAME_GameSession); //기존 세션을 삭제한다.
-// 
-// 		if (GEngine)
-// 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Black, FString::Printf(TEXT("Destroy session : %s"), NAME_GameSession));
-// 	}
-
-	//세션 생성 완료 후 호출될 delegate 리스트에 CreateSessionCompleteDelegate 추가
-	//OnlineSessionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
 
 	TSharedPtr<FOnlineSessionSettings> SessionSettings = MakeShareable(new FOnlineSessionSettings());
 	SessionSettings->bIsDedicated = false;
@@ -91,11 +63,10 @@ void UPSH_GameInstance::CreateGameSession()
 위 코드는 세션의 MatchType을 '모두에게 열림(FreeForAll)'으로 설정하고, 온라인 서비스와 핑을 통해 세션을 홍보할 수 있게 설정하는 코드이다.*/
 
 // Local Player를 호스트로 설정하여 하여 세션 생성하기
-	//const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 	const FUniqueNetIdPtr netID = GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 
 	PRINTLOG(TEXT("netID : %s"), *netID->ToString());
-	OnlineSessionInterface->CreateSession(0, mySessionName, *SessionSettings);
+	OnlineSessionInterface->CreateSession(*netID, mySessionName, *SessionSettings);
 
 	PRINTLOG(TEXT("Create Session Start SessionName"));
 }
@@ -105,10 +76,7 @@ void UPSH_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSucc
 	if (bWasSuccessful)
 	{
 		PRINTLOG(TEXT("OnMyCreateSessionCompelte is Sucess~~~"));
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Created session : %s"), *SessionName.ToString()));
-
-			GetWorld()->ServerTravel(FString("/Game/PSH/Map/WaitRoom?listen"));
+		GetWorld()->ServerTravel(FString("/Game/PSH/Map/WaitRoom?listen"));
 
 	}
 	else
@@ -119,19 +87,18 @@ void UPSH_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSucc
 	}
 }
 
+void UPSH_GameInstance::SetData() {}
+
 void UPSH_GameInstance::FindOtherSession() // FindOtherSession
 {
 	if (!OnlineSessionInterface.IsValid()) // 세션 인터페이스 유효성 검사
 	{
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("Game Session Interface is invailed")));
-
 		return;
 	}
-        PRINTLOG(TEXT("FindOtherSession"));
-	// Find Session Complete Delegate 등록
-	//OnlineSessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionCompleteDelegate);
 
+    PRINTLOG(TEXT("FindOtherSession"));
 	// Find Game Session
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	SessionSearch->MaxSearchResults = 40; // 검색 결과로 나오는 세션 수 최대값
@@ -140,15 +107,11 @@ void UPSH_GameInstance::FindOtherSession() // FindOtherSession
 	SessionSearch->QuerySettings.Set(FName("MatchType"), FString("FreeForAll"), EOnlineComparisonOp::Equals);
 	SessionSearch->QuerySettings.Set(FName("SESSION_NAME"), mySessionName.ToString(), EOnlineComparisonOp::Equals);
 	// 찾을 세션 쿼리를 현재로 설정한다
-
-        const FUniqueNetIdPtr netID =
-            GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 	OnlineSessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-
 }
+
 void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
-{
-     
+{   
 	if (!OnlineSessionInterface.IsValid())
 		return;
        
@@ -173,7 +136,6 @@ void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 				return;
 			}
 		}
-
          CreateGameSession();
 	}
 	else
@@ -183,10 +145,6 @@ void UPSH_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 	}
 
 }
-// void UPSH_GameInstance::JoinSeesion()
-// {
-// 
-// }
 
 void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
@@ -201,8 +159,6 @@ void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionC
 	{
 	case EOnJoinSessionCompleteResult::Success: // 세션에 조인했다면 IP Address얻어와서 해당 서버에 접속
 
-		
-
 		if (pc)
 		{
 			
@@ -210,8 +166,7 @@ void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionC
 
 			if (false == Address.IsEmpty())
 			{
-				pc->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-                           
+				pc->ClientTravel(Address, ETravelType::TRAVEL_Absolute);   
 			}
 	
 		}

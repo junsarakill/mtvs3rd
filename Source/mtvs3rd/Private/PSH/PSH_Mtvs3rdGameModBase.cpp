@@ -34,12 +34,13 @@ void APSH_Mtvs3rdGameModBase::BeginPlay()
 	
 }
 
-// void APSH_Mtvs3rdGameModBase::PreLogin(const FString &Options, const FString &Address, const FUniqueNetIdRepl &UniqueId, FString &ErrorMessage)
-// {
-// //     서버에 접근 시도중인 플레이어를 수락 또는 거부합니다
-// //         .ErrorMessage 에 공백이 아닌 스트링을 입력하면 Login 함수가 실패하도록 만듭니다.PreLogin 은 Login 전 호출되며,
-// //         참가하는 플레이어가 게임 콘텐츠를 다운로드해야 하는 경우 시간이 한참 지나서야 Login 이 호출될 수도 있습니다.
-// }
+void APSH_Mtvs3rdGameModBase::PreLogin(const FString &Options, const FString &Address, const FUniqueNetIdRepl &UniqueId, FString &ErrorMessage)
+{
+    Super::PreLogin(Options,Address,UniqueId,ErrorMessage);
+    //     서버에 접근 시도중인 플레이어를 수락 또는 거부합니다
+//         .ErrorMessage 에 공백이 아닌 스트링을 입력하면 Login 함수가 실패하도록 만듭니다.PreLogin 은 Login 전 호출되며,
+//         참가하는 플레이어가 게임 콘텐츠를 다운로드해야 하는 경우 시간이 한참 지나서야 Login 이 호출될 수도 있습니다.
+}
 
 void APSH_Mtvs3rdGameModBase::PostLogin(APlayerController *NewPlayer) 
 {
@@ -47,16 +48,16 @@ void APSH_Mtvs3rdGameModBase::PostLogin(APlayerController *NewPlayer)
 
      Gi = Cast<UPSH_GameInstance>(GetGameInstance());
 
-	 Id ++;
     // 새로 들어온 플레이어에게 GI에 있는 데이터를 넣어주고 싶다.
     auto *pc = NewPlayer;
+
     if (pc)
     {
         playerState = Cast<ABS_PlayerState>(pc->PlayerState);
         if (playerState != nullptr)
         {
-			//Gi->StartDataReQestJson();
-            playerState->SetPlayerData(Gi->GetData(Id));
+			Gi->StartDataReQestJson();
+            playerState->SetPlayerData(Gi->GetStartData());
         }
     }
    
@@ -155,25 +156,3 @@ void APSH_Mtvs3rdGameModBase::SetActor(class APSH_LastChoiceActor *Actor)
     if (ChoiceActor)
 	UE_LOG(LogTemp,Warning,TEXT("APSH_LastChoiceActor : %s"),*ChoiceActor->GetName());
 }
-
-//  시작중 UI 적용
-void APSH_Mtvs3rdGameModBase::QestButtonJson(int ButtonNum , int QestNum, int playerID)
-{
-	TMap<FString, FString> QestData; // 제이슨에 들어갈 데이터
-	QestData.Add("playerID", FString::FromInt(playerID)); // 어떤 플레이어가
-	QestData.Add("QestNum", FString::FromInt(QestNum)); // 몇번째 퀘스트에
-	QestData.Add("Answer", FString::FromInt(ButtonNum)); // 몇번을 눌렀는지
-	
-	// 내가 누구인지. id
-	// 버튼 무엇을 눌렀는지. button Num
-	// 몇번째 퀘스트인지  Qest Num
-	TestScore += 5;
-	PlayerData.otherUserID1 = 3;
-	PlayerData.syncPercentID1 = TestScore;
-
-	Gi->SetStartData(PlayerData);
-	FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
-
-//	ReqPost(json, URLScore); // 만든 제이슨 보내주는거
-}
-

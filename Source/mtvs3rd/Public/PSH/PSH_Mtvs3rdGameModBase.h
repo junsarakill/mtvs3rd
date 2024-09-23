@@ -22,14 +22,12 @@ public:
 // 	FHttopStartData GetStartData();
 
 	// 플레이어 로그인 시도 할때
-	/*virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;*/
+	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 
 	// 플레이어 로그인 이후
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	UPROPERTY()
 	class UPSH_GameInstance * Gi;
-
-	int Id = 0;
 
 	FPSH_HttpDataTable PlayerData;
 
@@ -57,8 +55,6 @@ public:
 
 
 	void SetData(FPSH_HttpDataTable Data);
-
-	void QestButtonJson(int ButtonNum, int QestNum , int playerID);
 
 	void LastChoice(int FromId, int ToId);
 
