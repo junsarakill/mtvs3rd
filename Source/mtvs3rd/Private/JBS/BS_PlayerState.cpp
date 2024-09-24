@@ -2,14 +2,42 @@
 
 
 #include <JBS/BS_PlayerState.h>
+#include "JBS/BS_Utility.h"
+#include "JBS/BS_VRPlayer.h"
+#include "PSH/PSH_GameInstance.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include <Net/UnrealNetwork.h>
+#include "Kismet/GameplayStatics.h"
 
 ABS_PlayerState::ABS_PlayerState()
 {
     // Replication 설정
     bReplicates = true; // 이 객체가 복제되도록 설정
     bAlwaysRelevant = true; // 항상 관련 있는 상태로 유지
+}
+
+void ABS_PlayerState::BeginPlay()
+{
+    Super::BeginPlay();
+
+    
+
+    auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    if(pc)
+    {
+        //pc로 뭔가 하기
+        if((pc && pc->IsLocalController() && this == pc->GetPlayerState<ABS_PlayerState>()))
+        {
+            auto* gi = UBS_Utility::GetGI(GetWorld());
+            // gi에서 플레이어 데이터 가져오기
+            SetPlayerData(gi->GetStartData());
+
+            APlayerCameraManager* cam = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+            cam->StartCameraFade(1, 0, 5, FColor::Black);
+
+            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
+        }
+    }
 }
 
 void ABS_PlayerState::SetIsAlreadySelect(bool value)
@@ -26,13 +54,13 @@ FPSH_HttpDataTable ABS_PlayerState::GetPlayerData()
     float sync1 = syncId1 != -1 ? syncMap[syncId1] : -1.f;
     float sync2 = syncId2 != -1 ? syncMap[syncId2] : -1.f;
 
-    return FPSH_HttpDataTable(id, name, age, gender, mbti, blood, syncId1, sync1, syncId2, sync2);
+    return FPSH_HttpDataTable(ID, name, age, gender, mbti, blood, syncId1, sync1, syncId2, sync2);
 }
 
 void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data) 
 {
     // 데이터 설정
-    id = data.Id;
+    ID = data.Id;
     name = data.Name;
     age = data.Age;
     gender = data.Gender;
@@ -81,4 +109,18 @@ void ABS_PlayerState::SRPC_AddSyncMap_Implementation(int userId, float value) { 
 void ABS_PlayerState::MRPC_AddSyncMap_Implementation(int userId, float value)
 {
     AddSyncMap(userId, value);
+}
+
+
+void ABS_PlayerState::SetId(int value)
+{
+    id = value;
+    // @@ 플레이어 찾아서 id 동기화
+    auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    if(pc && pc->IsLocalController())
+    {
+        //pc로 뭔가 하기
+        auto* player = pc->GetPawn<ABS_VRPlayer>();
+        player->ID = this->ID;
+    }
 }

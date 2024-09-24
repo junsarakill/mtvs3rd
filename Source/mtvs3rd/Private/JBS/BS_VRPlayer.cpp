@@ -13,6 +13,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameStateBase.h"
 #include "JBS/BS_Hand.h"
 #include "JBS/BS_Utility.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -49,15 +50,16 @@ void ABS_VRPlayer::BeginPlay()
 	if(IsLocallyControlled())
 	{
 		// id 가져오기
+		// @@ 플레이어 전부 로딩되고 나서 해야하는지 아니면 더 좋은 방법이 있는지 확인하기
 		SRPC_SetPlayerId();
 	}
 
 	SetMoveSpeed(moveSpeed);
-
-	if(enableDebugFinalSelect)
-	{
-		// PS->IS_FINAL_SELECT = enableDebugFinalSelect;
-	}
+	
+	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
+	// FIXME 성별 + 조건 하나 더 필요
+	EPlayerType pType = DATA.Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+	SetPlayerAppearance(pType);
 
 	if(playOnPC)
 	{
@@ -67,13 +69,10 @@ void ABS_VRPlayer::BeginPlay()
 	}
 	this->bUseControllerRotationYaw = playOnPC;
 	vrHMDCam->bUsePawnControlRotation = playOnPC;
-
-	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
-	// FIXME 성별 + 조건 하나 더 필요
-	EPlayerType pType = DATA.Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
-	SetPlayerAppearance(pType);
-
 	GetAnim()->isPlayOnPC = playOnPC;
+
+
+
 }
 
 // Called every frame
@@ -94,8 +93,12 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
 		
 		
-		FString str = FString::Printf(TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f\n플레이어 id2 : %d")
-			, *moveDir.ToString(), *velStr, DATA.Id, vrRootHeight, vrHMDHeight, this->id);
+		// FString str = FString::Printf(
+		// 	TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f\n플레이어 id2 : %d\n")
+		// 	, *moveDir.ToString(), *velStr, DATA.Id, vrRootHeight, vrHMDHeight, this->id);
+		FString str = FString::Printf(
+			TEXT("id : %d\n")
+			, this->ID);
 		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
 	}
 
@@ -150,13 +153,7 @@ void ABS_VRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-void ABS_VRPlayer::SetPS(ABS_PlayerState *value)
-{
-	auto* myPS = this->GetPlayerState<ABS_PlayerState>();
-	check(myPS);
-	// ps 로 뭔가하기
-	ps = myPS;
-}
+
 
 void ABS_VRPlayer::SetIMC(UInputMappingContext *imc)
 {
@@ -201,7 +198,7 @@ void ABS_VRPlayer::EventTurn(float value)
 		bool isRight = value > 0.f;
 		SnapTurn(isRight);
 	}
-	// @@나중엔 자연스러운 회전?
+	// XXX 나중엔 자연스러운 회전?
 	else
 	{
 		SmoothTurn(value);
@@ -234,19 +231,27 @@ void ABS_VRPlayer::EventLookup(FVector2D value)
 	
 }
 
-ABS_PlayerState *ABS_VRPlayer::GetPS()
-{
-    // ps 캐시 안되있으면 가져오기
-    if (!ps)
-    {
-        auto *myPS = this->GetPlayerState<ABS_PlayerState>();
-        check(myPS);
-        // ps 로 뭔가하기
-        ps = myPS;
-    }
+// ABS_PlayerState *ABS_VRPlayer::GetPS()
+// {
+//     // ps 캐시 안되있으면 가져오기
+//     if (!ps)
+//     {
+//         auto *myPS = this->GetPlayerState<ABS_PlayerState>();
+//         check(myPS);
+//         // ps 로 뭔가하기
+//         ps = myPS;
+//     }
 
-    return ps;
-}
+//     return ps;
+// }
+
+// void ABS_VRPlayer::SetPS(ABS_PlayerState *value)
+// {
+// 	auto* myPS = this->GetPlayerState<ABS_PlayerState>();
+// 	check(myPS);
+// 	// ps 로 뭔가하기
+// 	ps = myPS;
+// }
 
 void ABS_VRPlayer::StartTrip()
 {
@@ -258,26 +263,30 @@ void ABS_VRPlayer::StartTrip()
 		.SetTimer(timerHandle, [this]() mutable
 	{
 		//타이머에서 할 거
-		// FIXME 시간 확인 필요
 		GetAnim()->isFall = false;
-	}, 5.f, false);
+	}, 10.f, false);
 }
-// FIXME 이거 좋은 타이밍에 가져오기
-FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
-{
-	auto* pc = Cast<APlayerController>(this->GetController());
-	if(pc)
-	{
-		//pc로 뭔가 하기
-		auto* aps = pc->GetPlayerState<ABS_PlayerState>();
-		if(aps)
-		{
-			return aps->GetPlayerData();
-		}
-	}
+
+// FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
+// {
+// 	// id 를 key 해서 모든 ps 가져와서 찾아오기
+//     TArray<TObjectPtr<APlayerState>> tempAllPS = GetWorld()->GetGameState()->PlayerArray;
+// 	TArray<ABS_PlayerState*> allPS;
+// 	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
+// 		return Cast<ABS_PlayerState>(temp);
+// 	});
+// 	//캐스트 후
+// 	for(auto* ps : allPS)
+// 	{
+// 		// id 가져오기
+// 		if(ps && ps->ID == this->ID)
+// 		{
+
+// 		}
+// 	}
 	
-	return FPSH_HttpDataTable(); 
-}
+
+// }
 
 class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
 {
@@ -287,15 +296,4 @@ class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
     }
 
     return anim;
-}
-void ABS_VRPlayer::SRPC_SetPlayerId_Implementation()
-{
-	auto* aps = this->GetPlayerState<ABS_PlayerState>();
-	check(aps);
-	// ps 로 뭔가하기
-	MRPC_SetPlayerId(aps->id);
-}
-void ABS_VRPlayer::MRPC_SetPlayerId_Implementation(int playerId)
-{
-	id = playerId;
 }

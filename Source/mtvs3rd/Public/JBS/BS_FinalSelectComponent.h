@@ -77,7 +77,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SendPlayerFinalSelect();
 
-	// XXX 프로토용 최종 선택 더미와 함께
+	// 최종 선택
 	void SendPlayerFinalSelect(EFinalSelectType type);
 
 

@@ -5,6 +5,8 @@
 #include "Components/ActorComponent.h"
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "PSH/PSH_GameInstance.h"
 #include "Templates/Casts.h"
 #include <PSH/PSH_Mtvs3rdGameModBase.h>
 #include <cfloat>
@@ -14,6 +16,11 @@ APSH_Mtvs3rdGameModBase *UBS_Utility::GetGM(UWorld* world)
     auto* gm = Cast<APSH_Mtvs3rdGameModBase>(world->GetAuthGameMode());
 
     return gm;
+}
+
+UPSH_GameInstance *UBS_Utility::GetGI(UWorld *world)
+{
+    return world->GetGameInstance<UPSH_GameInstance>();
 }
 
 UActorComponent *UBS_Utility::GetNearestGrabComp(TArray<UActorComponent *> comps, FVector targetLoc)

@@ -32,6 +32,17 @@ protected:
 	// 플레이어 id
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	int id;
+		public:
+	__declspec(property(get = GetId, put = SetId)) int ID;
+	int GetId()
+	{
+		return id;
+	}
+	void SetId(int value)
+	{
+		id = value;
+	}
+		protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
@@ -55,7 +66,7 @@ protected:
 	FVector moveDir;
 
 	// 회전 설정
-	// @@ 나중엔 자연스러운 회전 추가할까?
+	// XXX 나중엔 자연스러운 회전 추가할까?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	bool isSnapTurn = true;
 
@@ -67,7 +78,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float smoothTurnMulti = 5.f;
 
-	// XXX 디버그용 최종 선택 가능
+	// 디버그용 최종 선택 가능
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
 
@@ -77,15 +88,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
-
-	// 플레이어 데이터
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FPSH_HttpDataTable data;
-		public:
-	__declspec(property(get = GetPlayerData, put = SetPlayerData)) FPSH_HttpDataTable DATA;
-	FPSH_HttpDataTable GetPlayerData();
-	
-    protected:
 
 	
 
@@ -103,13 +105,13 @@ protected:
 
 #pragma region 컴포넌트, 오브젝트
 	// 플레이어 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
-	class ABS_PlayerState* ps;
-		public:
-	__declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
-        ABS_PlayerState *GetPS();
-        void SetPS(ABS_PlayerState* value);
-		protected:
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	// class ABS_PlayerState* ps;
+	// 	public:
+	// __declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
+    //     ABS_PlayerState *GetPS();
+    //     void SetPS(ABS_PlayerState* value);
+	// 	protected:
 
 	// 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Components", BlueprintGetter=GetAnim, BlueprintSetter=SetAnim)
@@ -167,14 +169,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EventLookup(FVector2D value);
 
-	// 플레이어 id 설정하기
-	UFUNCTION(Server, Reliable)
-	void SRPC_SetPlayerId();
-
-	UFUNCTION(Client, Reliable)
-	void MRPC_SetPlayerId(int playerId);
-
-    public:
+public:
 	// imc 추가
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);
@@ -186,6 +181,8 @@ protected:
 	// 프로필에 따른 겉모습 수정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerAppearance(EPlayerType type);
+
+	FPSH_HttpDataTable GetPlayerData();
 
 #pragma endregion
 

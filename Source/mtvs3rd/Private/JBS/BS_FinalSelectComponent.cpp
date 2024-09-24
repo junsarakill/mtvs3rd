@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/Engine.h"
+#include "JBS/BS_Utility.h"
 #include "TimerManager.h"
 #include <JBS/BS_Hand.h>
 #include <JBS/BS_VRPlayer.h>
@@ -110,8 +111,9 @@ void UBS_FinalSelectComponent::OnClickSelect(bool value)
 	// yes 눌렀을 경우 게임모드에 선택 보내기
 	if(value)
 	{
-		// FIXME 프로토용
-		SendPlayerFinalSelect(EFinalSelectType::DUMMY);
+		// XXX 프로토용
+		// SendPlayerFinalSelect(EFinalSelectType::DUMMY);
+		SendPlayerFinalSelect(EFinalSelectType::NORMAL);
 	}
 }
 

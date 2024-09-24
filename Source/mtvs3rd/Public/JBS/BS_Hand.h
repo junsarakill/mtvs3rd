@@ -189,7 +189,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	int32 dummyID = 0;
 		
-	// XXX 디버그용 잡기 범위 표시
+	// 디버그용 잡기 범위 표시
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugGrabSphere = false;
 

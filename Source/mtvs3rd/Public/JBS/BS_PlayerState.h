@@ -23,6 +23,15 @@ public:
 	// id
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Values")
 	int id = -1;
+		public:
+	__declspec(property(get = GetId, put = SetId)) int ID;
+	int GetId()
+	{
+		return id;
+	}
+	void SetId(int value);
+
+    protected:
 	// 이름
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Values")
 	FString name = TEXT("미설정");
@@ -40,7 +49,7 @@ public:
 	FString blood = TEXT("미설정");
 	// 상대 id, 호감도 맵
 	// otherUserID1 : syncPercentID1
-	// XXX 직접 복제 안되니깐 add를 rpc
+	// 직접 복제 안되니깐 add를 rpc
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	TMap<int, float> syncMap;
 	// id 순서 배열
@@ -70,6 +79,7 @@ public:
 	void SetIsAlreadySelect(bool value);
 
 protected:
+    virtual void BeginPlay() override;
 
 public:
 	UFUNCTION(BlueprintGetter)

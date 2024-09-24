@@ -46,11 +46,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	bool canSimulateOnDrop = false;
 
-	//XXX 잡기 딜리게이트 
-
-	// 놓기 딜리게이트
-
-
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
