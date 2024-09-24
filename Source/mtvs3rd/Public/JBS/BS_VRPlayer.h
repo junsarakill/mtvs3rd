@@ -182,8 +182,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerAppearance(EPlayerType type);
 
-	FPSH_HttpDataTable GetPlayerData();
-
 #pragma endregion
 
 };

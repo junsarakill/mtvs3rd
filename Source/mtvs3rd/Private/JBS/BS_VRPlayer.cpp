@@ -49,17 +49,18 @@ void ABS_VRPlayer::BeginPlay()
 	// 로컬 플레이어
 	if(IsLocallyControlled())
 	{
-		// id 가져오기
-		// @@ 플레이어 전부 로딩되고 나서 해야하는지 아니면 더 좋은 방법이 있는지 확인하기
-		SRPC_SetPlayerId();
-	}
 
-	SetMoveSpeed(moveSpeed);
+	}
+	
+	FPSH_HttpDataTable myData;
+	UBS_Utility::TryGetPlayerData(GetWorld(), this->ID, myData);
 	
 	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
 	// FIXME 성별 + 조건 하나 더 필요
-	EPlayerType pType = DATA.Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+	EPlayerType pType = myData.Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
 	SetPlayerAppearance(pType);
+
+	SetMoveSpeed(moveSpeed);
 
 	if(playOnPC)
 	{
@@ -267,28 +268,7 @@ void ABS_VRPlayer::StartTrip()
 	}, 10.f, false);
 }
 
-// FPSH_HttpDataTable ABS_VRPlayer::GetPlayerData()
-// {
-// 	// id 를 key 해서 모든 ps 가져와서 찾아오기
-//     TArray<TObjectPtr<APlayerState>> tempAllPS = GetWorld()->GetGameState()->PlayerArray;
-// 	TArray<ABS_PlayerState*> allPS;
-// 	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
-// 		return Cast<ABS_PlayerState>(temp);
-// 	});
-// 	//캐스트 후
-// 	for(auto* ps : allPS)
-// 	{
-// 		// id 가져오기
-// 		if(ps && ps->ID == this->ID)
-// 		{
-
-// 		}
-// 	}
-	
-
-// }
-
-class UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
+UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
 {
     if (!anim)
     {
