@@ -91,7 +91,5 @@ void UPSH_LikeSocreWidget::SetLikeSocreOwner(class APSH_LikgeScoreActor* owner)
 void UPSH_LikeSocreWidget::SetScore(int NewScore)
 {
 	score = NewScore;
-	// 스코어 와 id
-	//Actor
 }
 

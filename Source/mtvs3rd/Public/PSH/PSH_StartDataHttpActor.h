@@ -22,8 +22,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	
 	UPROPERTY(EditDefaultsOnly)
@@ -41,6 +39,4 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UPSH_StartDataWidget * HttpWidget;
 
-	void SetVisible(bool chek);
-	
 };

@@ -7,16 +7,7 @@
 
 void UPSH_LastChoiceWidget::NativeConstruct()
 {
-	Super::NativeConstruct();
-
-	GM = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
-	
-	if (GM)
-	{
-		GM->SetLastWdiget(this);
-	}
-
-	
+	Super::NativeConstruct();	
 
 }
 
@@ -28,21 +19,4 @@ void UPSH_LastChoiceWidget::SetActor(class APSH_LastChoiceActor* Owner)
 void UPSH_LastChoiceWidget::SetData(FPSH_HttpDataTable data)
 {
 	WidgetData = data;
-}
-
-void UPSH_LastChoiceWidget::VisibleName(bool chek)
-{
-	
-	
-}
-
-void UPSH_LastChoiceWidget::SuccessChoice()
-{
-	
-	
-}
-
-void UPSH_LastChoiceWidget::FailChoice()
-{
-	
 }

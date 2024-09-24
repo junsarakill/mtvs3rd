@@ -23,9 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-// 	UPROPERTY(EditDefaultsOnly)
-// 	TSubclassOf<class UUserWidget> ChoiceWidgetFac;
-// 
+
 	UPROPERTY()
 	class UPSH_LastChoiceWidget* ChoiceWidget;
  

@@ -10,8 +10,8 @@
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
 #include "../../../../Plugins/Online/OnlineBase/Source/Public/Online/OnlineSessionNames.h"
 #include "HttpModule.h"
-#include "PSH_TsetJsonParseLib.h"
 #include "JBS/BS_PlayerState.h"
+#include "PSH/PSH_JsonParseLibrary.h"
 
 
 void UPSH_GameInstance::Init()
@@ -198,6 +198,7 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
     PlayerData = Data; // 데이터 가져오기
     const FUniqueNetIdPtr netID =
         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
+
     if (netID)
     {
         PlayerData.Id = FCString::Atoi(*netID->ToString()); // Id 할당
@@ -233,7 +234,7 @@ void UPSH_GameInstance::StatDataJson()
     // 	TMap<FString, FPSH_HttpDataTable> StudentData; // 제이슨에 들어갈 데이터
     // 	StudentData.Add("" , PlayerData);
 
-    FString json = UPSH_TsetJsonParseLib::MakeJson(StartData);
+    FString json = UPSH_JsonParseLibrary::MakeJson(StartData);
     ReqStartPost(json); // 만든 제이슨 보내주는거
 }
 
@@ -257,8 +258,7 @@ void UPSH_GameInstance::ReqStartPost(FString json)
     req->ProcessRequest();
 }
 
-void UPSH_GameInstance::OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response,
-                                             bool bConnectedSuccessfully)
+void UPSH_GameInstance::OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
     if (bConnectedSuccessfully)
     {
@@ -267,13 +267,15 @@ void UPSH_GameInstance::OnStartResPost(FHttpRequestPtr Request, FHttpResponsePtr
         // Json을 파싱해서 필요한 정보만 뽑아서 화면에 출력하고싶다.
         UE_LOG(LogTemp, Warning, TEXT("creal"));
         FString result = Response->GetContentAsString();
-       FString Protocol = UPSH_TsetJsonParseLib::ProtocolJson(result); // 성공실패 확인
+       FString Protocol = UPSH_JsonParseLibrary::ProtocolJson(result); // 성공실패 확인
         if (Protocol == "Success")
         {
+            FindOtherSession();
 			// 성공
         }
         else
         {
+            PRINTLOG(TEXT("ReQuestFailed"));
 			// 실패
         }
     }
@@ -292,7 +294,7 @@ void UPSH_GameInstance::QuestButtonJson(int ButtonNum, int QestNum, int playerID
     QestData.Add("QestNum", FString::FromInt(QestNum));   // 몇번째 퀘스트에
     QestData.Add("Answer", FString::FromInt(ButtonNum));  // 몇번을 눌렀는지
 
-    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+    FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
     ReqQuestPost(json); // 만든 제이슨 보내주는거
 }
@@ -323,7 +325,7 @@ void UPSH_GameInstance::OnResQuestPost(FHttpRequestPtr Request, FHttpResponsePtr
     {
 
         FString result = Response->GetContentAsString();
-        FString Protocol = UPSH_TsetJsonParseLib::ProtocolJson(result); // 성공실패 확인
+        FString Protocol = UPSH_JsonParseLibrary::ProtocolJson(result); // 성공실패 확인
         if (Protocol == "Success")
         {
             QuestStateButtonJson();
@@ -365,7 +367,7 @@ void UPSH_GameInstance::MRPC_QuestStateButtonJson_Implementation()
     QestData.Add("Id", FString::FromInt(PlayerData.Id)); // 어떤 플레이어가
     QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
 
-    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+    FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
     ReqQuestPost(json); // 만든 제이슨 보내주는거
 }
@@ -395,7 +397,7 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
     if (bConnectedSuccessfully) 
     {
         FString result = Response->GetContentAsString();
-        UPSH_TsetJsonParseLib::JsonParse(result, PlayerData); // 점수 갱신 요청
+        UPSH_JsonParseLibrary::JsonParse(result, PlayerData); // 점수 갱신 요청
         PlayerData.PrintStruct();
 
 		auto *pc = GetWorld()->GetFirstPlayerController();
@@ -419,7 +421,7 @@ void UPSH_GameInstance::MatchDataJson()
     QestData.Add("Id", FString::FromInt(PlayerData.Id)); // 어떤 플레이어가
     QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
 
-    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+    FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
     ReqQuestPost(json); // 만든 제이슨 보내주는거
 }
@@ -471,7 +473,7 @@ void UPSH_GameInstance::StartDataReQestJson()
     QestData.Add("ID", netID->ToString());                         // 어떤 플레이어가
     QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
 
-    FString json = UPSH_TsetJsonParseLib::MakeJson(QestData);
+    FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
     ReqStartDataReQestPost(json); // 만든 제이슨 보내주는거
 }
@@ -501,7 +503,7 @@ void UPSH_GameInstance::OnStartDataReQestResPost(FHttpRequestPtr Request, FHttpR
     if (bConnectedSuccessfully)
     {
         FString result = Response->GetContentAsString();
-        UPSH_TsetJsonParseLib::StartJsonParse(result, PlayerData); // 점수 갱신 요청
+        UPSH_JsonParseLibrary::StartJsonParse(result, PlayerData); // 점수 갱신 요청
         PlayerData.PrintStruct();
     }
     else

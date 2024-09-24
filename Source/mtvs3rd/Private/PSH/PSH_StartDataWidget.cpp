@@ -5,8 +5,6 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/TextBlock.h"
-#include "PSH_TsetJsonParseLib.h"
-#include "PSH/PSH_HttpActor.h"
 #include "PSH/PSH_StartDataHttpActor.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
 #include "Components/WidgetComponent.h"
@@ -96,21 +94,14 @@ void UPSH_StartDataWidget::OnClickRequest()
 		data.Name = NameText;
 		
 		Gi->SetStartData(data);
-		Gi->FindOtherSession();
-		
+		// FIXME
+		// 테스트용 AI 있을때는 끄길바람.
 		if (HttpActor)
 		{
+			Gi->FindOtherSession();
 			HttpActor->SelectComponent->SetVisibility(false);
 		}
 
-		
-		if (pc)
-		{
-			RemoveFromParent();
-			//HttpActor->SelectComponent->Setvisibl
-			pc->SetShowMouseCursor(false);
-			pc->SetInputMode(FInputModeGameOnly());
-		}
 	}
 }
 

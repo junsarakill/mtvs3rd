@@ -14,46 +14,43 @@ UCLASS()
 class MTVS3RD_API APSH_Mtvs3rdGameModBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void BeginPlay() override;
+
 	APSH_Mtvs3rdGameModBase();
 
-public:
 
-// 	FHttopStartData GetStartData();
 
 	// 플레이어 로그인 시도 할때
 	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 
 	// 플레이어 로그인 이후
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+private:
+
 	UPROPERTY()
 	class UPSH_GameInstance * Gi;
 
+	// 플레이어 구조체
 	FPSH_HttpDataTable PlayerData;
 
 	UPROPERTY()
-	class ABS_PlayerState * playerState;
+	class ABS_PlayerState * playerState; // 플레이어 변수 저장 장소
 	
-	UPROPERTY(EditDefaultsOnly)
-	FName LevelName;
-
-	UPROPERTY()
-	float TestScore = 75;
-
 	TMap<int,int> ChoiceNum;
 
-	int LastChoiceNum = 0;
+	UPROPERTY(EditDefaultsOnly)
+	int LastChoiceNum = 0;    // 함수 실행 체크 변수 최대 플레이어 수보다 많도록 체크하는 용도.
 
 	UPROPERTY(EditDefaultsOnly)
-	int playerCount = 2;
-
-	UPROPERTY()
-	class UPSH_LastChoiceWidget * ChoiceWidget;
+	int playerCount = 0;   // 최대 플레이어 수 
 
 	UPROPERTY()
 	class APSH_LastChoiceActor * ChoiceActor;
 
-
+public:
 	void SetData(FPSH_HttpDataTable Data);
 
 	void LastChoice(int FromId, int ToId);
@@ -62,13 +59,10 @@ public:
 
 	void ChekChoice();
 
-	void SetLastWdiget(class UPSH_LastChoiceWidget* widget);
-
 	void SetActor(class APSH_LastChoiceActor * Actor);
 
 
-protected:
-	virtual void BeginPlay() override;
+
 
 
 	

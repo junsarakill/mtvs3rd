@@ -14,10 +14,18 @@ class MTVS3RD_API APSH_LobbyGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
+public:
 	// 플레이어 로그인 이후
     virtual void PostLogin(APlayerController *NewPlayer) override;
+
+
+	virtual void BeginPlay()override;
+
+	
 
 	UPROPERTY(EditDefaultsOnly)
 	int playerCount = 0;
 	
+	UFUNCTION(NetMulticast,Reliable)
+	void MRPC_StartFade();
 };

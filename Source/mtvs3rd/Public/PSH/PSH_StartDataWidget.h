@@ -4,13 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "PSH_TsetJsonParseLib.h"
 #include "PSH_StartDataHttpActor.h"
 #include "PSH_StartDataWidget.generated.h"
-
-/**
- * 
- */
 
 class UButton;
 

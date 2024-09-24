@@ -58,22 +58,17 @@ void APSH_Portal::BeginPlay()
 void APSH_Portal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 
 void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//ABS_VRPlayer * player = Cast<ABS_VRPlayer>(OtherActor);
-	// Test
-	//player = Cast<Amtvs3rdCharacter>(OtherActor);
 
 	player = Cast<ABS_VRPlayer>(OtherActor);
 	
 	// 서버에서 배열에 들어간 애를 제외하고 배열에 들어가지 않은 애들이 왔을때 playerCount를 증가 시키고 싶다.
 	if (player)
-	{
-           
+	{          
             if (HasAuthority()) // 서버에서
             {
                 if (PlayerArray.Find(player) != INDEX_NONE) // 배열에 있다면
@@ -84,34 +79,20 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
                        
 					}
 
-
                     return;
 				}
 				else // 배열에 없다면
 				{
 					
 					auto playerData = player->PS->GetPlayerData(); // 상대의 데이터를 가져옴
-					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
-					//auto playerData = player->PS->syncPercentID1; // 상대의 데이터를 가져옴
-					//PlayerIdArray.Add(playerData);
-                                      
+					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.                 
 					PlayerArray.Add(player);
 					PlayerCount++;
 					OnRep_PlayerPotal();
-					UE_LOG(LogTemp, Warning, TEXT("Acotr : %s"), *player->GetName());
-                                        // 					auto  playerState =
-                                        // Cast<ABS_PlayerState>(player->GetPlayerState());
-                                        // auto * GI = Cast<UPSH_GameInstance>(GetWorld()->GetGameInstance());
-                                        // auto playerdata = GI->GetData();
-                                        //                     playerState->SetPlayerData();
+					
 				}
-               // Setvisilbe(false);
             }
-
 	}
-	
-
-	
 }
 void APSH_Portal::OnRep_PlayerPotal()
 { 
@@ -119,7 +100,6 @@ void APSH_Portal::OnRep_PlayerPotal()
 }
 void APSH_Portal::Setvisilbe(bool chek)
 {
-	//mesh->SetVisibility(chek);
 	mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
@@ -132,7 +112,7 @@ void APSH_Portal::GoPotal()
 {
 	// 맨처음 플레이어를 기준으로 호감도 높은 ID를 판별
     if (!PlayerDataArray.IsEmpty())
-        {
+    {
         if (PlayerDataArray[0].syncPercentID1 >= PlayerDataArray[0].syncPercentID2) // 호감도 비교.
         {
             SetMeshPlayerID = PlayerDataArray[0].otherUserID1; // 높은 호감도 ID
@@ -141,14 +121,8 @@ void APSH_Portal::GoPotal()
         {
             SetMeshPlayerID = PlayerDataArray[0].otherUserID2; // 높은 호감도 ID
         }
-
-
-
-
-
-		}
+	}
     
-
     // 베타에 설문 추가
     for (auto PlayerChek : PlayerArray) // 플레이어 의 배열
     {
@@ -192,7 +166,6 @@ void APSH_Portal::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(APSH_Portal,PlayerCount);
-   
 }
 
 

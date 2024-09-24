@@ -4,8 +4,8 @@
 #include "PSH/PSH_LikgeScoreActor.h"
 #include "Components/WidgetComponent.h"
 #include "PSH/PSH_LikeSocreWidget.h"
-#include "PSH_TsetJsonParseLib.h"
 #include "HttpModule.h"
+#include "PSH/PSH_JsonParseLibrary.h"
 
 // Sets default values
 APSH_LikgeScoreActor::APSH_LikgeScoreActor()
@@ -44,7 +44,7 @@ void APSH_LikgeScoreActor::LikeScoreButtonJson()
 	LikeScoreData.Add("", "");
 	LikeScoreData.Add("", "");
 
-	FString json = UPSH_TsetJsonParseLib::MakeJson(LikeScoreData);
+	FString json = UPSH_JsonParseLibrary::MakeJson(LikeScoreData);
 
 	LikeScoreButtonReqPost(json, URLScore); // 만든 제이슨 보내주는거
 }
