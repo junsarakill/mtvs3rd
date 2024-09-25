@@ -56,7 +56,7 @@ bool UBS_FinalSelectComponent::TrySpawnSelectConfirmUI(int selectPlayerId)
 	// 플레이어 스테이트 가져오기
 	auto* player = gameObject->ownerPlayer;
 	check(player);
-	auto* playerPS = player->PS;
+	auto* playerPS = player->GetMyPS();
 	check(playerPS);
 	// 최종 선택 시점 && 이미 선택했는지 확인
 	bool canSpawn = playerPS->IS_FINAL_SELECT && !playerPS->IS_ALREADY_SELECT;
@@ -126,7 +126,7 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(int fromId, int toId)
 		gm->LastChoice(fromId, toId);
 
 		// 주인 정보
-		auto* ownerPS = gameObject->ownerPlayer->PS;
+		auto* ownerPS = gameObject->ownerPlayer->GetMyPS();
 		// 선택 확정 하기
 		ownerPS->IS_ALREADY_SELECT = true;
 
@@ -138,10 +138,8 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(int fromId, int toId)
 
 void UBS_FinalSelectComponent::SendPlayerFinalSelect()
 {
-	// 주인 정보
-	auto* ownerPS = gameObject->ownerPlayer->PS;
 	// 주인 플레이어 id
-	int32 playerId = ownerPS->id;
+	int playerId = gameObject->ownerPlayer->ID;
 
 	SendPlayerFinalSelect(playerId, CUR_SELECT_PLAYER_ID);
 }
@@ -160,10 +158,9 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(EFinalSelectType type)
 			.SetTimer(timerHandle, [this]() mutable
 		{
 			//타이머에서 할 거
-			// 주인 정보
-			auto* ownerPS = gameObject->ownerPlayer->PS;
 			// 주인 플레이어 id
-			int32 playerId = ownerPS->id;
+			int32 playerId = gameObject->ownerPlayer->ID;
+
 
 			SendPlayerFinalSelect(CUR_SELECT_PLAYER_ID, playerId);
 		}, 1.5f, false);

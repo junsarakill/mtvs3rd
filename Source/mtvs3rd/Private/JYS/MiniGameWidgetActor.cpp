@@ -2,6 +2,7 @@
 
 #include "JYS/MiniGameWidgetActor.h"
 #include "Components/WidgetComponent.h"
+#include "JBS/BS_Utility.h"
 #include "JBS/BS_VRPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
@@ -118,8 +119,11 @@ void AMiniGameWidgetActor::HideMissionWidget()
         missionWidget->RemoveFromParent();
     }
 
-    FPSH_HttpDataTable pd = Cast<ABS_VRPlayer>(GetOwner())->DATA;
-
+    // JBS 수정 플레이어 id로 찾아오기
+    auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+    auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
+    auto pd = ps->GetPlayerData();
+    // /
     if (pd.Gender == "Man")
     {
         miniGameUIComp->SetVisibility(true);

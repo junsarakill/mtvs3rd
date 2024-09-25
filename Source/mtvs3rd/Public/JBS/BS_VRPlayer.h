@@ -147,7 +147,7 @@ public:
 	class ABS_SelectConfirmActor* selectConfirmUIActor;
 
 	
-	
+
 #pragma endregion
 #pragma endregion
 #pragma region 함수 영역
@@ -181,6 +181,9 @@ public:
 	// 프로필에 따른 겉모습 수정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerAppearance(EPlayerType type);
+
+	// 내 플레이어 스테이스 가져오기
+	class ABS_PlayerState *GetMyPS();
 
 #pragma endregion
 

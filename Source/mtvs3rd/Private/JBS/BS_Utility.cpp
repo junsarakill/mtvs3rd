@@ -49,28 +49,77 @@ UActorComponent *UBS_Utility::GetNearestGrabComp(TArray<UActorComponent *> comps
     return resultComp;
 }
 
-bool UBS_Utility::TryGetPlayerData(UWorld* world, int id, FPSH_HttpDataTable& outData)
+// bool UBS_Utility::TryGetPlayerData(UWorld* world, int id, FPSH_HttpDataTable& outData)
+// {
+//     // id 를 key 해서 모든 ps 가져와서 찾아오기
+//     TArray<TObjectPtr<APlayerState>> tempAllPS = world->GetGameState()->PlayerArray;
+// 	TArray<ABS_PlayerState*> allPS;
+// 	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
+// 		return Cast<ABS_PlayerState>(temp);
+// 	});
+
+//     bool result = false;
+
+// 	//캐스트 후
+//     for (ABS_PlayerState *ps : allPS)
+//     {
+//         result = ps && ps->ID == id;
+//         // id 가져오기
+//         if(result)
+//         {
+//             outData = ps->GetPlayerData();
+//             break;
+//         }
+// 	}
+
+//     return result;
+// }
+
+// bool UBS_Utility::TryGetPlayerState(UWorld *world, int id, ABS_PlayerState *outPS)
+// {
+//     // 레벨의 모든 ps 가져오기
+//     TArray<TObjectPtr<APlayerState>> tempAllPS = world->GetGameState()->PlayerArray;
+// 	TArray<ABS_PlayerState*> allPS;
+//     // 캐스트
+// 	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
+// 		return Cast<ABS_PlayerState>(temp);
+// 	});
+
+//     bool result = false;
+//     for (ABS_PlayerState *ps : allPS)
+//     {
+//         // id 가 같은 ps 찾기
+//         result = ps && ps->ID == id;
+//         if(result)
+//         {
+//             outPS = ps;
+//             break;
+//         }
+//     }
+
+//     return result;
+// }
+
+ABS_PlayerState *UBS_Utility::TryGetPlayerState(UWorld *world, int id)
 {
-    // id 를 key 해서 모든 ps 가져와서 찾아오기
+    // 레벨의 모든 ps 가져오기
     TArray<TObjectPtr<APlayerState>> tempAllPS = world->GetGameState()->PlayerArray;
 	TArray<ABS_PlayerState*> allPS;
+    // 캐스트
 	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
 		return Cast<ABS_PlayerState>(temp);
 	});
 
     bool result = false;
-
-	//캐스트 후
     for (ABS_PlayerState *ps : allPS)
     {
+        // id 가 같은 ps 찾기
         result = ps && ps->ID == id;
-        // id 가져오기
         if(result)
         {
-            outData = ps->GetPlayerData();
-            break;
+            return ps;
         }
-	}
+    }
 
-    return result;
+    return nullptr;
 }

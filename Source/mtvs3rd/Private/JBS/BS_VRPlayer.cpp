@@ -52,12 +52,11 @@ void ABS_VRPlayer::BeginPlay()
 
 	}
 	
-	FPSH_HttpDataTable myData;
-	UBS_Utility::TryGetPlayerData(GetWorld(), this->ID, myData);
+	auto* myPS = UBS_Utility::TryGetPlayerState(GetWorld(), this->ID);
 	
 	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
 	// FIXME 성별 + 조건 하나 더 필요
-	EPlayerType pType = myData.Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+	EPlayerType pType = myPS->GetPlayerData().Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
 	SetPlayerAppearance(pType);
 
 	SetMoveSpeed(moveSpeed);
@@ -232,28 +231,6 @@ void ABS_VRPlayer::EventLookup(FVector2D value)
 	
 }
 
-// ABS_PlayerState *ABS_VRPlayer::GetPS()
-// {
-//     // ps 캐시 안되있으면 가져오기
-//     if (!ps)
-//     {
-//         auto *myPS = this->GetPlayerState<ABS_PlayerState>();
-//         check(myPS);
-//         // ps 로 뭔가하기
-//         ps = myPS;
-//     }
-
-//     return ps;
-// }
-
-// void ABS_VRPlayer::SetPS(ABS_PlayerState *value)
-// {
-// 	auto* myPS = this->GetPlayerState<ABS_PlayerState>();
-// 	check(myPS);
-// 	// ps 로 뭔가하기
-// 	ps = myPS;
-// }
-
 void ABS_VRPlayer::StartTrip()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("넘어짐"));
@@ -276,4 +253,8 @@ UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
     }
 
     return anim;
+}
+ABS_PlayerState *ABS_VRPlayer::GetMyPS()
+{
+	return UBS_Utility::TryGetPlayerState(GetWorld(), ID);
 }

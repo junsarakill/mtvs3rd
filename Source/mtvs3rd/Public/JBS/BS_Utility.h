@@ -76,6 +76,6 @@ public:
         // 컴포넌트 중 가장 가까운 거 구하기
 	static class UActorComponent *GetNearestGrabComp(TArray<UActorComponent *> comps, FVector targetLoc);
 
-	// id로 플레이어 데이터 가져오기
-	static bool UBS_Utility::TryGetPlayerData(UWorld* world, int id, struct FPSH_HttpDataTable& outData);
+	// id로 플레이어 스테이트 가져오기
+	static class ABS_PlayerState *TryGetPlayerState(UWorld *world, int id);
 };

@@ -55,11 +55,9 @@ protected:
 		protected:
 
 public:
-	// 주인
+	// 주인(핸드)
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
 	class ABS_Hand* gameObject;
-
-	
 
 protected:
 	// 최종 선택 ui 생성
