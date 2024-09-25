@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include <PSH/PSH_HttpDataTable.h>
 #include <JBS/BS_Utility.h>
+#include<JBS/BS_PlayerState.h>
 #include "BS_VRPlayer.generated.h"
 
 UCLASS()
@@ -43,6 +44,8 @@ protected:
 		id = value;
 	}
 		protected:
+	
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
@@ -104,14 +107,6 @@ protected:
 #pragma endregion
 
 #pragma region 컴포넌트, 오브젝트
-	// 플레이어 상태
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
-	// class ABS_PlayerState* ps;
-	// 	public:
-	// __declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
-    //     ABS_PlayerState *GetPS();
-    //     void SetPS(ABS_PlayerState* value);
-	// 	protected:
 
 	// 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Components", BlueprintGetter=GetAnim, BlueprintSetter=SetAnim)
@@ -128,7 +123,12 @@ protected:
 		protected:
 
 public:
-	
+	// 플레이어 ps
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Objects")
+	ABS_PlayerState* ps;
+	__declspec(property(get = GetMyPS, put = SetMyPS)) ABS_PlayerState* PS;
+	ABS_PlayerState *GetMyPS();
+	void SetMyPS(class ABS_PlayerState *value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* vrRoot;
@@ -181,9 +181,16 @@ public:
 	// 프로필에 따른 겉모습 수정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerAppearance(EPlayerType type);
+	
+	UFUNCTION(Server, Reliable)
+	void SRPC_CalcPlayerType();
 
-	// 내 플레이어 스테이스 가져오기
-	class ABS_PlayerState *GetMyPS();
+	UFUNCTION(NetMulticast, Reliable)
+	void MRPC_CalcPlayerType(EPlayerType type);
+
+	// void CalcPlayerType();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const override;
 
 #pragma endregion
 

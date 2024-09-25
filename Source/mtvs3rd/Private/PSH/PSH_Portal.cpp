@@ -2,6 +2,7 @@
 
 
 #include "PSH/PSH_Portal.h"
+#include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
 #include "JBS/BS_Utility.h"
 #include "PSH/PSH_PotalWidget.h"

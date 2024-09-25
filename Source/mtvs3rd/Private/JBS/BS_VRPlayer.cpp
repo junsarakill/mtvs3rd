@@ -17,6 +17,7 @@
 #include "JBS/BS_Hand.h"
 #include "JBS/BS_Utility.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Net/UnrealNetwork.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include "TimerManager.h"
 #include <JBS/BS_PlayerState.h>
@@ -49,15 +50,8 @@ void ABS_VRPlayer::BeginPlay()
 	// 로컬 플레이어
 	if(IsLocallyControlled())
 	{
-
+		
 	}
-	
-	auto* myPS = UBS_Utility::TryGetPlayerState(GetWorld(), this->ID);
-	
-	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
-	// FIXME 성별 + 조건 하나 더 필요
-	EPlayerType pType = myPS->GetPlayerData().Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
-	SetPlayerAppearance(pType);
 
 	SetMoveSpeed(moveSpeed);
 
@@ -254,7 +248,54 @@ UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
 
     return anim;
 }
+
+void ABS_VRPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// DOREPLIFETIME(ABS_VRPlayer, ps);
+}
+
+// void ABS_VRPlayer::CalcPlayerType()
+// {
+
+//     EPlayerType pType = PS->GetPlayerData().Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+//     SetPlayerAppearance(pType);
+// }
+
+void ABS_VRPlayer::SRPC_CalcPlayerType_Implementation()
+{
+	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
+    // FIXME 성별 + 조건 하나 더 필요
+    EPlayerType pType = PS->GetPlayerData().Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s"), *UEnum::GetValueAsString(pType)));
+	MRPC_CalcPlayerType(pType);
+}
+
+void ABS_VRPlayer::MRPC_CalcPlayerType_Implementation(EPlayerType type)
+{
+	SetPlayerAppearance(type);
+}
+
+// 여기 이후 부터 ps 사용가능
+void ABS_VRPlayer::SetMyPS(class ABS_PlayerState *value)
+{
+	ps = value;
+	
+	// 플레이어 외형 설정
+	SRPC_CalcPlayerType();
+}
+// 다른 클라에서 가져올 경우를 대비해 무조건 가져올수 있게 하기
 ABS_PlayerState *ABS_VRPlayer::GetMyPS()
 {
-	return UBS_Utility::TryGetPlayerState(GetWorld(), ID);
+	auto* myPS = UBS_Utility::TryGetPlayerState(GetWorld(), this->ID);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s"), myPS ? TEXT("ps 있음") : TEXT("ps 왜 없냐고")));
+	if(myPS)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id : %d, name : %s, gender : %s")
+		, myPS->ID, *myPS->name, *myPS->gender));
+
+	}
+
+	return myPS;
 }
