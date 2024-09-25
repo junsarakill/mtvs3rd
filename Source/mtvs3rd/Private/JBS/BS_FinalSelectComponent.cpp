@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/Engine.h"
+#include "JBS/BS_Utility.h"
 #include "TimerManager.h"
 #include <JBS/BS_Hand.h>
 #include <JBS/BS_VRPlayer.h>
@@ -55,7 +56,7 @@ bool UBS_FinalSelectComponent::TrySpawnSelectConfirmUI(int selectPlayerId)
 	// 플레이어 스테이트 가져오기
 	auto* player = gameObject->ownerPlayer;
 	check(player);
-	auto* playerPS = player->PS;
+	auto* playerPS = player->GetMyPS();
 	check(playerPS);
 	// 최종 선택 시점 && 이미 선택했는지 확인
 	bool canSpawn = playerPS->IS_FINAL_SELECT && !playerPS->IS_ALREADY_SELECT;
@@ -110,8 +111,9 @@ void UBS_FinalSelectComponent::OnClickSelect(bool value)
 	// yes 눌렀을 경우 게임모드에 선택 보내기
 	if(value)
 	{
-		// FIXME 프로토용
-		SendPlayerFinalSelect(EFinalSelectType::DUMMY);
+		// XXX 프로토용
+		// SendPlayerFinalSelect(EFinalSelectType::DUMMY);
+		SendPlayerFinalSelect(EFinalSelectType::NORMAL);
 	}
 }
 
@@ -124,7 +126,7 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(int fromId, int toId)
 		gm->LastChoice(fromId, toId);
 
 		// 주인 정보
-		auto* ownerPS = gameObject->ownerPlayer->PS;
+		auto* ownerPS = gameObject->ownerPlayer->GetMyPS();
 		// 선택 확정 하기
 		ownerPS->IS_ALREADY_SELECT = true;
 
@@ -136,10 +138,8 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(int fromId, int toId)
 
 void UBS_FinalSelectComponent::SendPlayerFinalSelect()
 {
-	// 주인 정보
-	auto* ownerPS = gameObject->ownerPlayer->PS;
 	// 주인 플레이어 id
-	int32 playerId = ownerPS->id;
+	int playerId = gameObject->ownerPlayer->ID;
 
 	SendPlayerFinalSelect(playerId, CUR_SELECT_PLAYER_ID);
 }
@@ -158,10 +158,9 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(EFinalSelectType type)
 			.SetTimer(timerHandle, [this]() mutable
 		{
 			//타이머에서 할 거
-			// 주인 정보
-			auto* ownerPS = gameObject->ownerPlayer->PS;
 			// 주인 플레이어 id
-			int32 playerId = ownerPS->id;
+			int32 playerId = gameObject->ownerPlayer->ID;
+
 
 			SendPlayerFinalSelect(CUR_SELECT_PLAYER_ID, playerId);
 		}, 1.5f, false);

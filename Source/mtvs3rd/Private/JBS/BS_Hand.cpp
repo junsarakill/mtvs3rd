@@ -321,7 +321,9 @@ void ABS_Hand::LineTracePlayer()
 			auto* otherPlayer = Cast<ABS_VRPlayer>(outHit.GetActor());
 			check(otherPlayer);
 			// 해당 플레이어의 정보 가져오기
-			auto otherPlayerData = otherPlayer->GetPlayerData();
+			auto* otherPS = otherPlayer->GetMyPS();
+			check(otherPS);
+			auto otherPlayerData = otherPS->GetPlayerData();
 			// 프로필 ui 생성
 			SpawnProfileUI(otherPlayerData);
 			// 최종 선택인 경우 선택 UI도 생성

@@ -29,6 +29,21 @@ public:
 
 #pragma region 변수 영역
 protected:
+	// 플레이어 id
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	int id;
+		public:
+	__declspec(property(get = GetId, put = SetId)) int ID;
+	int GetId()
+	{
+		return id;
+	}
+	void SetId(int value)
+	{
+		id = value;
+	}
+		protected:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
 	// 이동 속도
@@ -51,7 +66,7 @@ protected:
 	FVector moveDir;
 
 	// 회전 설정
-	// @@ 나중엔 자연스러운 회전 추가할까?
+	// XXX 나중엔 자연스러운 회전 추가할까?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	bool isSnapTurn = true;
 
@@ -63,7 +78,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float smoothTurnMulti = 5.f;
 
-	// XXX 디버그용 최종 선택 가능
+	// 디버그용 최종 선택 가능
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
 
@@ -73,15 +88,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
-
-	// 플레이어 데이터
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	FPSH_HttpDataTable data;
-		public:
-	__declspec(property(get = GetPlayerData, put = SetPlayerData)) FPSH_HttpDataTable DATA;
-	FPSH_HttpDataTable GetPlayerData();
-
-    protected:
 
 	
 
@@ -99,13 +105,13 @@ protected:
 
 #pragma region 컴포넌트, 오브젝트
 	// 플레이어 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
-	class ABS_PlayerState* ps;
-		public:
-	__declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
-        ABS_PlayerState *GetPS();
-        void SetPS(ABS_PlayerState* value);
-		protected:
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
+	// class ABS_PlayerState* ps;
+	// 	public:
+	// __declspec(property(get = GetPS, put = SetPS)) ABS_PlayerState* PS;
+    //     ABS_PlayerState *GetPS();
+    //     void SetPS(ABS_PlayerState* value);
+	// 	protected:
 
 	// 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Components", BlueprintGetter=GetAnim, BlueprintSetter=SetAnim)
@@ -122,6 +128,8 @@ protected:
 		protected:
 
 public:
+	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* vrRoot;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
@@ -139,7 +147,7 @@ public:
 	class ABS_SelectConfirmActor* selectConfirmUIActor;
 
 	
-	
+
 #pragma endregion
 #pragma endregion
 #pragma region 함수 영역
@@ -172,7 +180,10 @@ public:
 
 	// 프로필에 따른 겉모습 수정
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void SetPlayerAppearance();
+	void SetPlayerAppearance(EPlayerType type);
+
+	// 내 플레이어 스테이스 가져오기
+	class ABS_PlayerState *GetMyPS();
 
 #pragma endregion
 

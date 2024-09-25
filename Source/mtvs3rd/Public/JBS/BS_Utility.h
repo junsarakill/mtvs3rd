@@ -71,7 +71,11 @@ class MTVS3RD_API UBS_Utility : public UBlueprintFunctionLibrary
 	
 public:
 	static class APSH_Mtvs3rdGameModBase* GetGM(UWorld* world);
+	static class UPSH_GameInstance *GetGI(UWorld *world);
 
-	// 컴포넌트 중 가장 가까운 거 구하기
+        // 컴포넌트 중 가장 가까운 거 구하기
 	static class UActorComponent *GetNearestGrabComp(TArray<UActorComponent *> comps, FVector targetLoc);
+
+	// id로 플레이어 스테이트 가져오기
+	static class ABS_PlayerState *TryGetPlayerState(UWorld *world, int id);
 };
