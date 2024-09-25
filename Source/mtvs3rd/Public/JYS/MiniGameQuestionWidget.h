@@ -43,6 +43,11 @@ public:
 
     TArray<class AActor *> tag;
 
+    UPROPERTY(EditDefaultsOnly)
+    class AMiniGameWidgetActor *owner;
+
+    TArray<AActor*> findTB;
+
 private:
     UFUNCTION()
     void Onbtn_1Clicked();
@@ -63,9 +68,6 @@ private:
     void Onbtn_6Clicked();
 
     UPROPERTY(EditDefaultsOnly)
-    class AMiniGameWidgetActor *owner;
-
-    UPROPERTY(EditDefaultsOnly)
     class AMiniGameTriggerBox_Item *triggerBox;
 
 
@@ -75,7 +77,7 @@ private:
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<AActor> actor;
 
-    TArray<AActor *> findTB;
+
 
    
 };

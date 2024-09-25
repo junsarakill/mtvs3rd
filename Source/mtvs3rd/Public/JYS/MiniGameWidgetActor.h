@@ -43,16 +43,19 @@ public:
 
     // VR
     UPROPERTY(EditDefaultsOnly)
-    class UWidgetComponent* miniGameUIComp;
+	class UWidgetComponent* miniGameUIComp;    
+    
+    UPROPERTY(EditDefaultsOnly)
+	class UWidgetComponent* missionWidgetUI;
 
     UPROPERTY(EditDefaultsOnly)
     class ACharacter *player;
 
-    UPROPERTY(EditDefaultsOnly)
-    TSubclassOf<UMiniGameMissionWidget> MissionWidgetFactory;
+    //UPROPERTY(EditDefaultsOnly)
+    //TSubclassOf<UMiniGameMissionWidget> MissionWidgetFactory;
 
-    UPROPERTY(EditDefaultsOnly)
-    TSubclassOf<UMiniGameQuestionWidget> QuestionWidgetFactory;
+    //UPROPERTY(EditDefaultsOnly)
+    //TSubclassOf<UMiniGameQuestionWidget> QuestionWidgetFactory;
 
     void InitUI();
 

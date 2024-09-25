@@ -33,7 +33,7 @@ private:
 	int32 playerCount = 0;
 	
 	// 허용된 최대 액터 수
-	const int32 MAXPLAYERCOUNT = 2;
+	const int32 MAXPLAYERCOUNT = 1;
 
 	//UPROPERTY()
 	//class UBoxComponent* collisionComp;

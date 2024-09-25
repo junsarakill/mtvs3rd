@@ -9,7 +9,7 @@
 
 void UMiniGameQuestionWidget::NativeConstruct()
 {
-    if (btn_1)
+    //if (btn_1)
     {
         btn_1->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_1Clicked);
     }
@@ -38,7 +38,6 @@ void UMiniGameQuestionWidget::NativeConstruct()
     TArray<AActor *> outActor;
     UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName(TEXT("Table")), outActor);
 
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), actor, findTB);
 }
 
 void UMiniGameQuestionWidget::NativeTick(const FGeometry &MyGeometry, float InDeltaTime)
@@ -53,7 +52,12 @@ void UMiniGameQuestionWidget::NativeTick(const FGeometry &MyGeometry, float InDe
             float distance = FVector::Dist(a->GetActorLocation(), owner->GetActorLocation());
             if (pre > distance)
             {
-                triggerBox = Cast<AMiniGameTriggerBox_Item>(a);
+                if (triggerBox)
+                {
+					triggerBox = Cast<AMiniGameTriggerBox_Item>(a);
+                    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("00000000") );
+
+                }
             }
             pre = distance;
         }
@@ -64,11 +68,15 @@ void UMiniGameQuestionWidget::SetOwner(AMiniGameWidgetActor *miniActor) { owner 
 
 void UMiniGameQuestionWidget::Onbtn_1Clicked()
 {
+
+    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 5555555555555"));
     FTimerHandle handle;
     GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true,
                                                 0.0f);
     if (nullptr == triggerBox)
     {
+        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 6666666666"));
+
         return;
     }
     triggerBox->Tags.Add(FName("Shoes"));

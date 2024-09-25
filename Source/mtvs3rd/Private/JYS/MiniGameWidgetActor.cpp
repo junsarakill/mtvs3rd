@@ -10,6 +10,7 @@
 #include "JYS/MiniGameWall.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include "JYS/MiniGameMissionWidget.h"
+#include <JYS/MiniGameTriggerBox_Item.h>
 
 // Sets default values
 AMiniGameWidgetActor::AMiniGameWidgetActor()
@@ -19,6 +20,9 @@ AMiniGameWidgetActor::AMiniGameWidgetActor()
 
     miniGameUIComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("miniGameUIComp"));
     miniGameUIComp->SetupAttachment(RootComponent);
+
+    missionWidgetUI = CreateDefaultSubobject<UWidgetComponent>(TEXT("missionWidgetUI"));
+    missionWidgetUI->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +34,7 @@ void AMiniGameWidgetActor::BeginPlay()
     if (questionWidget)
     {
         questionWidget->SetOwner(this);
+        questionWidget->owner = this;
     }
     ////// PC
     // pcWiidget = Cast<UQuestionsWidget>(CreateWidget(GetWorld(), pcWidgetFactory));
@@ -39,10 +44,13 @@ void AMiniGameWidgetActor::BeginPlay()
     //	pcWiidget->SetOwner(this);
     // }
 
-    missionWidget = CreateWidget<UMiniGameMissionWidget>(GetWorld(), MissionWidgetFactory);
-    if (missionWidget)
+    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" missionWidget"));
+    // missionWidget = CreateWidget<UMiniGameMissionWidget>(GetWorld(), MissionWidgetFactory);
+    if (missionWidgetUI)
     {
-        missionWidget->SetVisibility(ESlateVisibility::Visible);
+        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" missionWidget1111111111"));
+
+        missionWidgetUI->SetVisibility(true);
     }
 
     FTimerHandle missionTimeHandle;
@@ -51,14 +59,20 @@ void AMiniGameWidgetActor::BeginPlay()
     //FTimerHandle handle;
     //GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.0f, true, 0.0f);
 
-    miniGameUIComp->SetVisibility(false);
+	miniGameUIComp->SetVisibility(false);
+
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), questionWidget->findTB);
+    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), questionWidget->findTB.Num()));
+
+
+    BillBoardQuestionsWidget();
 }
 
 // Called every frame
 void AMiniGameWidgetActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-   // BillBoardQuestionsWidget();
+    // BillBoardQuestionsWidget();
 }
 
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
@@ -72,14 +86,16 @@ void AMiniGameWidgetActor::BillBoardQuestionsWidget()
         FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
 
         // 위젯의 새로운 위치 설정 (카메라 앞 50cm 위치)
-        FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 800.0f;
+        FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 300.0f;
         miniGameUIComp->SetWorldLocation(miniGameUILoc);
+        missionWidgetUI->SetWorldLocation(miniGameUILoc);
 
         // LookAt 방식으로 회전 계산
         FRotator lookRot = (miniGameCamLoc - miniGameUILoc).Rotation();
 
         // 위젯을 카메라를 바라보게 회전 (Pitch 값을 조정하여 위젯을 정확히 정면으로)
         miniGameUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
+        missionWidgetUI->SetWorldRotation(lookRot + FRotator(0, 0, -0));
     }
 }
 
@@ -123,5 +139,6 @@ void AMiniGameWidgetActor::HideMissionWidget()
     if (pd.Gender == "Man")
     {
         miniGameUIComp->SetVisibility(true);
+        missionWidgetUI->SetVisibility(false);
     }
 }
