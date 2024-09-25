@@ -2,6 +2,8 @@
 
 
 #include <JBS/BS_PlayerState.h>
+#include "Engine/Engine.h"
+#include "Engine/World.h"
 #include "JBS/BS_Utility.h"
 #include "JBS/BS_VRPlayer.h"
 #include "PSH/PSH_GameInstance.h"
@@ -16,27 +18,31 @@ ABS_PlayerState::ABS_PlayerState()
     bAlwaysRelevant = true; // 항상 관련 있는 상태로 유지
 }
 
+void ABS_PlayerState::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+    
+}
+
 void ABS_PlayerState::BeginPlay()
 {
     Super::BeginPlay();
 
-    
-
+    // 플레이어 데이터 가져오기
     auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    if(pc)
+    if(pc && pc->IsLocalController() && this == pc->GetPlayerState<ABS_PlayerState>())
     {
         //pc로 뭔가 하기
-        if((pc && pc->IsLocalController() && this == pc->GetPlayerState<ABS_PlayerState>()))
-        {
-            auto* gi = UBS_Utility::GetGI(GetWorld());
-            // gi에서 플레이어 데이터 가져오기
-            SetPlayerData(gi->GetStartData());
+        auto* gi = UBS_Utility::GetGI(GetWorld());
+        // gi에서 플레이어 데이터 가져오기
+        SetPlayerData(gi->GetStartData());
 
-            APlayerCameraManager* cam = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
-            cam->StartCameraFade(1, 0, 5, FColor::Black);
+        APlayerCameraManager* cam = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+        cam->StartCameraFade(1, 0, 5, FColor::Black);
 
-            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
-        }
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
+        // // 플레이어 캐릭터에게 ps 설정하기
+        // pc->GetPawn<ABS_VRPlayer>()->PS = this;
     }
 }
 
@@ -49,6 +55,10 @@ FPSH_HttpDataTable ABS_PlayerState::GetPlayerData()
 {
 
     // 구조체 화 하고 return
+    if(idOrderAry.Num() < 2)
+    {
+        idOrderAry = {-1,-1};
+    }
     int& syncId1 = idOrderAry[0];
     int& syncId2 = idOrderAry[1];
     float sync1 = syncId1 != -1 ? syncMap[syncId1] : -1.f;
@@ -122,5 +132,8 @@ void ABS_PlayerState::SetId(int value)
         //pc로 뭔가 하기
         auto* player = pc->GetPawn<ABS_VRPlayer>();
         player->ID = this->ID;
+
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id 설정 체크 == ps id : %d, player id : %d")
+        , this->ID, player->ID));
     }
 }

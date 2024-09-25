@@ -31,7 +31,6 @@ public:
 	}
 	void SetId(int value);
 
-    protected:
 	// 이름
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Values")
 	FString name = TEXT("미설정");
@@ -79,6 +78,7 @@ public:
 	void SetIsAlreadySelect(bool value);
 
 protected:
+	virtual void PostInitializeComponents() override;
     virtual void BeginPlay() override;
 
 public:
@@ -97,6 +97,6 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SRPC_AddSyncMap(int userId, float value);
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void MRPC_AddSyncMap(int userId, float value);
 };
