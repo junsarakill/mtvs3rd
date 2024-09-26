@@ -44,9 +44,9 @@ public:
     TArray<class AActor *> tag;
 
     UPROPERTY(EditDefaultsOnly)
-    class AMiniGameWidgetActor *owner;
+    class AMiniGameWidgetActor* owner;
 
-    TArray<AActor*> findTB;
+    FTimerHandle handle;
 
 private:
     UFUNCTION()
@@ -67,8 +67,8 @@ private:
     UFUNCTION()
     void Onbtn_6Clicked();
 
-    UPROPERTY(EditDefaultsOnly)
-    class AMiniGameTriggerBox_Item *triggerBox;
+    //UPROPERTY(EditDefaultsOnly)
+    //class AMiniGameTriggerBox_Item *triggerBox;
 
 
     UFUNCTION()

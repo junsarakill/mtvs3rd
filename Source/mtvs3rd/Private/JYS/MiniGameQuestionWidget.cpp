@@ -6,217 +6,228 @@
 #include <JYS/MiniGameTriggerBox_Item.h>
 #include "JYS/MiniGameWall.h"
 #include "JYS/MiniGameWidgetActor.h"
+#include "Components/WidgetComponent.h"
 
 void UMiniGameQuestionWidget::NativeConstruct()
 {
-    //if (btn_1)
-    {
-        btn_1->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_1Clicked);
-    }
-    if (btn_2)
-    {
-        btn_2->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_2Clicked);
-    }
-    if (btn_3)
-    {
-        btn_3->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_3Clicked);
-    }
-    if (btn_4)
-    {
-        btn_4->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_4Clicked);
-    }
-    if (btn_5)
-    {
-        btn_5->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_5Clicked);
-    }
-    if (btn_6)
-    {
-        btn_6->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_6Clicked);
-    }
+	//if (btn_1)
+	{
+		btn_1->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_1Clicked);
+	}
+	if (btn_2)
+	{
+		btn_2->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_2Clicked);
+	}
+	if (btn_3)
+	{
+		btn_3->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_3Clicked);
+	}
+	if (btn_4)
+	{
+		btn_4->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_4Clicked);
+	}
+	if (btn_5)
+	{
+		btn_5->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_5Clicked);
+	}
+	if (btn_6)
+	{
+		btn_6->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_6Clicked);
+	}
 
-    // TriggerBox에 있는 Table가져오기
-    TArray<AActor *> outActor;
-    UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName(TEXT("Table")), outActor);
+	// TriggerBox에 있는 Table가져오기
+	TArray<AActor*> outActor;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName(TEXT("Table")), outActor);
 
 }
 
-void UMiniGameQuestionWidget::NativeTick(const FGeometry &MyGeometry, float InDeltaTime)
+void UMiniGameQuestionWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
-    Super::NativeTick(MyGeometry, InDeltaTime);
+	Super::NativeTick(MyGeometry, InDeltaTime);
 
-    float pre = 10000000;
-    for (auto a : findTB)
-    {
-        if (owner)
-        {
-            float distance = FVector::Dist(a->GetActorLocation(), owner->GetActorLocation());
-            if (pre > distance)
-            {
-                if (triggerBox)
-                {
-					triggerBox = Cast<AMiniGameTriggerBox_Item>(a);
-                    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("00000000") );
-
-                }
-            }
-            pre = distance;
-        }
-    }
 }
 
-void UMiniGameQuestionWidget::SetOwner(AMiniGameWidgetActor *miniActor) { owner = miniActor; }
+void UMiniGameQuestionWidget::SetOwner(AMiniGameWidgetActor* miniActor) { owner = miniActor; }
 
 void UMiniGameQuestionWidget::Onbtn_1Clicked()
 {
 
-    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 5555555555555"));
-    FTimerHandle handle;
-    GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true,
-                                                0.0f);
-    if (nullptr == triggerBox)
-    {
-        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 6666666666"));
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 5555555555555"));
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+	if (nullptr == owner->triggerBox)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 6666666666"));
 
-        return;
-    }
-    triggerBox->Tags.Add(FName("Shoes"));
-    // if (triggerBox->overlapActorTag == FName("Shoes"))
-    //{
-    //    StartCountDown();
+		return;
+	}
+	owner->triggerBox->Tags.Add(FName("Shoes"));
+	// if (triggerBox->overlapActorTag == FName("Shoes"))
+	//{
+	//    StartCountDown();
 
-    //    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-    //    if (tag.Num() <= 0)
-    //        return;
+	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
+	//    if (tag.Num() <= 0)
+	//        return;
 
-    //    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-    //    fadeOutWall->SetFadeOut();
-    //}
-    owner->Destroy();
+	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
+	//    fadeOutWall->SetFadeOut();
+	//}
+	owner->miniGameUIComp->SetVisibility(false);
+	StartCountDown();
 }
 
 void UMiniGameQuestionWidget::Onbtn_2Clicked()
 {
-    FTimerHandle handle;
-    GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
 
-    if (nullptr == triggerBox)
-    {
-        return;
-    }
-    triggerBox->Tags.Add(FName("Clothes"));
-    //if (triggerBox->overlapActorTag == FName("Clothes"))
-    //{
-    //    StartCountDown();
-    //    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-    //    if (tag.Num() <= 0)
-    //        return;
+	if (nullptr == owner->triggerBox)
+	{
+		return;
+	}
+	owner->triggerBox->Tags.Add(FName("Clothes"));
+	//if (triggerBox->overlapActorTag == FName("Clothes"))
+	//{
+	//    StartCountDown();
+	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
+	//    if (tag.Num() <= 0)
+	//        return;
 
-    //    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-    //    fadeOutWall->SetFadeOut();
-    //}
-    owner->Destroy();
+	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
+	//    fadeOutWall->SetFadeOut();
+	//}
+	owner->miniGameUIComp->SetVisibility(false);
+	StartCountDown();
 }
 
 void UMiniGameQuestionWidget::Onbtn_3Clicked()
 {
-    FTimerHandle handle;
-    GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+	
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
 
-    if (nullptr == triggerBox)
-    {
-        return;
-    }
-    triggerBox->Tags.Add(FName("Hat"));
+	if (nullptr == owner->triggerBox)
+	{
+		return;
+	}
+	owner->triggerBox->Tags.Add(FName("Hat"));
 
-    //if (triggerBox->overlapActorTag == FName("Hat"))
-    //{
-    //    StartCountDown();
-    //    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-    //    if (tag.Num() <= 0)
-    //        return;
+	//if (triggerBox->overlapActorTag == FName("Hat"))
+	//{
+	//    StartCountDown();
+	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
+	//    if (tag.Num() <= 0)
+	//        return;
 
-    //    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-    //    fadeOutWall->SetFadeOut();
-    //}
-    owner->Destroy();
+	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
+	//    fadeOutWall->SetFadeOut();
+	//}
+	owner->miniGameUIComp->SetVisibility(false);
+	StartCountDown();
 }
 
 void UMiniGameQuestionWidget::Onbtn_4Clicked()
 {
-    FTimerHandle handle;
-    GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
 
-    if (nullptr == triggerBox)
-    {
-        return;
-    }
-    triggerBox->Tags.Add(FName("Bag"));
+	if (nullptr == owner->triggerBox)
+	{
+		return;
+	}
+	owner->triggerBox->Tags.Add(FName("Bag"));
 
-    //if (triggerBox->overlapActorTag == FName("Bag"))
-    //{
-    //    StartCountDown();
-    //    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-    //    if (tag.Num() <= 0)
-    //        return;
+	//if (triggerBox->overlapActorTag == FName("Bag"))
+	//{
+	//    StartCountDown();
+	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
+	//    if (tag.Num() <= 0)
+	//        return;
 
-    //    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-    //    fadeOutWall->SetFadeOut();
-    //}
-    owner->Destroy();
+	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
+	//    fadeOutWall->SetFadeOut();
+	//}
+	owner->miniGameUIComp->SetVisibility(false);
+	StartCountDown();
 }
 
 void UMiniGameQuestionWidget::Onbtn_5Clicked()
 {
-    FTimerHandle handle;
-    GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
 
-    if (nullptr == triggerBox)
-    {
-        return;
-    }
-    triggerBox->Tags.Add(FName("Muffler"));
+	if (nullptr == owner->triggerBox)
+	{
+		return;
+	}
+	owner->triggerBox->Tags.Add(FName("Muffler"));
 
-    //if (triggerBox->overlapActorTag == FName("Muffler"))
-    //{
-    //    StartCountDown();
-    //    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-    //    if (tag.Num() <= 0)
-    //        return;
+	//if (triggerBox->overlapActorTag == FName("Muffler"))
+	//{
+	//    StartCountDown();
+	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
+	//    if (tag.Num() <= 0)
+	//        return;
 
-    //    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-    //    fadeOutWall->SetFadeOut();
-    //}
-    owner->Destroy();
+	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
+	//    fadeOutWall->SetFadeOut();
+	//}
+	owner->miniGameUIComp->SetVisibility(false);
+	StartCountDown();
 }
 
 void UMiniGameQuestionWidget::Onbtn_6Clicked()
 {
-    FTimerHandle handle;
-    GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
 
-    if (nullptr == triggerBox)
-    {
-        return;
-    }
-    triggerBox->Tags.Add(FName("Watch"));
+	if (nullptr == owner->triggerBox)
+	{
+		return;
+	}
+	owner->triggerBox->Tags.Add(FName("Watch"));
 
-    //if (triggerBox->overlapActorTag == FName("Watch"))
-    //{
-    //    StartCountDown();
-    //    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-    //    if (tag.Num() <= 0)
-    //        return;
+	//if (triggerBox->overlapActorTag == FName("Watch"))
+	//{
+	//    StartCountDown();
+	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
+	//    if (tag.Num() <= 0)
+	//        return;
 
-    //    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-    //    fadeOutWall->SetFadeOut();
-    //}
-    owner->Destroy();
+	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
+	//    fadeOutWall->SetFadeOut();
+	//}
+	owner->miniGameUIComp->SetVisibility(false);
+	StartCountDown();
 }
 
 void UMiniGameQuestionWidget::StartCountDown()
 {
-    if (owner)
-    {
-        owner->CountDown();
-    }
+	owner->countDownWidget->SetVisibility(true);
+	/*   if (owner)
+	   {
+		   owner->CountDown();
+	   }*/
+
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, FString::Printf(TEXT("FadeIn: %d"), owner->second));
+	if (owner->second != 0)
+	{
+		owner->second = owner->second - 1;
+	}
+	else
+	{
+		if (owner->second == 0)
+		{
+			TArray<AActor*> OutActors;
+			UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("FadeOut"), OutActors);
+			auto* miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
+			if (miniGameWall)
+			{
+				GetWorld()->GetTimerManager().ClearTimer(handle);
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" FadeOut~~~~"));
+				miniGameWall->SetFadeOut();
+				owner->Destroy();
+			}
+		}
+		else
+		{
+			owner->minutes = owner->minutes - 1;
+			owner->second = 59;
+		}
+	}
 }

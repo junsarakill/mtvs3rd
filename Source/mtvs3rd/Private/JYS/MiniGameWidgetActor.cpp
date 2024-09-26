@@ -11,6 +11,8 @@
 #include "PSH/PSH_HttpDataTable.h"
 #include "JYS/MiniGameMissionWidget.h"
 #include <JYS/MiniGameTriggerBox_Item.h>
+#include "JYS/Countdown.h"
+#include "Components/TextBlock.h"
 
 // Sets default values
 AMiniGameWidgetActor::AMiniGameWidgetActor()
@@ -23,6 +25,9 @@ AMiniGameWidgetActor::AMiniGameWidgetActor()
 
     missionWidgetUI = CreateDefaultSubobject<UWidgetComponent>(TEXT("missionWidgetUI"));
     missionWidgetUI->SetupAttachment(RootComponent);
+
+    countDownWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("countDownWidget"));
+    countDownWidget->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -53,6 +58,11 @@ void AMiniGameWidgetActor::BeginPlay()
         missionWidgetUI->SetVisibility(true);
     }
 
+	if (countDownWidget)
+	{
+		countDownWidget->SetVisibility(false);
+	}
+
     FTimerHandle missionTimeHandle;
     GetWorldTimerManager().SetTimer(missionTimeHandle, this, &AMiniGameWidgetActor::HideMissionWidget, 10.0, false);
 
@@ -61,8 +71,10 @@ void AMiniGameWidgetActor::BeginPlay()
 
 	miniGameUIComp->SetVisibility(false);
 
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), questionWidget->findTB);
-    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), questionWidget->findTB.Num()));
+    
+    // 트리거박스 찾기
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), findTB);
+    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
 
 
     BillBoardQuestionsWidget();
@@ -73,6 +85,27 @@ void AMiniGameWidgetActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
     // BillBoardQuestionsWidget();
+
+    float pre = 10000000;
+    for (auto a : findTB)
+    {
+        if (this)
+        {
+            float distance = FVector::Dist(a->GetActorLocation(), this->GetActorLocation());
+            if (pre > distance)
+            {
+                if (a)
+                {
+                    triggerBox = Cast<AMiniGameTriggerBox_Item>(a);
+                }
+            }
+            pre = distance;
+        }
+    }
+
+    auto countdownWidgetUI = Cast<UCountdown>(countDownWidget->GetWidget());
+    countdownWidgetUI->seconds->SetText(FText::AsNumber(second));
+    countdownWidgetUI->minute->SetText(FText::AsNumber(minutes));
 }
 
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
@@ -89,6 +122,7 @@ void AMiniGameWidgetActor::BillBoardQuestionsWidget()
         FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 300.0f;
         miniGameUIComp->SetWorldLocation(miniGameUILoc);
         missionWidgetUI->SetWorldLocation(miniGameUILoc);
+        countDownWidget->SetWorldLocation(miniGameUILoc + FVector::UpVector * 50.f);
 
         // LookAt 방식으로 회전 계산
         FRotator lookRot = (miniGameCamLoc - miniGameUILoc).Rotation();
@@ -96,6 +130,7 @@ void AMiniGameWidgetActor::BillBoardQuestionsWidget()
         // 위젯을 카메라를 바라보게 회전 (Pitch 값을 조정하여 위젯을 정확히 정면으로)
         miniGameUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         missionWidgetUI->SetWorldRotation(lookRot + FRotator(0, 0, -0));
+        countDownWidget->SetWorldRotation(lookRot + FRotator(0, 0, -0));
     }
 }
 
@@ -103,28 +138,28 @@ void AMiniGameWidgetActor::InitUI() { bCheck = true; }
 
 void AMiniGameWidgetActor::CountDown()
 {
-    if (second != 0)
-    {
-        second = second - 1;
-    }
-    else
-    {
-        if (minutes == 0)
-        {
-            TArray<AActor *> OutActors;
-            UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("FadeOut"), OutActors);
-            auto *miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
-            if (miniGameWall)
-            {
-                miniGameWall->SetFadeOut();
-            }
-        }
-        else
-        {
-            minutes = minutes - 1;
-            second = 59;
-        }
-    }
+	//if (second != 0)
+	//{
+	//	second = second - 1;
+	//}
+    //else
+    //{
+    //    if (minutes == 0)
+    //    {
+    //        TArray<AActor *> OutActors;
+    //        UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("FadeOut"), OutActors);
+    //        auto *miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
+    //        if (miniGameWall)
+    //        {
+    //            miniGameWall->SetFadeOut();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        minutes = minutes - 1;
+    //        second = 59;
+    //    }
+    //}
 }
 
 void AMiniGameWidgetActor::HideMissionWidget()
