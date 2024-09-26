@@ -46,7 +46,10 @@ public:
 	class UWidgetComponent* miniGameUIComp;    
     
     UPROPERTY(EditDefaultsOnly)
-	class UWidgetComponent* missionWidgetUI;
+	class UWidgetComponent* missionWidgetUI;    
+    
+    UPROPERTY(EditDefaultsOnly)
+	class UWidgetComponent* countDownWidget;
 
     UPROPERTY(EditDefaultsOnly)
     class ACharacter *player;
@@ -65,10 +68,10 @@ public:
     // countdown
     void CountDown();
 
-    UPROPERTY(BlueprintReadOnly)
-    int32 minutes = 2;
-    UPROPERTY(BlueprintReadOnly)
-    int32 second = 59;
+	UPROPERTY(BlueprintReadOnly)
+	int32 minutes = 0;
+	UPROPERTY(BlueprintReadOnly)
+	int32 second = 60;
 
     UFUNCTION()
     void HideMissionWidget();
@@ -82,4 +85,8 @@ public:
     TArray<AActor *> findTB;
 
     AActor *closestActor;
+    
+    UPROPERTY(EditDefaultsOnly)
+    class AMiniGameTriggerBox_Item *triggerBox;
+
 };
