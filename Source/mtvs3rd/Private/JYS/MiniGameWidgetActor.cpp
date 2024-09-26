@@ -73,7 +73,7 @@ void AMiniGameWidgetActor::BeginPlay()
 	miniGameUIComp->SetVisibility(false);
 
     
-    // Æ®¸®°Å¹Ú½º Ã£±â
+    // Æ®ï¿½ï¿½ï¿½Å¹Ú½ï¿½ Ã£ï¿½ï¿½
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), findTB);
     GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
 
@@ -112,23 +112,23 @@ void AMiniGameWidgetActor::Tick(float DeltaTime)
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
 {
     // VR
-    // ÇÃ·¹ÀÌ¾î Ä«¸Þ¶ó °¡Á®¿À±â
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     auto *playerCam = Cast<ABS_VRPlayer>(this->GetOwner());
     if (playerCam->vrHMDCam)
     {
         FVector miniGameCamLoc = playerCam->vrHMDCam->GetComponentLocation();
         FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
 
-        // À§Á¬ÀÇ »õ·Î¿î À§Ä¡ ¼³Á¤ (Ä«¸Þ¶ó ¾Õ 50cm À§Ä¡)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ (Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ 50cm ï¿½ï¿½Ä¡)
         FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 300.0f;
         miniGameUIComp->SetWorldLocation(miniGameUILoc);
         missionWidgetUI->SetWorldLocation(miniGameUILoc);
         countDownWidget->SetWorldLocation(miniGameUILoc + FVector::UpVector * 50.f);
 
-        // LookAt ¹æ½ÄÀ¸·Î È¸Àü °è»ê
+        // LookAt ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? È¸ï¿½ï¿½ ï¿½ï¿½ï¿?
         FRotator lookRot = (miniGameCamLoc - miniGameUILoc).Rotation();
 
-        // À§Á¬À» Ä«¸Þ¶ó¸¦ ¹Ù¶óº¸°Ô È¸Àü (Pitch °ªÀ» Á¶Á¤ÇÏ¿© À§Á¬À» Á¤È®È÷ Á¤¸éÀ¸·Î)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½Ù¶óº¸°ï¿½ È¸ï¿½ï¿½ (Pitch ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         miniGameUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         missionWidgetUI->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         countDownWidget->SetWorldRotation(lookRot + FRotator(0, 0, -0));
@@ -145,9 +145,37 @@ void AMiniGameWidgetActor::HideMissionWidget()
     {
         missionWidget->RemoveFromParent();
     }
-    if (player->IsLocallyControlled())
+
+    // JBS ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ idï¿½ï¿½ Ã£ï¿½Æ¿ï¿½ï¿½ï¿½
+    // FIXME ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
+    if(player->IsLocallyControlled())
+        SRPC_SetVisibilityByGender();
+    // auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+    // auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
+    // auto pd = ps->GetPlayerData();
+    // // /
+    // if (pd.Gender == "Man")
+    // {
+    //     miniGameUIComp->SetVisibility(true);
+    //     missionWidgetUI->SetVisibility(false);
+    // }
+}
+
+void AMiniGameWidgetActor::SRPC_SetVisibilityByGender_Implementation()
+{
+    auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+    auto* ps = myPlayer->GetPlayerState<ABS_PlayerState>();
+    auto pd = ps->GetPlayerData();
+    // /
+    MRPC_SetVisibilityByGender(pd);
+    
+}
+
+void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDataTable playerData)
+{
+    if (playerData.Gender == "Man")
     {
-        // ÇÃ·¹ÀÌ¾î id·Î Ã£¾Æ¿À±â
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ idï¿½ï¿½ Ã£ï¿½Æ¿ï¿½ï¿½ï¿½
         auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
         auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
         auto pd = ps->GetPlayerData();
@@ -159,4 +187,4 @@ void AMiniGameWidgetActor::HideMissionWidget()
         }
 
     }
-}
+}   

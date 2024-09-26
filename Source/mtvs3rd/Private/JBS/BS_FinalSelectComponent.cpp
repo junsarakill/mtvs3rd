@@ -48,24 +48,9 @@ void UBS_FinalSelectComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 bool UBS_FinalSelectComponent::TrySpawnSelectConfirmUI(int selectPlayerId)
 {
-	// 이미 있는지 확인
-	if(gameObject->ownerPlayer->selectConfirmUIActor) return false;
+	SpawnSelectConfirmUI(selectPlayerId);
 
-	// 최종 선택 인지 확인
-	check(gameObject);
-	// 플레이어 스테이트 가져오기
-	auto* player = gameObject->ownerPlayer;
-	check(player);
-	auto* playerPS = player->GetMyPS();
-	check(playerPS);
-	// 최종 선택 시점 && 이미 선택했는지 확인
-	bool canSpawn = playerPS->IS_FINAL_SELECT && !playerPS->IS_ALREADY_SELECT;
-	if(canSpawn)
-	{
-		SpawnSelectConfirmUI(selectPlayerId);
-	}
-
-    return canSpawn;
+	return true;
 }
 
 void UBS_FinalSelectComponent::SetConfirmUIActor(ABS_SelectConfirmActor *value)
@@ -124,24 +109,26 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(int fromId, int toId)
 	{
 		// 선택 데이터 보내기
 		gm->LastChoice(fromId, toId);
-
+		check(gameObject);
+		check(gameObject->ownerPlayer);
 		// 주인 정보
-		auto* ownerPS = gameObject->ownerPlayer->GetMyPS();
+		auto* ownerPS = gameObject->ownerPlayer->GetPlayerState<ABS_PlayerState>();
 		// 선택 확정 하기
 		ownerPS->IS_ALREADY_SELECT = true;
 
-		FString debugWorldStr = FString::Printf(TEXT("fromid: %d, toid: %d"), fromId, toId);
-		DrawDebugString(GetWorld(), gameObject->GetActorLocation() + FVector3d(0,0,FMath::RandRange(0,10)), debugWorldStr, nullptr, FColor::Green, 5.f, true);
-
+		FString debugWorldStr = FString::Printf(TEXT("최종 선택 : fromid: %d, toid: %d"), fromId, toId);
+		DrawDebugString(GetWorld()
+		, gameObject->GetActorLocation() + FVector3d(0,0,FMath::RandRange(0,10))
+		, debugWorldStr, nullptr, FColor::Green, 5.f, true);
 	}
 }
 
 void UBS_FinalSelectComponent::SendPlayerFinalSelect()
 {
 	// 주인 플레이어 id
-	int playerId = gameObject->ownerPlayer->ID;
+	// int playerId = gameObject->ownerPlayer->ID;
 
-	SendPlayerFinalSelect(playerId, CUR_SELECT_PLAYER_ID);
+	// SendPlayerFinalSelect(playerId, CUR_SELECT_PLAYER_ID);
 }
 
 void UBS_FinalSelectComponent::SendPlayerFinalSelect(EFinalSelectType type)
@@ -150,26 +137,66 @@ void UBS_FinalSelectComponent::SendPlayerFinalSelect(EFinalSelectType type)
 	{
 	case EFinalSelectType::DUMMY:
 	{
-		SendPlayerFinalSelect();
+		// SendPlayerFinalSelect();
 
 		// 1.5초 후 더미도 선택 보내기
-		FTimerHandle timerHandle;
-		GetWorld()->GetTimerManager()
-			.SetTimer(timerHandle, [this]() mutable
-		{
-			//타이머에서 할 거
-			// 주인 플레이어 id
-			int32 playerId = gameObject->ownerPlayer->ID;
+		// FTimerHandle timerHandle;
+		// GetWorld()->GetTimerManager()
+		// 	.SetTimer(timerHandle, [this]() mutable
+		// {
+		// 	//타이머에서 할 거
+		// 	// 주인 플레이어 id
+		// 	// int32 playerId = gameObject->ownerPlayer->ID;
 
 
-			SendPlayerFinalSelect(CUR_SELECT_PLAYER_ID, playerId);
-		}, 1.5f, false);
+		// 	// SendPlayerFinalSelect(CUR_SELECT_PLAYER_ID, playerId);
+		// }, 1.5f, false);
 		
 		break;
 	}
 	case EFinalSelectType::NORMAL:
-		SendPlayerFinalSelect();
+		SRPC_SendPlayerFinalSelect();
 		break;
 	}
 
+}
+
+void UBS_FinalSelectComponent::SRPC_TrySpawnSelectConfirmUI_Implementation(int selectPlayerId)
+{
+    check(gameObject);
+    // 이미 있는지 확인
+    if (gameObject->ownerPlayer->selectConfirmUIActor)
+        return;
+
+    // 플레이어 스테이트 가져오기
+    auto *player = gameObject->ownerPlayer;
+    check(player);
+    auto *playerPS = player->GetPlayerState<ABS_PlayerState>();
+    check(playerPS);
+    // 최종 선택 시점 && 이미 선택했는지 확인
+    bool canSpawn = playerPS->IS_FINAL_SELECT && !playerPS->IS_ALREADY_SELECT;
+    if (canSpawn)
+    {
+		MRPC_TrySpawnSelectConfirmUI(selectPlayerId);
+    }
+}
+
+void UBS_FinalSelectComponent::MRPC_TrySpawnSelectConfirmUI_Implementation(int selectPlayerId)
+{
+	TrySpawnSelectConfirmUI(selectPlayerId);
+	// SpawnSelectConfirmUI(selectPlayerId);
+}
+
+void UBS_FinalSelectComponent::SRPC_SendPlayerFinalSelect_Implementation()
+{
+	// id 가져오기
+	int fromId = gameObject->ownerPlayer->GetPlayerState<ABS_PlayerState>()->ID;
+	int toId = CUR_SELECT_PLAYER_ID;
+
+	SendPlayerFinalSelect(fromId, toId);
+}
+
+void UBS_FinalSelectComponent::MRPC_SendPlayerFinalSelect_Implementation()
+{
+	
 }

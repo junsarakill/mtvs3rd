@@ -52,6 +52,9 @@ void ABS_VRPlayer::BeginPlay()
 	{
 		
 	}
+	else {
+		
+	}
 
 	SetMoveSpeed(moveSpeed);
 
@@ -66,7 +69,7 @@ void ABS_VRPlayer::BeginPlay()
 	GetAnim()->isPlayOnPC = playOnPC;
 
 
-
+	SRPC_CalcPlayerType();
 }
 
 // Called every frame
@@ -77,24 +80,29 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	// XXX 디버그단
 	if(enableViewPlayerStat)
 	{
-		FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
-		
-		FString velStr = GetVelocity().ToString();
-		// 
-		float vrRootHeight = vrRoot->GetRelativeLocation().Z;
-		
-		// 카메라 키
-		float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
+		SRPC_DebugPlayerStat();
 		
 		
+		// FString checkPS = GetMyPS() ? TEXT("ps 있어") : TEXT("ps 없어");
+		// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("%s"), *checkPS));
+
+		// if(PS)
+		// {
+		// 	FString str = FString::Printf(
+		// 	TEXT("id : %d\ngender : %s\nage : %d")
+		// 	, this->ID, *PS->gender, PS->age);
+		// 	DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
+		// }
 		// FString str = FString::Printf(
 		// 	TEXT("액터 moveDir : %s\n액터 vel : %s\n플레이어 Id : %d\nvrRoot height : %.2f\nhmd height : %.2f\n플레이어 id2 : %d\n")
 		// 	, *moveDir.ToString(), *velStr, DATA.Id, vrRootHeight, vrHMDHeight, this->id);
-		FString str = FString::Printf(
-			TEXT("id : %d\n")
-			, this->ID);
-		DrawDebugString(GetWorld(), debugLoc, str, nullptr, FColor::Green, 0.f, true);
+		
 	}
+
+	// if(!isSetAppearance && this->IsLocallyControlled())
+	// {
+	// 	SRPC_CalcPlayerType();
+	// }
 
 	if(playOnPC)
 	{
@@ -253,7 +261,7 @@ void ABS_VRPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// DOREPLIFETIME(ABS_VRPlayer, ps);
+	// DOREPLIFETIME(ABS_VRPlayer, id);
 }
 
 // void ABS_VRPlayer::CalcPlayerType()
@@ -265,37 +273,78 @@ void ABS_VRPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 
 void ABS_VRPlayer::SRPC_CalcPlayerType_Implementation()
 {
-	//@@ 플레이어 성별 가져와서 타입 판별후 메시,애니 설정
-    // FIXME 성별 + 조건 하나 더 필요
-    EPlayerType pType = PS->GetPlayerData().Gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s"), *UEnum::GetValueAsString(pType)));
+	// 플레이어 성별 및 나이 가져와서 타입 판별후 메시,애니 설정
+	// 30 대 이상이면 2번째 메시 사용
+	// 서버단에서 내 ps 에서 타입 판별
+	auto* ps = this->GetPlayerState<ABS_PlayerState>();
+	if(!ps) return;
+	// ps 로 뭔가하기
+	EPlayerType pType;
+	bool isMale = ps->GetPlayerData().Gender == TEXT("Man");
+	bool isAlter = ps->GetPlayerData().Age >= 30;
+
+	if(isMale)
+		pType = !isAlter ? EPlayerType::MALE1 : EPlayerType::MALE2;
+	else
+		pType = !isAlter ? EPlayerType::FEMALE1 : EPlayerType::FEMALE2;
+
+	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("srpc cpt"));
 	MRPC_CalcPlayerType(pType);
 }
 
-void ABS_VRPlayer::MRPC_CalcPlayerType_Implementation(EPlayerType type)
+void ABS_VRPlayer::MRPC_CalcPlayerType_Implementation(EPlayerType pType)
 {
-	SetPlayerAppearance(type);
+	// 해당 타입대로 외형 설정
+	isSetAppearance = true;
+	SetPlayerAppearance(pType);
 }
 
 // 여기 이후 부터 ps 사용가능
-void ABS_VRPlayer::SetMyPS(class ABS_PlayerState *value)
-{
-	ps = value;
+// void ABS_VRPlayer::SetMyPS(class ABS_PlayerState *value)
+// {
+// 	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("setmyps"));
+// 	// ps = value;
 	
-	// 플레이어 외형 설정
-	SRPC_CalcPlayerType();
-}
+	// // // 플레이어 외형 설정
+	// SRPC_CalcPlayerType();
+// }
 // 다른 클라에서 가져올 경우를 대비해 무조건 가져올수 있게 하기
-ABS_PlayerState *ABS_VRPlayer::GetMyPS()
+// ABS_PlayerState *ABS_VRPlayer::GetMyPS()
+// {
+	// auto* myPS = UBS_Utility::TryGetPlayerState(GetWorld(), this->ID);
+	// if(!myPS)
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(-1, 355.f
+	// 	, FColor::Green, FString::Printf(TEXT("%d, %s\n 무슨 PS가 없냐"), this->ID, *this->GetName()));
+	// }
+
+
+// 	// return myPS;
+// }
+// void ABS_VRPlayer::OnRep_Id()
+// {
+// 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("id 받음"));
+// }
+void ABS_VRPlayer::SRPC_DebugPlayerStat_Implementation()
 {
-	auto* myPS = UBS_Utility::TryGetPlayerState(GetWorld(), this->ID);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s"), myPS ? TEXT("ps 있음") : TEXT("ps 왜 없냐고")));
-	if(myPS)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id : %d, name : %s, gender : %s")
-		, myPS->ID, *myPS->name, *myPS->gender));
+    // 서버단에서 ps 찾아서 str 구성
+    auto *ps = this->GetPlayerState<ABS_PlayerState>();
+    check(ps);
+    // ps 로 뭔가하기
+	// 디버그 str 구성
+    FString str = FString::Printf(TEXT("id : %d\ngender : %s\nage : %d")
+		, ps->ID, *ps->gender, ps->age);
 
-	}
+    MRPC_DebugPlayerStat(str);
+}
 
-	return myPS;
+void ABS_VRPlayer::MRPC_DebugPlayerStat_Implementation(const FString &playerStatStr)
+{
+	FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
+	FString velStr = GetVelocity().ToString();
+	float vrRootHeight = vrRoot->GetRelativeLocation().Z;
+	// 카메라 키
+	float vrHMDHeight = this->GetActorLocation().Z - vrHMDCam->GetComponentLocation().Z;
+	
+    DrawDebugString(GetWorld(), debugLoc, playerStatStr, nullptr, FColor::Green, 0.f, true);
 }

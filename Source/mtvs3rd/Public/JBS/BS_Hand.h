@@ -241,7 +241,11 @@ public:
 	// 원거리 물건 잡기용 물건 찾기
 	void FindGrabComponentByRay(class UBS_GrabComponent*& findGrabComp);
 
+	UFUNCTION(Server, Reliable)
+	void SRPC_SpawnProfileUI(class ABS_VRPlayer *otherPlayer);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MRPC_SpawnProfileUI(struct FPSH_HttpDataTable profileData);
 
 #pragma endregion
 };

@@ -4,12 +4,14 @@
 #include <JBS/BS_PlayerState.h>
 #include "Engine/Engine.h"
 #include "Engine/World.h"
+#include "GameFramework/GameStateBase.h"
 #include "JBS/BS_Utility.h"
 #include "JBS/BS_VRPlayer.h"
 #include "PSH/PSH_GameInstance.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include <Net/UnrealNetwork.h>
 #include "Kismet/GameplayStatics.h"
+#include <PSH/PSH_Mtvs3rdGameModBase.h>
 
 ABS_PlayerState::ABS_PlayerState()
 {
@@ -28,21 +30,17 @@ void ABS_PlayerState::BeginPlay()
 {
     Super::BeginPlay();
 
-    // 플레이어 데이터 가져오기
+    // 로컬 클라 플레이어 페이드 아웃
     auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    if(pc && pc->IsLocalController() && this == pc->GetPlayerState<ABS_PlayerState>())
+    if(pc && pc->IsLocalController())
     {
         //pc로 뭔가 하기
         auto* gi = UBS_Utility::GetGI(GetWorld());
-        // gi에서 플레이어 데이터 가져오기
-        SetPlayerData(gi->GetStartData());
+        SRPC_SetPlayerdata(gi->GetStartData());
 
-        APlayerCameraManager* cam = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+        // 페이드 아웃 실행
+        APlayerCameraManager* cam = pc->PlayerCameraManager;
         cam->StartCameraFade(1, 0, 5, FColor::Black);
-
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
-        // // 플레이어 캐릭터에게 ps 설정하기
-        // pc->GetPawn<ABS_VRPlayer>()->PS = this;
     }
 }
 
@@ -77,9 +75,10 @@ void ABS_PlayerState::SetPlayerData(FPSH_HttpDataTable data)
     mbti = data.MBTI;
     blood = data.Blood;
     
-    SRPC_AddSyncMap(data.otherUserID1, data.syncPercentID1);
-    SRPC_AddSyncMap(data.otherUserID2, data.syncPercentID2);
-
+    // SRPC_AddSyncMap(data.otherUserID1, data.syncPercentID1);
+    // SRPC_AddSyncMap(data.otherUserID2, data.syncPercentID2);
+    AddSyncMap(data.otherUserID1, data.syncPercentID1);
+    AddSyncMap(data.otherUserID2, data.syncPercentID2);
 }
 
 void ABS_PlayerState::SetIsFinalSelect(bool value)
@@ -125,15 +124,56 @@ void ABS_PlayerState::MRPC_AddSyncMap_Implementation(int userId, float value)
 void ABS_PlayerState::SetId(int value)
 {
     id = value;
-    // @@ 플레이어 찾아서 id 동기화
-    auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    if(pc && pc->IsLocalController())
-    {
-        //pc로 뭔가 하기
-        auto* player = pc->GetPawn<ABS_VRPlayer>();
-        player->ID = this->ID;
+    // GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("일단 vlaue 체크 :id = %d"), value));
+    // // @@ 플레이어 찾아서 id 동기화
+    // // auto* gm = UBS_Utility::GetGM(GetWorld());
+    // // gm->
 
-        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id 설정 체크 == ps id : %d, player id : %d")
-        , this->ID, player->ID));
-    }
+    // auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    // if(pc && pc->IsLocalController())
+    // {
+    //     //pc로 뭔가 하기
+    //     auto* player = pc->GetPawn<ABS_VRPlayer>();
+    //     player->ID = this->ID;
+
+    //     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id 설정 체크 == ps id : %d, player id : %d")
+    //     , this->ID, player->ID));
+    // }
+    // else {
+    //     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("조건 안됨"));
+    // }
+}
+
+// void ABS_PlayerState::OnRep_Id()
+// {
+//     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("설정됨 rep : id = %d"), this->ID));
+//     auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+//     if(pc && pc->IsLocalController())
+//     {
+//         //pc로 뭔가 하기
+//         auto* player = pc->GetPawn<ABS_VRPlayer>();
+//         player->ID = this->ID;
+
+//         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id 설정 체크 == ps id : %d, player id : %d")
+//         , this->ID, player->ID));
+//     }
+// }
+void ABS_PlayerState::SRPC_SetPlayerdata_Implementation(FPSH_HttpDataTable data)
+{
+    SetPlayerData(data);
+
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
+    // // // 플레이어 캐릭터에게 ps 설정하기
+    // auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    // pc->GetPawn<ABS_VRPlayer>()->PS = this;
+}
+void ABS_PlayerState::MRPC_SetPlayerdata_Implementation(FPSH_HttpDataTable data)
+{
+    // // gi에서 플레이어 데이터 가져오기
+    // SetPlayerData(data);
+
+    // GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
+    // // // 플레이어 캐릭터에게 ps 설정하기
+    // auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    // pc->GetPawn<ABS_VRPlayer>()->PS = this;
 }
