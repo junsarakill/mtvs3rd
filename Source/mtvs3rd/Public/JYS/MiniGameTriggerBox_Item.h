@@ -23,11 +23,11 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	// 첫 번째 트리거 박스 컴포넌트
+
+	// 트리거 박스 컴포넌트
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* itemBox;
 
-	// 두 번째 트리거 박스 컴포넌트
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

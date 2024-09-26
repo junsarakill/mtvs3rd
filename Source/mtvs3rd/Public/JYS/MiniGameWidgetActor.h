@@ -54,19 +54,11 @@ public:
     UPROPERTY(EditDefaultsOnly)
     class ACharacter *player;
 
-    //UPROPERTY(EditDefaultsOnly)
-    //TSubclassOf<UMiniGameMissionWidget> MissionWidgetFactory;
-
-    //UPROPERTY(EditDefaultsOnly)
-    //TSubclassOf<UMiniGameQuestionWidget> QuestionWidgetFactory;
-
     void InitUI();
 
     bool bCheck = false;
 
 public:
-    // countdown
-    void CountDown();
 
 	UPROPERTY(BlueprintReadOnly)
 	int32 minutes = 0;

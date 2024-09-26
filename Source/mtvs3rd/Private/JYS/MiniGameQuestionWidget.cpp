@@ -47,32 +47,39 @@ void UMiniGameQuestionWidget::NativeTick(const FGeometry& MyGeometry, float InDe
 
 }
 
-void UMiniGameQuestionWidget::SetOwner(AMiniGameWidgetActor* miniActor) { owner = miniActor; }
+void UMiniGameQuestionWidget::SetOwner(AMiniGameWidgetActor* miniActor) 
+{ 
+	owner = miniActor; 
+}
+
+void UMiniGameQuestionWidget::CheckTagNetMulticast_Implementation(FName TagName)
+{
+	owner->triggerBox->Tags.Add(TagName);
+}
+
+void UMiniGameQuestionWidget::checkTagServer_Implementation(FName TagName)
+{
+	CheckTagNetMulticast(TagName);
+}
 
 void UMiniGameQuestionWidget::Onbtn_1Clicked()
 {
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 5555555555555"));
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" Onbtn_1Clicked"));
+
 	GetWorld()->GetTimerManager().SetTimer(handle, this, &UMiniGameQuestionWidget::StartCountDown, 1.0f, true, 0.0f);
+
 	if (nullptr == owner->triggerBox)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" 6666666666"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" owner->triggerBox nullptr"));
 
 		return;
 	}
-	owner->triggerBox->Tags.Add(FName("Shoes"));
-	// if (triggerBox->overlapActorTag == FName("Shoes"))
-	//{
-	//    StartCountDown();
 
-	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-	//    if (tag.Num() <= 0)
-	//        return;
+	checkTagServer(FName("Shoes"));
 
-	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-	//    fadeOutWall->SetFadeOut();
-	//}
 	owner->miniGameUIComp->SetVisibility(false);
+
 	StartCountDown();
 }
 
@@ -84,18 +91,9 @@ void UMiniGameQuestionWidget::Onbtn_2Clicked()
 	{
 		return;
 	}
-	owner->triggerBox->Tags.Add(FName("Clothes"));
-	//if (triggerBox->overlapActorTag == FName("Clothes"))
-	//{
-	//    StartCountDown();
-	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-	//    if (tag.Num() <= 0)
-	//        return;
+	checkTagServer(FName("Clothes"));
 
-	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-	//    fadeOutWall->SetFadeOut();
-	//}
-	owner->miniGameUIComp->SetVisibility(false);
+ 	owner->miniGameUIComp->SetVisibility(false);
 	StartCountDown();
 }
 
@@ -108,18 +106,8 @@ void UMiniGameQuestionWidget::Onbtn_3Clicked()
 	{
 		return;
 	}
-	owner->triggerBox->Tags.Add(FName("Hat"));
+	checkTagServer(FName("Hat"));
 
-	//if (triggerBox->overlapActorTag == FName("Hat"))
-	//{
-	//    StartCountDown();
-	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-	//    if (tag.Num() <= 0)
-	//        return;
-
-	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-	//    fadeOutWall->SetFadeOut();
-	//}
 	owner->miniGameUIComp->SetVisibility(false);
 	StartCountDown();
 }
@@ -132,18 +120,8 @@ void UMiniGameQuestionWidget::Onbtn_4Clicked()
 	{
 		return;
 	}
-	owner->triggerBox->Tags.Add(FName("Bag"));
+	checkTagServer(FName("Bag"));
 
-	//if (triggerBox->overlapActorTag == FName("Bag"))
-	//{
-	//    StartCountDown();
-	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-	//    if (tag.Num() <= 0)
-	//        return;
-
-	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-	//    fadeOutWall->SetFadeOut();
-	//}
 	owner->miniGameUIComp->SetVisibility(false);
 	StartCountDown();
 }
@@ -156,18 +134,8 @@ void UMiniGameQuestionWidget::Onbtn_5Clicked()
 	{
 		return;
 	}
-	owner->triggerBox->Tags.Add(FName("Muffler"));
+	checkTagServer(FName("Muffler"));
 
-	//if (triggerBox->overlapActorTag == FName("Muffler"))
-	//{
-	//    StartCountDown();
-	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-	//    if (tag.Num() <= 0)
-	//        return;
-
-	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-	//    fadeOutWall->SetFadeOut();
-	//}
 	owner->miniGameUIComp->SetVisibility(false);
 	StartCountDown();
 }
@@ -180,18 +148,8 @@ void UMiniGameQuestionWidget::Onbtn_6Clicked()
 	{
 		return;
 	}
-	owner->triggerBox->Tags.Add(FName("Watch"));
+	checkTagServer(FName("Watch"));
 
-	//if (triggerBox->overlapActorTag == FName("Watch"))
-	//{
-	//    StartCountDown();
-	//    UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("fadeOut"), tag);
-	//    if (tag.Num() <= 0)
-	//        return;
-
-	//    AMiniGameWall *fadeOutWall = Cast<AMiniGameWall>(tag[0]);
-	//    fadeOutWall->SetFadeOut();
-	//}
 	owner->miniGameUIComp->SetVisibility(false);
 	StartCountDown();
 }
@@ -199,10 +157,6 @@ void UMiniGameQuestionWidget::Onbtn_6Clicked()
 void UMiniGameQuestionWidget::StartCountDown()
 {
 	owner->countDownWidget->SetVisibility(true);
-	/*   if (owner)
-	   {
-		   owner->CountDown();
-	   }*/
 
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, FString::Printf(TEXT("FadeIn: %d"), owner->second));
 	if (owner->second != 0)

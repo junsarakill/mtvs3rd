@@ -16,9 +16,19 @@ AMiniGameTriggerBox_Item::AMiniGameTriggerBox_Item()
     itemBox->OnComponentBeginOverlap.AddDynamic(this, &AMiniGameTriggerBox_Item::OnOverlapBegin);
 }
 
-void AMiniGameTriggerBox_Item::BeginPlay() {}
+void AMiniGameTriggerBox_Item::BeginPlay() 
+{
+    Super::BeginPlay();
+}
 
-void AMiniGameTriggerBox_Item::Tick(float DeltaTime) {}
+void AMiniGameTriggerBox_Item::Tick(float DeltaTime) 
+{
+    Super::Tick(DeltaTime);
+
+    GEngine->AddOnScreenDebugMessage(-1, -1.0f, FColor::Red, FString::Printf(TEXT("1111111111111111: %d"), Tags.Num()));
+    //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
+
+}
 
 void AMiniGameTriggerBox_Item::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
                                               UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, bool bFromSweep,
@@ -41,8 +51,9 @@ void AMiniGameTriggerBox_Item::CheckTags()
         auto *miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
         if (miniGameWall)
         {
+            GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" Actorrrrr Fade Out!!!!!!!!!!!!!!!!!"));
+
             miniGameWall->SetFadeOut();
-            // CountDown도 없어져야함
         }
     }
 }

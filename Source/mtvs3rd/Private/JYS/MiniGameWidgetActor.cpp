@@ -36,6 +36,9 @@ void AMiniGameWidgetActor::BeginPlay()
 {
     Super::BeginPlay();
     InitUI();
+
+    player = Cast<ACharacter>(this->GetOwner());
+
     auto* questionWidget = Cast<UMiniGameQuestionWidget>(miniGameUIComp->GetWidget());
     if (questionWidget)
     {
@@ -66,9 +69,6 @@ void AMiniGameWidgetActor::BeginPlay()
 
     FTimerHandle missionTimeHandle;
     GetWorldTimerManager().SetTimer(missionTimeHandle, this, &AMiniGameWidgetActor::HideMissionWidget, 10.0, false);
-
-    //FTimerHandle handle;
-    //GetWorldTimerManager().SetTimer(handle, this, &AMiniGameWidgetActor::CountDown, 1.0f, true, 0.0f);
 
 	miniGameUIComp->SetVisibility(false);
 
@@ -137,31 +137,7 @@ void AMiniGameWidgetActor::BillBoardQuestionsWidget()
 
 void AMiniGameWidgetActor::InitUI() { bCheck = true; }
 
-void AMiniGameWidgetActor::CountDown()
-{
-	//if (second != 0)
-	//{
-	//	second = second - 1;
-	//}
-    //else
-    //{
-    //    if (minutes == 0)
-    //    {
-    //        TArray<AActor *> OutActors;
-    //        UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("FadeOut"), OutActors);
-    //        auto *miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
-    //        if (miniGameWall)
-    //        {
-    //            miniGameWall->SetFadeOut();
-    //        }
-    //    }
-    //    else
-    //    {
-    //        minutes = minutes - 1;
-    //        second = 59;
-    //    }
-    //}
-}
+
 
 void AMiniGameWidgetActor::HideMissionWidget()
 {
@@ -169,15 +145,18 @@ void AMiniGameWidgetActor::HideMissionWidget()
     {
         missionWidget->RemoveFromParent();
     }
-
-    // JBS 수정 플레이어 id로 찾아오기
-    auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
-    auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
-    auto pd = ps->GetPlayerData();
-    // /
-    if (pd.Gender == "Man")
+    if (player->IsLocallyControlled())
     {
-        miniGameUIComp->SetVisibility(true);
+        // 플레이어 id로 찾아오기
+        auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+        auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
+        auto pd = ps->GetPlayerData();
         missionWidgetUI->SetVisibility(false);
+  
+		if (pd.Gender == "Man")
+		{
+            miniGameUIComp->SetVisibility(true);
+        }
+
     }
 }
