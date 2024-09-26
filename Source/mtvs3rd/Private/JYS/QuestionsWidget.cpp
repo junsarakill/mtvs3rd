@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "JYS/QuestionsWidget.h"
@@ -29,7 +29,7 @@ void UQuestionsWidget::NativeConstruct()
 
 
 
-// owner ÇÔ¼ö·Î °ü¸®
+// owner í•¨ìˆ˜ë¡œ ê´€ë¦¬
 void UQuestionsWidget::SetOwner(AQuestionsWidgetActor* actor)
 {
 	owner = actor;
@@ -39,7 +39,7 @@ void UQuestionsWidget::SetOwner(AQuestionsWidgetActor* actor)
 
 void UQuestionsWidget::OnButton1Clicked()
 {
-	// owner ÀÎµ¦½º ÇÒ´ç
+	// owner ì¸ë±ìŠ¤ í• ë‹¹
 	owner->SetAnswer(1);
 
 
@@ -57,7 +57,7 @@ void UQuestionsWidget::OnButton1Clicked()
 void UQuestionsWidget::OnButton2Clicked()
 {
 
-	// owner ÀÎµ¦½º ÇÒ´ç
+	// owner ì¸ë±ìŠ¤ í• ë‹¹
 	owner->SetAnswer(2);
 
 	if (owner)
@@ -73,7 +73,7 @@ void UQuestionsWidget::OnButton2Clicked()
 
 void UQuestionsWidget::OnButton3Clicked()
 {
-	// owner ÀÎµ¦½º ÇÒ´ç
+	// owner ì¸ë±ìŠ¤ í• ë‹¹
 	owner->SetAnswer(3);
 
 	if (owner)
@@ -89,7 +89,7 @@ void UQuestionsWidget::OnButton3Clicked()
 
 void UQuestionsWidget::OnButton4Clicked()
 {
-	// owner ÀÎµ¦½º ÇÒ´ç
+	// owner ì¸ë±ìŠ¤ í• ë‹¹
 	owner->SetAnswer(4);
 
 	if (owner)

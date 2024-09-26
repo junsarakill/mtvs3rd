@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "JYS/SecondEventTriggerBox.h"
@@ -24,11 +24,11 @@ void ASecondEventTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Oth
 	if (Once) {
 		if (OtherActor && OtherActor != this)
 		{
-			// JBS Ãß°¡ ÇÃ·¹ÀÌ¾î°¡ ´ê¾Ò´ÂÁö Ã¼Å©
+			// JBS ì¶”ê°€ í”Œë ˆì´ì–´ê°€ ë‹¿ì•˜ëŠ”ì§€ ì²´í¬
 			if(!OtherActor->ActorHasTag(FName(TEXT("Player"))) || OtherActor->ActorHasTag(FName(TEXT("Dummy"))))
 				return;
 
-			// "Player" ÅÂ±×¸¦ °¡Áø Ä³¸¯ÅÍ Áß ¹«ÀÛÀ§·Î ÇÏ³ª¸¦ ¼±ÅÃÇÕ´Ï´Ù.
+			// "Player" íƒœê·¸ë¥¼ ê°€ì§„ ìºë¦­í„° ì¤‘ ë¬´ì‘ìœ„ë¡œ í•˜ë‚˜ë¥¼ ì„ íƒí•©ë‹ˆë‹¤.
 			ACharacter* RandomPlayer = GetRandomPlayerWithTag(TEXT("Player"));
 			if (RandomPlayer)
 			{
@@ -46,7 +46,7 @@ void ASecondEventTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Oth
 ACharacter* ASecondEventTriggerBox::GetRandomPlayerWithTag(FName Tag)
 {
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), Tag, players);
-	// JBS Ãß°¡ ´õ¹Ì Á¦¿Ü
+	// JBS ì¶”ê°€ ë”ë¯¸ ì œì™¸
 	TArray<AActor*> realPlayers;
 	for(AActor* player : players)
 	{
@@ -74,7 +74,7 @@ void ASecondEventTriggerBox::PlaceBoxInFrontOfCamera(ACharacter* PlayerCharacter
 		return;
 	}
 
-	// Ä«¸Ş¶ó ÄÄÆ÷³ÍÆ® Ã£±â
+	// ì¹´ë©”ë¼ ì»´í¬ë„ŒíŠ¸ ì°¾ê¸°
 	UCameraComponent* CameraComponent = PlayerCharacter->FindComponentByClass<UCameraComponent>();
 	if (!CameraComponent || !boxFactory)
 	{
@@ -83,19 +83,19 @@ void ASecondEventTriggerBox::PlaceBoxInFrontOfCamera(ACharacter* PlayerCharacter
 		return;
 	}
 
-	// Ä«¸Ş¶ó ¾Õ¿¡ ¹Ú½º À§Ä¡ °è»ê
+	// ì¹´ë©”ë¼ ì•ì— ë°•ìŠ¤ ìœ„ì¹˜ ê³„ì‚°
 	FVector cameraLoc = CameraComponent->GetComponentLocation();
 	FRotator cameraRot = CameraComponent->GetComponentRotation();
 	FVector boxLoc = cameraLoc + cameraRot.Vector() * 100.f;
 
-	// ¹Ú½º ½ºÆù
+	// ë°•ìŠ¤ ìŠ¤í°
 	FActorSpawnParameters spawnParams;
 	spawnParams.Owner = this;
 	AActor* spawnedBox = GetWorld()->SpawnActor<AActor>(boxFactory, boxLoc, cameraRot, spawnParams);
 	check(spawnedBox);
 	if (spawnedBox)
 	{
-		// ¹Ú½º¸¦ ÇÃ·¹ÀÌ¾îÇÑÅ× ºÎÂø
+		// ë°•ìŠ¤ë¥¼ í”Œë ˆì´ì–´í•œí…Œ ë¶€ì°©
 		spawnedBox->AttachToComponent(CameraComponent, FAttachmentTransformRules::KeepWorldTransform);
 	}
 }

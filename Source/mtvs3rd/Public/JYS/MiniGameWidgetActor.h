@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -25,7 +25,7 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    // ºôº¸µå
+    // ë¹Œë³´ë“œ
     UFUNCTION()
     void BillBoardQuestionsWidget();
 

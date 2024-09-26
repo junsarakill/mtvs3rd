@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "JYS/MiniGameQuestionWidget.h"
 #include "Components/Button.h"
@@ -35,7 +35,7 @@ void UMiniGameQuestionWidget::NativeConstruct()
 		btn_6->OnClicked.AddDynamic(this, &UMiniGameQuestionWidget::Onbtn_6Clicked);
 	}
 
-	// TriggerBox¿¡ ÀÖ´Â Table°¡Á®¿À±â
+	// TriggerBoxì— ìˆëŠ” Tableê°€ì ¸ì˜¤ê¸°
 	TArray<AActor*> outActor;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName(TEXT("Table")), outActor);
 

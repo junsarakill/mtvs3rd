@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -21,7 +21,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	// ¿À¹ö·¦
+	// ì˜¤ë²„ë©
 	UFUNCTION(BlueprintCallable)
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
@@ -29,10 +29,10 @@ protected:
 	class AMiniGameWall* miniGameWallFade;
 
 private:
-	// Æ®¸®°Å ¹Ú½º ³»ºÎ¿¡ ÀÖ´Â ¾×ÅÍ ¼ö
+	// íŠ¸ë¦¬ê±° ë°•ìŠ¤ ë‚´ë¶€ì— ìˆëŠ” ì•¡í„° ìˆ˜
 	int32 playerCount = 0;
 	
-	// Çã¿ëµÈ ÃÖ´ë ¾×ÅÍ ¼ö
+	// í—ˆìš©ëœ ìµœëŒ€ ì•¡í„° ìˆ˜
 	const int32 MAXPLAYERCOUNT = 1;
 
 	//UPROPERTY()

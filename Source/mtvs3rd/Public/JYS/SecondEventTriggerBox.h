@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -21,13 +21,13 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	// ¿À¹ö·¦
+	// ì˜¤ë²„ë©
 	UFUNCTION(BlueprintCallable)
 	void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
 
 public:
 
-	// Box¸¦ ÇÃ·¹ÀÌ¾î Ä«¸Ş¶ó¿¡ ¹èÄ¡
+	// Boxë¥¼ í”Œë ˆì´ì–´ ì¹´ë©”ë¼ì— ë°°ì¹˜
 	UPROPERTY(EditAnywhere, Category = "Box")
 	TSubclassOf<AActor> boxFactory;
 

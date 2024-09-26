@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "JYS/QuestionsWidgetActor.h"
@@ -49,21 +49,21 @@ void AQuestionsWidgetActor::BillBoardQuestionsWidget()
 	if (auto* pc = GetWorld()->GetFirstPlayerController())
 	{
 		// VR
-		// ÇÃ·¹ÀÌ¾î Ä«¸Ş¶ó °¡Á®¿À±â
+		// í”Œë ˆì´ì–´ ì¹´ë©”ë¼ ê°€ì ¸ì˜¤ê¸°
 		auto* playerCam = Cast<ABS_VRPlayer>(pc->GetCharacter());
  		if (playerCam->vrHMDCam)
  		{
 			FVector camLoc = playerCam->vrHMDCam->GetComponentLocation();
 			FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
 
-			// À§Á¬ÀÇ »õ·Î¿î À§Ä¡ ¼³Á¤ (Ä«¸Ş¶ó ¾Õ 50cm À§Ä¡)
+			// ìœ„ì ¯ì˜ ìƒˆë¡œìš´ ìœ„ì¹˜ ì„¤ì • (ì¹´ë©”ë¼ ì• 50cm ìœ„ì¹˜)
 			FVector questionsUILoc = camLoc + camForwardVector * 800.0f;
 			questionsUIComp->SetWorldLocation(questionsUILoc);
 
-			// LookAt ¹æ½ÄÀ¸·Î È¸Àü °è»ê
+			// LookAt ë°©ì‹ìœ¼ë¡œ íšŒì „ ê³„ì‚°
 			FRotator lookRot = (camLoc - questionsUILoc).Rotation();
 
-			// À§Á¬À» Ä«¸Ş¶ó¸¦ ¹Ù¶óº¸°Ô È¸Àü (Pitch °ªÀ» Á¶Á¤ÇÏ¿© À§Á¬À» Á¤È®È÷ Á¤¸éÀ¸·Î)
+			// ìœ„ì ¯ì„ ì¹´ë©”ë¼ë¥¼ ë°”ë¼ë³´ê²Œ íšŒì „ (Pitch ê°’ì„ ì¡°ì •í•˜ì—¬ ìœ„ì ¯ì„ ì •í™•íˆ ì •ë©´ìœ¼ë¡œ)
 			questionsUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
 	
  		}
@@ -97,7 +97,7 @@ void AQuestionsWidgetActor::InitUI(int32 widgetNum)
 	getWidgetNum = widgetNum;
 }
 
-// ¼±ÅÃÁö ÀÌº¥Æ® ¸î¹øÂ° Á¤´äÀ» Å¬¸¯Çß´ÂÁö¿¡ ´ëÇÑ °ü¸®
+// ì„ íƒì§€ ì´ë²¤íŠ¸ ëª‡ë²ˆì§¸ ì •ë‹µì„ í´ë¦­í–ˆëŠ”ì§€ì— ëŒ€í•œ ê´€ë¦¬
 void AQuestionsWidgetActor::SetAnswer(int num)
 {
 	answerNum = num;

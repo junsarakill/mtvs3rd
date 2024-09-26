@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "JYS/MiniGameWidgetActor.h"
 #include "Components/WidgetComponent.h"
@@ -73,7 +73,7 @@ void AMiniGameWidgetActor::BeginPlay()
 	miniGameUIComp->SetVisibility(false);
 
     
-    // Æ®¸®°Å¹Ú½º Ã£±â
+    // íŠ¸ë¦¬ê±°ë°•ìŠ¤ ì°¾ê¸°
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), findTB);
     GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
 
@@ -112,23 +112,23 @@ void AMiniGameWidgetActor::Tick(float DeltaTime)
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
 {
     // VR
-    // ÇÃ·¹ÀÌ¾î Ä«¸Ş¶ó °¡Á®¿À±â
+    // í”Œë ˆì´ì–´ ì¹´ë©”ë¼ ê°€ì ¸ì˜¤ê¸°
     auto *playerCam = Cast<ABS_VRPlayer>(this->GetOwner());
     if (playerCam->vrHMDCam)
     {
         FVector miniGameCamLoc = playerCam->vrHMDCam->GetComponentLocation();
         FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
 
-        // À§Á¬ÀÇ »õ·Î¿î À§Ä¡ ¼³Á¤ (Ä«¸Ş¶ó ¾Õ 50cm À§Ä¡)
+        // ìœ„ì ¯ì˜ ìƒˆë¡œìš´ ìœ„ì¹˜ ì„¤ì • (ì¹´ë©”ë¼ ì• 50cm ìœ„ì¹˜)
         FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 300.0f;
         miniGameUIComp->SetWorldLocation(miniGameUILoc);
         missionWidgetUI->SetWorldLocation(miniGameUILoc);
         countDownWidget->SetWorldLocation(miniGameUILoc + FVector::UpVector * 50.f);
 
-        // LookAt ¹æ½ÄÀ¸·Î È¸Àü °è»ê
+        // LookAt ë°©ì‹ìœ¼ë¡œ íšŒì „ ê³„ì‚°
         FRotator lookRot = (miniGameCamLoc - miniGameUILoc).Rotation();
 
-        // À§Á¬À» Ä«¸Ş¶ó¸¦ ¹Ù¶óº¸°Ô È¸Àü (Pitch °ªÀ» Á¶Á¤ÇÏ¿© À§Á¬À» Á¤È®È÷ Á¤¸éÀ¸·Î)
+        // ìœ„ì ¯ì„ ì¹´ë©”ë¼ë¥¼ ë°”ë¼ë³´ê²Œ íšŒì „ (Pitch ê°’ì„ ì¡°ì •í•˜ì—¬ ìœ„ì ¯ì„ ì •í™•íˆ ì •ë©´ìœ¼ë¡œ)
         miniGameUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         missionWidgetUI->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         countDownWidget->SetWorldRotation(lookRot + FRotator(0, 0, -0));
@@ -147,7 +147,7 @@ void AMiniGameWidgetActor::HideMissionWidget()
     }
     if (player->IsLocallyControlled())
     {
-        // ÇÃ·¹ÀÌ¾î id·Î Ã£¾Æ¿À±â
+        // í”Œë ˆì´ì–´ idë¡œ ì°¾ì•„ì˜¤ê¸°
         auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
         auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
         auto pd = ps->GetPlayerData();

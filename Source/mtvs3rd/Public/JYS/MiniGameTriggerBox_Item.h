@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -24,7 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	// Æ®¸®°Å ¹Ú½º ÄÄÆ÷³ÍÆ®
+	// íŠ¸ë¦¬ê±° ë°•ìŠ¤ ì»´í¬ë„ŒíŠ¸
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* itemBox;
 
@@ -36,7 +36,7 @@ public:
 
 private:
 
-	// ÅÂ±×°¡ °°ÀºÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+	// íƒœê·¸ê°€ ê°™ì€ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
 	void CheckTags();
 
 	AActor* CurrentActor;
