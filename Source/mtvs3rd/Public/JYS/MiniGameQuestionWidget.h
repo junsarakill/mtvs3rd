@@ -48,6 +48,12 @@ public:
 
     FTimerHandle handle;
 
+    UFUNCTION(Reliable, NetMulticast)
+    void CheckTagNetMulticast(FName TagName);
+
+	UFUNCTION(Reliable, Server)
+	void checkTagServer(FName TagName);
+
 private:
     UFUNCTION()
     void Onbtn_1Clicked();
