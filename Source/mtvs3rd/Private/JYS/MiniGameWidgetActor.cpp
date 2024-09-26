@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "JYS/MiniGameWidgetActor.h"
 #include "Components/WidgetComponent.h"
@@ -73,7 +73,7 @@ void AMiniGameWidgetActor::BeginPlay()
 	miniGameUIComp->SetVisibility(false);
 
     
-    // Ʈ���Źڽ� ã��
+    // 트리거박스 찾기
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), findTB);
     GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
 
@@ -112,23 +112,23 @@ void AMiniGameWidgetActor::Tick(float DeltaTime)
 void AMiniGameWidgetActor::BillBoardQuestionsWidget()
 {
     // VR
-    // �÷��̾� ī�޶� ��������
+    // 플레이어 카메라 가져오기
     auto *playerCam = Cast<ABS_VRPlayer>(this->GetOwner());
     if (playerCam->vrHMDCam)
     {
         FVector miniGameCamLoc = playerCam->vrHMDCam->GetComponentLocation();
         FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
 
-        // ������ ���ο� ��ġ ���� (ī�޶� �� 50cm ��ġ)
+        // 위젯의 새로운 위치 설정 (카메라 앞 50cm 위치)
         FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 300.0f;
         miniGameUIComp->SetWorldLocation(miniGameUILoc);
         missionWidgetUI->SetWorldLocation(miniGameUILoc);
         countDownWidget->SetWorldLocation(miniGameUILoc + FVector::UpVector * 50.f);
 
-        // LookAt �������? ȸ�� ���?
+        // LookAt 방식으로 회전 계산
         FRotator lookRot = (miniGameCamLoc - miniGameUILoc).Rotation();
 
-        // ������ ī�޶� �ٶ󺸰� ȸ�� (Pitch ���� �����Ͽ� ������ ��Ȯ�� ��������)
+        // 위젯을 카메라를 바라보게 회전 (Pitch 값을 조정하여 위젯을 정확히 정면으로)
         miniGameUIComp->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         missionWidgetUI->SetWorldRotation(lookRot + FRotator(0, 0, -0));
         countDownWidget->SetWorldRotation(lookRot + FRotator(0, 0, -0));
@@ -145,37 +145,9 @@ void AMiniGameWidgetActor::HideMissionWidget()
     {
         missionWidget->RemoveFromParent();
     }
-
-    // JBS ���� �÷��̾� id�� ã�ƿ���
-    // FIXME ���� ���� �����ؾ���
-    if(player->IsLocallyControlled())
-        SRPC_SetVisibilityByGender();
-    // auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
-    // auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
-    // auto pd = ps->GetPlayerData();
-    // // /
-    // if (pd.Gender == "Man")
-    // {
-    //     miniGameUIComp->SetVisibility(true);
-    //     missionWidgetUI->SetVisibility(false);
-    // }
-}
-
-void AMiniGameWidgetActor::SRPC_SetVisibilityByGender_Implementation()
-{
-    auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
-    auto* ps = myPlayer->GetPlayerState<ABS_PlayerState>();
-    auto pd = ps->GetPlayerData();
-    // /
-    MRPC_SetVisibilityByGender(pd);
-    
-}
-
-void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDataTable playerData)
-{
-    if (playerData.Gender == "Man")
+    if (player->IsLocallyControlled())
     {
-        // �÷��̾� id�� ã�ƿ���
+        // 플레이어 id로 찾아오기
         auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
         auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
         auto pd = ps->GetPlayerData();
@@ -187,4 +159,4 @@ void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDa
         }
 
     }
-}   
+}

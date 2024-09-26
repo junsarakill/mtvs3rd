@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "JYS/QuestionsTriggerBox.h"
@@ -24,33 +24,33 @@ void AQuestionsTriggerBox::BeginPlay()
 void AQuestionsTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("1111"));
-	// ¸¸¾à ¸ÆÅÍ°¡ "Player"¶ó´Â ÅÂ±×¸¦ °¡Áö°í ÀÖ´Ù¸é
+	// ë§Œì•½ ë§¥í„°ê°€ "Player"ë¼ëŠ” íƒœê·¸ë¥¼ ê°€ì§€ê³  ìˆë‹¤ë©´
 	if (OtherActor->ActorHasTag(TEXT("Player")))
 	{
 		TArray<AActor*> OutActor;
-		// ¸Ê¿¡ ÀÖ´Â ¸ğµç ÇÃ·¹ÀÌ¾î Ã£±â
+		// ë§µì— ìˆëŠ” ëª¨ë“  í”Œë ˆì´ì–´ ì°¾ê¸°
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacter::StaticClass(), OutActor);
 
-		// for¹®À» µ¹·Á¼­ ÇÃ·¹ÀÌ¾î¿¡°Ô ÇØ´ç i¹øÀÇ Widget ³Ö¾îÁÖ±â
+		// forë¬¸ì„ ëŒë ¤ì„œ í”Œë ˆì´ì–´ì—ê²Œ í•´ë‹¹ ië²ˆì˜ Widget ë„£ì–´ì£¼ê¸°
 		for (int32 i = 0; i < OutActor.Num(); i++)
 		{
-			// JBS Ãß°¡ ´õ¹Ì Á¦¿Ü Ã³¸®
+			// JBS ì¶”ê°€ ë”ë¯¸ ì œì™¸ ì²˜ë¦¬
 			if(OutActor[i]->ActorHasTag(FName(TEXT("Dummy"))))
 				continue;
 
 
-			// spawnedWidgetActor º¯¼ö¿¡ questionsWidgetFactory Widget UI °¡Á®¿À±â
+			// spawnedWidgetActor ë³€ìˆ˜ì— questionsWidgetFactory Widget UI ê°€ì ¸ì˜¤ê¸°
 			AQuestionsWidgetActor* spawnedWidgetActor = GetWorld()->SpawnActor<AQuestionsWidgetActor>(questionsWidgetFactory);
 			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("num : %d"), widgetNum));
 			spawnedWidgetActor->InitUI(widgetNum);
-			// spawnedWidgetActor¿¡ ÀÖ´Â player¿¡ ¾×ÅÍ i¹øÀ» ³Ö¾îÁØ´Ù (ÀÚ·áÇüÀÌ ´Ù¸£±â ¶§¹®¿¡ Actor¸¦ Cast ÇØ¼­ Character·Î ¹Ù²ãÁÖ±â
+			// spawnedWidgetActorì— ìˆëŠ” playerì— ì•¡í„° ië²ˆì„ ë„£ì–´ì¤€ë‹¤ (ìë£Œí˜•ì´ ë‹¤ë¥´ê¸° ë•Œë¬¸ì— Actorë¥¼ Cast í•´ì„œ Characterë¡œ ë°”ê¿”ì£¼ê¸°
 			spawnedWidgetActor->player = Cast<ACharacter>(OutActor[i]);
 
-			// player º¯¼ö¿¡ spawnedWidgetActor¿¡ ÀÖ´Â player °¡Á®¿À±â
+			// player ë³€ìˆ˜ì— spawnedWidgetActorì— ìˆëŠ” player ê°€ì ¸ì˜¤ê¸°
 			auto* player = spawnedWidgetActor->player;
 			
 		}
-		// Æ®¸®°Å¹Ú½ºÀÇ Collision ²¨ÁÖ±â
+		// íŠ¸ë¦¬ê±°ë°•ìŠ¤ì˜ Collision êº¼ì£¼ê¸°
 		shapeComp->SetCollisionProfileName(FName("NoCollision"));	
 	}
 }

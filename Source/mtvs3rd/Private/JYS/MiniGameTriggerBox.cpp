@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "JYS/MiniGameTriggerBox.h"
@@ -13,7 +13,7 @@ AMiniGameTriggerBox::AMiniGameTriggerBox()
 	if (collisionComp)
 	{
 		collisionComp->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
-		// ÇÊ¿ä¿¡ µû¶ó ¿À¹ö·¦ ¼³Á¤
+		// í•„ìš”ì— ë”°ë¼ ì˜¤ë²„ëž© ì„¤ì •
 		// CollisionComp->SetGenerateOverlapEvents(true);
 		collisionComp->OnComponentEndOverlap.AddDynamic(this, &AMiniGameTriggerBox::OnOverlapEnd);
 	}
