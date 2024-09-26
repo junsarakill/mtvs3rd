@@ -7,7 +7,7 @@
 #include "PSH_HttpDataTable.generated.h"
 
 
-USTRUCT(Atomic,BlueprintType) // ÃÖÃÊ Åë½Å µ¥ÀÌÅÍ
+USTRUCT(Atomic,BlueprintType) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  struct FPSH_HttpDataTable : public FTableRowBase
  {
 	GENERATED_USTRUCT_BODY()
@@ -17,39 +17,43 @@ USTRUCT(Atomic,BlueprintType) // ÃÖÃÊ Åë½Å µ¥ÀÌÅÍ
 	 int Id;
 	// int Id;
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 FString Name; // ·£´ýÀ¸·Î Áö¾îÁü
+	 FString Name; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 int Age;  // 2°³ ¼±ÅÃ // ¹öÆ° ´©¸£¸é 1¾¿ ´õÇØÁö°í 9³Ñ¾î°¡¸é 0À¸·Î ÃÊ±âÈ­
-	// int Age;  // 2°³ ¼±ÅÃ // ¹öÆ° ´©¸£¸é 1¾¿ ´õÇØÁö°í 9³Ñ¾î°¡¸é 0À¸·Î ÃÊ±âÈ­
+	 int Age;  // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ // ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 9ï¿½Ñ¾î°¡ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+	// int Age;  // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ // ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 9ï¿½Ñ¾î°¡ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 FString Gender; // ¼ºº° 2°³ ¼±ÅÃ
+	 FString Gender; // ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 FString MBTI; // ¼±ÅÃ
+	 FString MBTI; // ï¿½ï¿½ï¿½ï¿½
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	 FString Blood; // ¼±ÅÃ
+	 FString Blood; // ï¿½ï¿½ï¿½ï¿½
 
 	
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	  int otherUserID1; //  Key -> FromUserID
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	  float syncPercentID1; // ½ÌÅ©·ÎÀ² Key -> AffinityScore
+	  float syncPercentID1; // ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ Key -> AffinityScore
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	  int otherUserID2;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	  float syncPercentID2;
 
- 	int To_User1; //- ´©±¸ ¿¡°Ô
- 	int To_User2;//- ´©±¸ ¿¡°Ô
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+ 	int To_User1; //- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+ 	int To_User2;//- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 // 
- 	int LikeScore1; //- ¼³¹®Áö
- 	int LikeScore2;// - ½ºÅ×ÀÌÁö ÀÌµ¿ ´äº¯
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+ 	int LikeScore1; //- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
+ 	int LikeScore2;// - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½äº¯
 
 
 	  void PrintStruct();
 
-	// JBS Ãß°¡ »ý¼ºÀÚ
+	// JBS ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	FPSH_HttpDataTable() {}
 	
 	FPSH_HttpDataTable(int Id, FString Name, int Age, FString Gender

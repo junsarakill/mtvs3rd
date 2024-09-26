@@ -30,20 +30,24 @@ public:
 
 #pragma region 변수 영역
 protected:
-	// 플레이어 id
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	int id;
+	// // 플레이어 id
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing=OnRep_Id, Category="Default|Values")
+	// int id;
 		public:
-	__declspec(property(get = GetId, put = SetId)) int ID;
-	int GetId()
-	{
-		return id;
-	}
-	void SetId(int value)
-	{
-		id = value;
-	}
-		protected:
+	// __declspec(property(get = GetId, put = SetId)) int ID;
+	// int GetId()
+	// {
+	// 	return id;
+	// }
+	// void SetId(int value)
+	// {
+	// 	id = value;
+	// 	// SRPC_CalcPlayerType();
+	// }
+	// UFUNCTION(BlueprintCallable)
+	// void OnRep_Id();
+
+    protected:
 	
 	
 
@@ -92,6 +96,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	bool isSetAppearance = false;
+
 	
 
 #pragma region 프리팹
@@ -124,11 +131,11 @@ protected:
 
 public:
 	// 플레이어 ps
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Objects")
-	ABS_PlayerState* ps;
-	__declspec(property(get = GetMyPS, put = SetMyPS)) ABS_PlayerState* PS;
-	ABS_PlayerState *GetMyPS();
-	void SetMyPS(class ABS_PlayerState *value);
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Objects")
+	// ABS_PlayerState* ps;
+	// __declspec(property(get = GetMyPS, put = SetMyPS)) ABS_PlayerState* PS;
+	// ABS_PlayerState *GetMyPS();
+	// void SetMyPS(class ABS_PlayerState *value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* vrRoot;
@@ -186,11 +193,17 @@ public:
 	void SRPC_CalcPlayerType();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void MRPC_CalcPlayerType(EPlayerType type);
+	void MRPC_CalcPlayerType(EPlayerType pType);
 
 	// void CalcPlayerType();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const override;
+
+	UFUNCTION(Server, Reliable)
+	void SRPC_DebugPlayerStat();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MRPC_DebugPlayerStat(const FString &playerStatStr);
 
 #pragma endregion
 

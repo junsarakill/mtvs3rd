@@ -136,13 +136,34 @@ void AMiniGameWidgetActor::HideMissionWidget()
     }
 
     // JBS 수정 플레이어 id로 찾아오기
+    // FIXME 변경 내용 적용해야함
+    SRPC_SetVisibilityByGender();
+    // auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+    // auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
+    // auto pd = ps->GetPlayerData();
+    // // /
+    // if (pd.Gender == "Man")
+    // {
+    //     miniGameUIComp->SetVisibility(true);
+    //     missionWidgetUI->SetVisibility(false);
+    // }
+}
+
+void AMiniGameWidgetActor::SRPC_SetVisibilityByGender_Implementation()
+{
     auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
-    auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
+    auto* ps = myPlayer->GetPlayerState<ABS_PlayerState>();
     auto pd = ps->GetPlayerData();
     // /
-    if (pd.Gender == "Man")
+    MRPC_SetVisibilityByGender(pd);
+    
+}
+
+void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDataTable playerData)
+{
+    if (playerData.Gender == "Man")
     {
         miniGameUIComp->SetVisibility(true);
         missionWidgetUI->SetVisibility(false);
     }
-}
+}   

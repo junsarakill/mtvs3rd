@@ -4,6 +4,7 @@
 #include <JBS/BS_Utility.h>
 #include "Components/ActorComponent.h"
 #include "Components/SceneComponent.h"
+#include "Engine/Engine.h"
 #include "Engine/World.h"
 #include "GameFramework/GameStateBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -100,26 +101,33 @@ UActorComponent *UBS_Utility::GetNearestGrabComp(TArray<UActorComponent *> comps
 //     return result;
 // }
 
-ABS_PlayerState *UBS_Utility::TryGetPlayerState(UWorld *world, int id)
-{
-    // 레벨의 모든 ps 가져오기
-    TArray<TObjectPtr<APlayerState>> tempAllPS = world->GetGameState()->PlayerArray;
-	TArray<ABS_PlayerState*> allPS;
-    // 캐스트
-	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
-		return Cast<ABS_PlayerState>(temp);
-	});
+// ABS_PlayerState *UBS_Utility::TryGetPlayerState(UWorld *world, int id)
+// {
+//     // 레벨의 모든 ps 가져오기
+//     TArray<TObjectPtr<APlayerState>> tempAllPS = world->GetGameState()->PlayerArray;
+// 	TArray<ABS_PlayerState*> allPS;
+//     // 캐스트
+// 	Algo::Transform(tempAllPS, allPS, [](TObjectPtr<APlayerState> temp){
+// 		return Cast<ABS_PlayerState>(temp);
+// 	});
 
-    bool result = false;
-    for (ABS_PlayerState *ps : allPS)
-    {
-        // id 가 같은 ps 찾기
-        result = ps && ps->ID == id;
-        if(result)
-        {
-            return ps;
-        }
-    }
+//     FString str;
+//     for(auto* ps : allPS)
+//     {
+//         str.Append(FString::Printf(TEXT("name : %s, id : %d\n"), *ps->GetName(), ps->ID));
+//     }
+//     GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Yellow, FString::Printf(TEXT("%s"), *str));
 
-    return nullptr;
-}
+//     bool result = false;
+//     for (ABS_PlayerState *ps : allPS)
+//     {
+//         // id 가 같은 ps 찾기
+//         result = ps && ps->ID == id;
+//         if(result)
+//         {
+//             return ps;
+//         }
+//     }
+
+//     return nullptr;
+// }

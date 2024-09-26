@@ -76,6 +76,7 @@ public:
 		return isAlreadySelect;
 	}
 	void SetIsAlreadySelect(bool value);
+	
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -87,7 +88,13 @@ public:
 	UFUNCTION(BlueprintSetter)
 	void SetPlayerData(FPSH_HttpDataTable data);
 
-	// 싱크로 맵에 요소 추가 : id , 해당유저에 대한 싱크로율
+	UFUNCTION(Server, Reliable)
+	void SRPC_SetPlayerdata(FPSH_HttpDataTable data);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MRPC_SetPlayerdata(FPSH_HttpDataTable data);
+
+        // 싱크로 맵에 요소 추가 : id , 해당유저에 대한 싱크로율
 	UFUNCTION(BlueprintCallable)
 	void AddSyncMap(int userId, float value);
 

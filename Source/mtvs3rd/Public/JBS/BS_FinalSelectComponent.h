@@ -78,11 +78,21 @@ protected:
 	// 최종 선택
 	void SendPlayerFinalSelect(EFinalSelectType type);
 
-
 public:
 	UFUNCTION(BlueprintCallable)
 	bool TrySpawnSelectConfirmUI(int selectPlayerId);
 
-	
+	//최종 선택 시점 확인하기
+	UFUNCTION(Server, Reliable)
+	void SRPC_TrySpawnSelectConfirmUI(int selectPlayerId);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MRPC_TrySpawnSelectConfirmUI(int selectPlayerId);
+
+	// 최종 선택 정보 보내기
+	UFUNCTION(Server, Reliable)
+	void SRPC_SendPlayerFinalSelect();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MRPC_SendPlayerFinalSelect();
 };

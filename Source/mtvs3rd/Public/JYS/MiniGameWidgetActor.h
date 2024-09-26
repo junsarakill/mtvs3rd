@@ -25,7 +25,7 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    // ������
+    // ������
     UFUNCTION()
     void BillBoardQuestionsWidget();
 
@@ -82,4 +82,12 @@ public:
     TArray<AActor *> findTB;
 
     AActor *closestActor;
+
+    // jbs 수정
+    // 남자 일때만 정답 선택 ui 뜨게하기
+    UFUNCTION(Server, Reliable)
+    void SRPC_SetVisibilityByGender();
+
+    UFUNCTION(NetMulticast, Reliable)
+    void MRPC_SetVisibilityByGender(struct FPSH_HttpDataTable playerData);
 };

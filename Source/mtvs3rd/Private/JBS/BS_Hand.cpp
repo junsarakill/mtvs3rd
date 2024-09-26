@@ -312,22 +312,15 @@ void ABS_Hand::LineTracePlayer()
 			// 내 손에 프로필 ui 생성
 			SpawnProfileUI(dData);
 			// 최종 선택인 경우 선택 UI도 생성
-			fsComp->TrySpawnSelectConfirmUI(dData.Id);
+			fsComp->SRPC_TrySpawnSelectConfirmUI(dData.Id);
+			// fsComp->TrySpawnSelectConfirmUI(dData.Id);
 		}
-		// 대상이 플레이어라면
-		// @@ 알파때 점검 필요
+		// 대상이 플레이어라면 프로필 ui 생성->최종 선택이면 선택 ui 도 생성
 		else if(outHit.GetActor()->ActorHasTag(FName("Player")))
 		{
 			auto* otherPlayer = Cast<ABS_VRPlayer>(outHit.GetActor());
 			check(otherPlayer);
-			// 해당 플레이어의 정보 가져오기
-			auto* otherPS = otherPlayer->GetMyPS();
-			check(otherPS);
-			auto otherPlayerData = otherPS->GetPlayerData();
-			// 프로필 ui 생성
-			SpawnProfileUI(otherPlayerData);
-			// 최종 선택인 경우 선택 UI도 생성
-			fsComp->TrySpawnSelectConfirmUI(otherPlayerData.Id);
+			SRPC_SpawnProfileUI(otherPlayer);
 		}
 	}
 }
@@ -463,4 +456,18 @@ void ABS_Hand::SetCurFindGrabComp(UBS_GrabComponent *value)
 		check(gcompOwner);
 		gcompOwner->grabHoverUIActor->IS_VISIBLE = true;
 	}
+}
+void ABS_Hand::SRPC_SpawnProfileUI_Implementation(ABS_VRPlayer *otherPlayer)
+{
+    auto* otherPS = otherPlayer->GetPlayerState<ABS_PlayerState>();
+	check(otherPS);
+	auto otherPlayerData = otherPS->GetPlayerData();
+	// 클라에 프로필 ui 생성
+	MRPC_SpawnProfileUI(otherPlayerData);
+}
+
+void ABS_Hand::MRPC_SpawnProfileUI_Implementation(FPSH_HttpDataTable profileData) {
+	SpawnProfileUI(profileData);
+	// 최종 선택인 경우 선택 UI도 생성
+	fsComp->SRPC_TrySpawnSelectConfirmUI(profileData.Id);
 }
