@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerState.h"
 #include "PSH/PSH_HttpDataTable.h"
 #include <Containers/Map.h>
+#include <JBS/BS_Utility.h>
 #include "BS_PlayerState.generated.h"
 
 /**
@@ -106,4 +107,7 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MRPC_AddSyncMap(int userId, float value);
+
+	UFUNCTION(BlueprintCallable)
+	EPlayerType CalcPlayerType();
 };

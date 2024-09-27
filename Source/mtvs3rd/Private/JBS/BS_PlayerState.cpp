@@ -4,7 +4,6 @@
 #include <JBS/BS_PlayerState.h>
 #include "Engine/Engine.h"
 #include "Engine/World.h"
-#include "GameFramework/GameStateBase.h"
 #include "JBS/BS_Utility.h"
 #include "JBS/BS_VRPlayer.h"
 #include "PSH/PSH_GameInstance.h"
@@ -37,6 +36,15 @@ void ABS_PlayerState::BeginPlay()
         //pc로 뭔가 하기
         auto* gi = UBS_Utility::GetGI(GetWorld());
         SRPC_SetPlayerdata(gi->GetStartData());
+
+        // 플레이어 외형 계산
+        EPlayerType pType = CalcPlayerType();
+        // 플레이어 캐릭터에 적용 srpc
+        auto* player = Cast<ABS_VRPlayer>(pc->GetCharacter());
+        if(player)
+        {
+            player->SRPC_CalcPlayerType(pType);
+        }
 
         // 페이드 아웃 실행
         APlayerCameraManager* cam = pc->PlayerCameraManager;
@@ -124,56 +132,30 @@ void ABS_PlayerState::MRPC_AddSyncMap_Implementation(int userId, float value)
 void ABS_PlayerState::SetId(int value)
 {
     id = value;
-    // GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("일단 vlaue 체크 :id = %d"), value));
-    // // @@ 플레이어 찾아서 id 동기화
-    // // auto* gm = UBS_Utility::GetGM(GetWorld());
-    // // gm->
-
-    // auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    // if(pc && pc->IsLocalController())
-    // {
-    //     //pc로 뭔가 하기
-    //     auto* player = pc->GetPawn<ABS_VRPlayer>();
-    //     player->ID = this->ID;
-
-    //     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id 설정 체크 == ps id : %d, player id : %d")
-    //     , this->ID, player->ID));
-    // }
-    // else {
-    //     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("조건 안됨"));
-    // }
 }
 
-// void ABS_PlayerState::OnRep_Id()
-// {
-//     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("설정됨 rep : id = %d"), this->ID));
-//     auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-//     if(pc && pc->IsLocalController())
-//     {
-//         //pc로 뭔가 하기
-//         auto* player = pc->GetPawn<ABS_VRPlayer>();
-//         player->ID = this->ID;
-
-//         GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("id 설정 체크 == ps id : %d, player id : %d")
-//         , this->ID, player->ID));
-//     }
-// }
 void ABS_PlayerState::SRPC_SetPlayerdata_Implementation(FPSH_HttpDataTable data)
 {
     SetPlayerData(data);
 
     GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
-    // // // 플레이어 캐릭터에게 ps 설정하기
-    // auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    // pc->GetPawn<ABS_VRPlayer>()->PS = this;
 }
 void ABS_PlayerState::MRPC_SetPlayerdata_Implementation(FPSH_HttpDataTable data)
 {
-    // // gi에서 플레이어 데이터 가져오기
-    // SetPlayerData(data);
+    
+}
 
-    // GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("이름 : %s"), *name));
-    // // // 플레이어 캐릭터에게 ps 설정하기
-    // auto* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    // pc->GetPawn<ABS_VRPlayer>()->PS = this;
+EPlayerType ABS_PlayerState::CalcPlayerType()
+{
+	EPlayerType pType;
+    // 플레이어 성별 및 나이 가져와서 타입 판별후 메시,애니 설정
+	// 30 대 이상이면 2번째 메시 사용
+	bool isMale = this->gender == TEXT("Man");
+	bool isAlter = this->age >= 30;
+	if(isMale)
+		pType = !isAlter ? EPlayerType::MALE1 : EPlayerType::MALE2;
+	else
+		pType = !isAlter ? EPlayerType::FEMALE1 : EPlayerType::FEMALE2;
+
+	return pType;
 }
