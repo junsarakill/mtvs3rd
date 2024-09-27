@@ -25,7 +25,7 @@ void AMiniGameTriggerBox_Item::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    GEngine->AddOnScreenDebugMessage(-1, -1.0f, FColor::Red, FString::Printf(TEXT("1111111111111111: %d"), Tags.Num()));
+    // GEngine->AddOnScreenDebugMessage(-1, -1.0f, FColor::Red, FString::Printf(TEXT("1111111111111111: %d"), Tags.Num()));
 }
 
 void AMiniGameTriggerBox_Item::OnOverlapBegin(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
@@ -49,7 +49,7 @@ void AMiniGameTriggerBox_Item::CheckTags()
         auto *miniGameWall = Cast<AMiniGameWall>(OutActors[0]);
         if (miniGameWall)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" Actorrrrr Fade Out!!!!!!!!!!!!!!!!!"));
+            // GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" Actorrrrr Fade Out!!!!!!!!!!!!!!!!!"));
 
             miniGameWall->SetFadeOut();
         }

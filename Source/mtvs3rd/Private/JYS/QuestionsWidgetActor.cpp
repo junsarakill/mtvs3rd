@@ -75,7 +75,7 @@ void AQuestionsWidgetActor::BillBoardQuestionsWidget()
 
 void AQuestionsWidgetActor::InitUI(int32 widgetNum)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("num : %d"),widgetNum ));
+	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("num : %d"),widgetNum ));
 	switch (widgetNum)
 	{
 	case 1:
