@@ -147,16 +147,37 @@ void AMiniGameWidgetActor::HideMissionWidget()
     }
     if (player->IsLocallyControlled())
     {
-        // 플레이어 id로 찾아오기
-        auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
-        auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
-        auto pd = ps->GetPlayerData();
-        missionWidgetUI->SetVisibility(false);
+        SRPC_SetVisibilityByGender();
+        // // 플레이어 id로 찾아오기
+        // auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+        // auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
+        // auto pd = ps->GetPlayerData();
+        // missionWidgetUI->SetVisibility(false);
   
-		if (pd.Gender == "Man")
-		{
-            miniGameUIComp->SetVisibility(true);
-        }
+		// if (pd.Gender == "Man")
+		// {
+        //     miniGameUIComp->SetVisibility(true);
+        // }
 
+    }
+}
+
+void AMiniGameWidgetActor::SRPC_SetVisibilityByGender_Implementation()
+{
+    // 플레이어 id로 찾아오기
+    auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
+    auto* ps = myPlayer->GetPlayerState<ABS_PlayerState>();
+    auto pd = ps->GetPlayerData();
+
+    MRPC_SetVisibilityByGender(pd);
+}
+
+void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDataTable playerData)
+{
+    missionWidgetUI->SetVisibility(false);
+  
+    if (playerData.Gender == "Man")
+    {
+        miniGameUIComp->SetVisibility(true);
     }
 }

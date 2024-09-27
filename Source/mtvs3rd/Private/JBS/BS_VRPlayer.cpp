@@ -68,7 +68,6 @@ void ABS_VRPlayer::BeginPlay()
 	vrHMDCam->bUsePawnControlRotation = playOnPC;
 	GetAnim()->isPlayOnPC = playOnPC;
 
-
 	SRPC_CalcPlayerType();
 }
 
@@ -80,7 +79,10 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 	// XXX 디버그단
 	if(enableViewPlayerStat)
 	{
-		SRPC_DebugPlayerStat();
+		if(IsLocallyControlled())
+		{
+			SRPC_DebugPlayerStat();
+		}
 		
 		
 		// FString checkPS = GetMyPS() ? TEXT("ps 있어") : TEXT("ps 없어");
@@ -273,6 +275,8 @@ void ABS_VRPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 
 void ABS_VRPlayer::SRPC_CalcPlayerType_Implementation()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("srpc cpt 실행 : %s 에서 실행됨")
+	, IsLocallyControlled() ? TEXT("로컬 클라") : TEXT("다른 클라")));
 	// 플레이어 성별 및 나이 가져와서 타입 판별후 메시,애니 설정
 	// 30 대 이상이면 2번째 메시 사용
 	// 서버단에서 내 ps 에서 타입 판별
