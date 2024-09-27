@@ -168,8 +168,8 @@ void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDa
 {
     missionWidgetUI->SetVisibility(false);
   
-    //if (playerData.Gender == "Man")
-    //{
+    if (playerData.Gender == "Man")
+    {
         miniGameUIComp->SetVisibility(true);
-    //}
+    }
 }
