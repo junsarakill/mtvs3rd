@@ -3,6 +3,7 @@
 
 #include "JYS/SecondEventBoxActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "JBS/BS_VRPlayer.h"
 
 
 // Sets default values
@@ -21,9 +22,11 @@ void ASecondEventBoxActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// 15?? ??? ???????
-	SetLifeSpan(5);
-	
+	// 검은 박스가 7초만 스폰되어있게 
+	SetLifeSpan(7);
+
+	Cast<ABS_VRPlayer>(GetOwner())->StartTrip();
+
 	MeshComp->SetOwnerNoSee(true);
 	MeshComp->SetOnlyOwnerSee(false);
 }

@@ -55,9 +55,11 @@ void AQuestionsWidgetActor::BillBoardQuestionsWidget()
  		{
 			FVector camLoc = playerCam->vrHMDCam->GetComponentLocation();
 			FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
+			FVector camDownVector = playerCam->vrHMDCam->GetUpVector();
 
 			// 위젯의 새로운 위치 설정 (카메라 앞 50cm 위치)
-			FVector questionsUILoc = camLoc + camForwardVector * 800.0f;
+			FVector questionsUILoc = camLoc + camForwardVector * 900.0f + camDownVector * -300.0f;
+			// FVector questionsUILoc = camLoc + camDownVector * 100.0f;
 			questionsUIComp->SetWorldLocation(questionsUILoc);
 
 			// LookAt 방식으로 회전 계산

@@ -78,14 +78,14 @@ void AMiniGameWidgetActor::BeginPlay()
     GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
 
 
-    BillBoardQuestionsWidget();
+    // BillBoardQuestionsWidget();
 }
 
 // Called every frame
 void AMiniGameWidgetActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    // BillBoardQuestionsWidget();
+    BillBoardQuestionsWidget();
 
     float pre = 10000000;
     for (auto a : findTB)
@@ -118,9 +118,11 @@ void AMiniGameWidgetActor::BillBoardQuestionsWidget()
     {
         FVector miniGameCamLoc = playerCam->vrHMDCam->GetComponentLocation();
         FVector camForwardVector = playerCam->vrHMDCam->GetForwardVector();
+        FVector camDownVector = playerCam->vrHMDCam->GetUpVector();
+
 
         // 위젯의 새로운 위치 설정 (카메라 앞 50cm 위치)
-        FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 300.0f;
+        FVector miniGameUILoc = miniGameCamLoc + camForwardVector * 400.0f+ camDownVector * -100.0f;
         miniGameUIComp->SetWorldLocation(miniGameUILoc);
         missionWidgetUI->SetWorldLocation(miniGameUILoc);
         countDownWidget->SetWorldLocation(miniGameUILoc + FVector::UpVector * 50.f);
@@ -176,8 +178,8 @@ void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDa
 {
     missionWidgetUI->SetVisibility(false);
   
-    if (playerData.Gender == "Man")
-    {
+    //if (playerData.Gender == "Man")
+    //{
         miniGameUIComp->SetVisibility(true);
-    }
+    //}
 }
