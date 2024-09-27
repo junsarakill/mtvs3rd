@@ -222,15 +222,12 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
     if(PlayerData.Id == 0 || PlayerData.Id == -1)
         PlayerData.Id = FMath::RandRange(1, 9999);
 
-    if (GEngine)
-       GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("ID : %d"), PlayerData.Id)); // ?????? ???? ID
-
     StatDataJson(); // ???? ???
 
     FString num = FString::FromInt(PlayerData.Id); // ID ?? ? ???? 
 
     // ???? Name???? ??????? ???? ????????.
-   
+    SaveData();
 	SRPC_SaveData();
 }
 
@@ -367,9 +364,18 @@ void UPSH_GameInstance::SRPC_SaveData_Implementation()
     FName RowName = FName(FString::FromInt(PlayerData.Id)); // ??? ????
     DataTable->AddRow(RowName, PlayerData);                 // ?????? ??????? ???.//
 
+    PRINTLOG(TEXT("SeverDataSave"));
     PlayerData.PrintStruct();
 }
 
+void UPSH_GameInstance::SaveData()
+{
+    FName RowName = FName(FString::FromInt(PlayerData.Id)); // ??? ????
+    DataTable->AddRow(RowName, PlayerData);                 // ?????? ??????? ???.//
+
+    PRINTLOG(TEXT("SaveData"));
+    PlayerData.PrintStruct();
+}
 void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation() 
 {
 	MRPC_QuestStateButtonJson();
@@ -377,8 +383,6 @@ void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation()
 
 void UPSH_GameInstance::MRPC_QuestStateButtonJson_Implementation() 
 {
-    if (GEngine)
-        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("MRPC_QuestStateButtonJson_Implementation!")));
     TMap<FString, FString> QestData;                     // ���̽��� �� ������
     QestData.Add("Id", FString::FromInt(PlayerData.Id)); // � �÷��̾
     QestData.Add("GroupID", mySessionName.ToString());   // � �濡
@@ -414,19 +418,15 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
     {
         FString result = Response->GetContentAsString();
         UPSH_JsonParseLibrary::JsonParse(result, PlayerData); // ���� ���� ��û
-
-        PlayerData.PrintStruct();
-
-        if (GEngine)
-            GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("OnResQuestStatePost!")));
         
-
 		auto *pc = GetWorld()->GetFirstPlayerController();
         if (pc)
         {
             playerState = Cast<ABS_PlayerState>(pc->PlayerState);
         }
         playerState->SetPlayerData(PlayerData); // ?��???? ?????? ????
+        SRPC_SaveData();
+        SaveData();
       
     }
     else
