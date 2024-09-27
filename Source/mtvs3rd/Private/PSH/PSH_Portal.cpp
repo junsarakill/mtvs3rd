@@ -87,10 +87,10 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 				else // 배열에 없다면
 				{
 					// jbs 수정
-// 					auto playerData = player->GetMyPS()->GetPlayerData(); // 상대의 데이터를 가져옴
-// 					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
-//                                       
-// 					PlayerArray.Add(player);
+					auto playerData = player->GetPlayerState<ABS_PlayerState>()->GetPlayerData(); // 상대의 데이터를 가져옴
+					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
+                                      
+					PlayerArray.Add(player);
 					PlayerCount++;
 					OnRep_PlayerPotal();
 					
