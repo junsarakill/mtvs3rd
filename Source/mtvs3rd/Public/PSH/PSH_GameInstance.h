@@ -55,7 +55,7 @@ private:
 	void SetData();
 
 	UPROPERTY(EditAnywhere)
-	FString URL ="https://explicitly-premium-catfish.ngrok-free.app ";
+	FString URL ="https://explicitly-premium-catfish.ngrok-free.app";
 
 	UPROPERTY(EditAnywhere) // 최초 통신
 	FString URLStart = FString::Printf(TEXT("%s/userinfo"),*URL);
