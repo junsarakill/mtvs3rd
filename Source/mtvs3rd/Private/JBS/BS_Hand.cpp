@@ -356,7 +356,7 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 	}
 	
 	// 프로필 데이터 구조체
-	FProfileData data(otherPlayerData.Name,(int) sync, otherPlayerData.Gender);
+	FProfileData data(otherPlayerData.Name,(int) sync, otherPlayerData.Gender, otherPlayerData.Age);
 	// ui에 값 설정
 	profileUIActor->SetProfileUIValue(data);
 }

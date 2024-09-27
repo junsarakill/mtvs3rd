@@ -43,7 +43,6 @@ public:
 	// 싱크로율 설정
 	void SetSyncPercent(int32 value);
 	// 3d 모델링 설정
-	// FIXME 아마 플레이어는 gender를 아니깐 바꿔야할듯?
 	void SetCapturePlayer(EPlayerType type);
 
 };

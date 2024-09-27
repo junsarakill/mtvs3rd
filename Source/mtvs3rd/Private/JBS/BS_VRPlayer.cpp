@@ -56,9 +56,6 @@ void ABS_VRPlayer::BeginPlay()
 	{
 		
 	}
-	else {
-		
-	}
 
 	SetMoveSpeed(moveSpeed);
 
@@ -72,9 +69,6 @@ void ABS_VRPlayer::BeginPlay()
 	// this->bUseControllerRotationYaw = playOnPC;
 	// vrHMDCam->bUsePawnControlRotation = playOnPC;
 	// GetAnim()->isPlayOnPC = playOnPC;
-
-	
-	
 }
 
 // Called every frame
@@ -88,18 +82,11 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		if(IsLocallyControlled())
 		{
 			SRPC_DebugPlayerStat();
-			DrawDebugCapsule(GetWorld(), GetCapsuleComponent()->GetComponentLocation(), GetCapsuleComponent()->GetScaledCapsuleHalfHeight()
-			, GetCapsuleComponent()->GetScaledCapsuleRadius(),FQuat::Identity, FColor::Green, false, -1, 0, 5);
+			// DrawDebugCapsule(GetWorld(), GetCapsuleComponent()->GetComponentLocation(), GetCapsuleComponent()->GetScaledCapsuleHalfHeight()
+			// , GetCapsuleComponent()->GetScaledCapsuleRadius(),FQuat::Identity, FColor::Green, false, -1, 0, 5);
 		}
 	}
-
-	// if(!isSetAppearance && this->IsLocallyControlled())
-	// {
-	// 	SRPC_CalcPlayerType();
-	// }
-
-	// GEngine->AddOnScreenDebugMessage(-1, -1.f, FColor::Green, FString::Printf(TEXT("외형 설정 : %d"), isSetAppearance));
-
+	// pc 버전 캠, 손 위치 설정
 	if(playOnPC)
 	{
 		if(leftController)
@@ -113,18 +100,9 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 			leftController->SetActorLocationAndRotation(newLoc, newRot);
 		}
 	}
-	else 
-	{
-		// vrHMDCam->GetComponentRotation()
-		// this->AddActorWorldRotation(FRotator DeltaRotation)
-
-	}
-	
 
 	// 이동 방향대로 이동
 	AddMovementInput(moveDir, 1);
-	// if(moveDir != FVector::ZeroVector)
-	// 	moveDir = FVector::ZeroVector;
 
 	if(this->IsLocallyControlled())
 	{
@@ -140,18 +118,16 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		GetAnim()->leftControllerTR = leftController->handWorldTR;
 		GetAnim()->rightControllerTR = rightController->handWorldTR;
 	}
-	
 
+	
 }
 
-// Called to bind functionality to input
+// solved input action은 bp에서 설정
 void ABS_VRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
-
 
 void ABS_VRPlayer::SetIMC(UInputMappingContext *imc)
 {
@@ -181,10 +157,6 @@ void ABS_VRPlayer::EventMove(FVector2D dir)
 	moveDir = (vrHMDCam->GetForwardVector() * inputDir.Y) + (vrHMDCam->GetRightVector() * inputDir.X);
 	if(!moveDir.IsZero())
 		moveDir.Normalize();
-	// moveDir = vrHMDCam->GetComponentRotation().RotateVector(inputDir);
-	// // 2d 이동으로 정규화
-	// moveDir.Z = 0.f;
-	// moveDir.Normalize();
 }
 
 void ABS_VRPlayer::EventTurn(float value)
@@ -205,15 +177,10 @@ void ABS_VRPlayer::EventTurn(float value)
 
 void ABS_VRPlayer::SnapTurn(bool isRight)
 {
-	// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("턴"));
 	// z 축으로 회전
 	FRotator turnRot = FRotator(0, snapTurnDeg * (isRight ? 1 : -1) ,0);
 
-	// AddControllerYawInput(snapTurnDeg * (isRight ? 1 : -1));
-	// SetActorRotation(GetActorRotation() + turnRot);
 	AddActorWorldRotation(turnRot);
-
-	
 }
 
 void ABS_VRPlayer::SmoothTurn(float value)
@@ -246,13 +213,12 @@ void ABS_VRPlayer::StartTrip()
 UBS_PlayerBaseAnimInstance *ABS_VRPlayer::GetAnim()
 {
     if (!anim)
-    {
         anim = Cast<UBS_PlayerBaseAnimInstance>(GetMesh()->GetAnimInstance());
-    }
 
     return anim;
 }
 
+// dore 복제
 void ABS_VRPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -268,7 +234,6 @@ void ABS_VRPlayer::SRPC_CalcPlayerType_Implementation(EPlayerType type)
 void ABS_VRPlayer::MRPC_CalcPlayerType_Implementation(EPlayerType pType)
 {
 	// 해당 타입대로 외형 설정
-	// isSetAppearance = true;
 	SetPlayerAppearance(pType);
 }
 
@@ -287,6 +252,7 @@ void ABS_VRPlayer::SRPC_DebugPlayerStat_Implementation()
 
 void ABS_VRPlayer::MRPC_DebugPlayerStat_Implementation(const FString &playerStatStr)
 {
+	// 디버그 용
 	FVector debugLoc = vrHMDCam->GetComponentLocation() + vrHMDCam->GetForwardVector()*500.f + vrHMDCam->GetRightVector() * - 200.f;
 	FString velStr = GetVelocity().ToString();
 	float vrRootHeight = vrRoot->GetRelativeLocation().Z;
