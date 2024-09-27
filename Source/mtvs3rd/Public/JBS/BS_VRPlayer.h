@@ -96,8 +96,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	bool isSetAppearance = false;
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
+	// bool isSetAppearance = false;
 
 	
 
@@ -176,7 +176,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EventLookup(FVector2D value);
 
-public:
+    public:
 	// imc 추가
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);
@@ -190,12 +190,11 @@ public:
 	void SetPlayerAppearance(EPlayerType type);
 	
 	UFUNCTION(Server, Reliable)
-	void SRPC_CalcPlayerType();
+	void SRPC_CalcPlayerType(EPlayerType type);
+	// void SRPC_CalcPlayerType();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MRPC_CalcPlayerType(EPlayerType pType);
-
-	// void CalcPlayerType();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const override;
 
