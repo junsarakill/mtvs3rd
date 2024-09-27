@@ -88,8 +88,7 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		if(IsLocallyControlled())
 		{
 			SRPC_DebugPlayerStat();
-			DrawDebugCapsule(GetWorld(), GetCapsuleComponent()->GetComponentLocation(), GetCapsuleComponent()->GetScaledCapsuleHalfHeight()
-			, GetCapsuleComponent()->GetScaledCapsuleRadius(),FQuat::Identity, FColor::Green, false, -1, 0, 5);
+			//DrawDebugCapsule(GetWorld(), GetCapsuleComponent()->GetComponentLocation(), GetCapsuleComponent()->GetScaledCapsuleHalfHeight() , GetCapsuleComponent()->GetScaledCapsuleRadius(),FQuat::Identity, FColor::Green, false, -1, 0, 5);
 		}
 	}
 
