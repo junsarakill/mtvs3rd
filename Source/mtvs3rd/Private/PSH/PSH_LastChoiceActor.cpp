@@ -6,6 +6,8 @@
 #include "PSH/PSH_LastChoiceWidget.h"
 #include "PSH/PSH_Mtvs3rdGameModBase.h"
 #include "Net/UnrealNetwork.h"
+#include "mtvs3rd.h"
+#include "JBS/BS_VRPlayerController.h"
 
 // Sets default values
 APSH_LastChoiceActor::APSH_LastChoiceActor()
@@ -32,23 +34,31 @@ void APSH_LastChoiceActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	auto* pc = Cast<ABS_VRPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (pc)
+	{
+		SetOwner(pc);
+	}
+
+
+	/*if(!HasAuthority())*/
+
 
 	if (ChoiceWidgetComponent)
 	{
 		ChoiceWidget = Cast<UPSH_LastChoiceWidget>(ChoiceWidgetComponent->GetWidget());
-		if (ChoiceWidget)
-		{
-			ChoiceWidget->SetActor(this);
-            ChoiceWidget->SetVisibility(ESlateVisibility::Hidden);
-		}
 	}
 
 	if (HasAuthority())
 	{
-		
 		auto* Gm = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
 		Gm->SetActor(this);
+
+
 	}
+
+	
+
 }
 
 
@@ -59,29 +69,27 @@ void APSH_LastChoiceActor::Tick(float DeltaTime)
 
 }
 
-void APSH_LastChoiceActor::SetPlayerName(FString Name) 
+void APSH_LastChoiceActor::SetPlayerName(const FString& ManName, const FString& WomanName) // 서버
 {
     playerCount++;
 
     if (playerCount > 1)
     {
-        SRPC_Visible();
+		PRINTLOG(TEXT("ManName : %s , WomanName : %s"),*ManName,*WomanName);
+		playerCount = 0;
+		MRPC_Visible(ManName, WomanName);
 	}
-	UE_LOG(LogTemp,Warning,TEXT("Name : %s"),*Name);
+}
 
+void APSH_LastChoiceActor::MRPC_Visible_Implementation(const FString& ManName, const FString& WomanName)
+{
+	PRINTLOG(TEXT("ChoiceWidget"));
+	if(ChoiceWidget == nullptr) return;
+
+
+	PRINTLOG(TEXT("MRPC_LastChoiceActor"));
+	ChoiceWidget->AddResult(ManName, WomanName);
 	
-	// 첫번째는 왼쪽 Text에
-	// 두번째는 오른쪽 Text에
-}
-
-void APSH_LastChoiceActor::SRPC_Visible_Implementation()
-{
-	MRPC_Visible();
-}
-
-void APSH_LastChoiceActor::MRPC_Visible_Implementation() 
-{
-	ChoiceWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void APSH_LastChoiceActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const 

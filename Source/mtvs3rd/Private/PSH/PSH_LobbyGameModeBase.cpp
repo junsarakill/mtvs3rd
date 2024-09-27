@@ -13,7 +13,9 @@ void APSH_LobbyGameModeBase::PostLogin(APlayerController *NewPlayer)
     playerCount++;
     if (playerCount >= 2)
     {
-        GetWorld()->ServerTravel(FString("/Game/Main/MainMap?listen"));
+        FTimerHandle f;
+        GetWorld()->GetTimerManager().SetTimer(f, [&]() {Travel(); }, 5, false);
+      
 //         NewPlayer->PlayerCameraManager->StartCameraFade(1, 1, 100, FColor::Black);
 //         MRPC_StartFade();
     }
@@ -24,6 +26,10 @@ void APSH_LobbyGameModeBase::BeginPlay()
 {
     Super::BeginPlay();
     
+}
+void APSH_LobbyGameModeBase::Travel()
+{
+    GetWorld()->ServerTravel(FString("/Game/Main/MainMap?listen"));
 }
 void APSH_LobbyGameModeBase::MRPC_StartFade_Implementation()
 {

@@ -19,8 +19,6 @@ class MTVS3RD_API UPSH_LastChoiceWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	void SetActor(class APSH_LastChoiceActor* Owner );
-
 	void SetData(FPSH_HttpDataTable data);
 	class APSH_LastChoiceActor * Actor;
 
@@ -28,5 +26,11 @@ public:
 	UPROPERTY()
 	class APSH_Mtvs3rdGameModBase* GM;
 
+	UPROPERTY(meta = (BindWidget))
+	class UVerticalBox * VB_Result;
+		
+	void AddResult(const FString &ManName , const FString& WoManName);
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UPSH_ChoiceResultWidget> ResultWdigetFactory;
 };

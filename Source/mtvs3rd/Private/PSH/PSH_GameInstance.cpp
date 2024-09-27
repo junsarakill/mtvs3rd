@@ -196,16 +196,25 @@ void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionC
 void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
 {
     PlayerData = Data; // 데이터 가져오기
+
     const FUniqueNetIdPtr netID =
         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 
-    if (netID)
+    FString UID;
+    FString ID = netID->ToString();
+    if (netID != nullptr)
     {
-        PlayerData.Id = FCString::Atoi(*netID->ToString()); // Id 할당
+
+        for (int i = 7; i < 16; i++)
+        {
+            UID += ID[i];
+        }
+        PlayerData.Id = FCString::Atoi(*UID);
     }
     else
     {
-        PlayerData.Id = 0;
+        UID = 0;
+        PlayerData.Id = FCString::Atoi(*UID);
     }
 
     if (GEngine)
@@ -363,6 +372,8 @@ void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation()
 
 void UPSH_GameInstance::MRPC_QuestStateButtonJson_Implementation() 
 {
+    if (GEngine)
+        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("MRPC_QuestStateButtonJson_Implementation!")));
     TMap<FString, FString> QestData;                     // 제이슨에 들어갈 데이터
     QestData.Add("Id", FString::FromInt(PlayerData.Id)); // 어떤 플레이어가
     QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
@@ -398,7 +409,12 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
     {
         FString result = Response->GetContentAsString();
         UPSH_JsonParseLibrary::JsonParse(result, PlayerData); // 점수 갱신 요청
+
         PlayerData.PrintStruct();
+
+        if (GEngine)
+            GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("OnResQuestStatePost!")));
+        
 
 		auto *pc = GetWorld()->GetFirstPlayerController();
         if (pc)
@@ -470,7 +486,22 @@ void UPSH_GameInstance::StartDataReQestJson()
     const FUniqueNetIdPtr netID =
         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 
-    QestData.Add("ID", netID->ToString());                         // 어떤 플레이어가
+    FString UID;
+    if (netID != nullptr)
+    {
+       FString ID = netID->ToString();
+ 
+       for (int i = 7; i < 16; i++)
+       {
+           UID[i] += ID[i];
+       }
+    }
+    else
+    {
+        UID = 0;
+    }
+
+    QestData.Add("ID", UID);                         // 어떤 플레이어가
     QestData.Add("GroupID", mySessionName.ToString());   // 어떤 방에
 
     FString json = UPSH_JsonParseLibrary::MakeJson(QestData);

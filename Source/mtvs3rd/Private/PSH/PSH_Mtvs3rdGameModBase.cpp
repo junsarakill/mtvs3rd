@@ -45,14 +45,11 @@ void APSH_Mtvs3rdGameModBase::PostLogin(APlayerController *NewPlayer)
 
 }
 
-
-
 void APSH_Mtvs3rdGameModBase::LastChoice(int FromId, int ToId) // 4번 불린다. 갱신 가능. // 누가 , 누구를
 {
-
 	ChoiceNum.Add(FromId,ToId); // ChoiceNum[FromId] = ToId;
 	LastChoiceNum++; // 함수 실행 횟수 체크
-
+	PRINTLOG(TEXT("FromId : %d , ToId : %d"),FromId , ToId);
 	if (LastChoiceNum < playerCount) // 테스트 현재 플레이어 수 현재 2
 	{
 		return;
@@ -74,14 +71,38 @@ FPSH_HttpDataTable APSH_Mtvs3rdGameModBase::GetData(int num)
 void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일 때 UI 어떻게 보여줘야 하는지 잘 모르겠어서 추후 수정
 {
 
+//  1 : 4
+//  2 : 3
+//  3 : 1
+//  4 : 1
+// 	FString* Ptr7 = FruitMap.Find(7); // 키를 이용해 찾은뒤에 벨류를 반환
+// 	// *Ptr7 == "Pineapple"
+// 
+// 	const int32* KeyMangoPtr = FruitMap.FindKey(TEXT("Mango")); // 벨류를 이용해 키를 찾는다..
+// 	// *KeyMangoPtr   == 5
+
 	for (auto& ID : ChoiceNum)  // 전체 확인을 했기 때문에 3명을 검사 할 필요가 없다.
 	{
-		const int* foundkey = ChoiceNum.FindKey(ID.Key); // value를 이용해 key를 찾는다. key가 있다면 일치된 존재 확인.
+		const int* foundkey1 = ChoiceNum.Find(ID.Value); // value를 이용해 key를 찾는다. key가 있다면 일치된 존재 확인.
 
-		if (foundkey != nullptr)
+		if (foundkey1 != nullptr)
 		{
-			ChoiceActor->SetPlayerName(Gi->GetData(ID.Key).Name); // 1
-			PRINTLOG(TEXT("ID.Key"));
+			// 키를 찾고 키의 값이 자신의 값과 같은지 확인.
+			if (ID.Key == *foundkey1)
+			{
+				ChoiceActor->SetPlayerName(Gi->GetData(ID.Key).Name, Gi->GetData(ID.Value).Name); // 1
+				// 매칭이 된순간 지워버린다. = foundkey 가 nullptr이 될거다.
+// 				ChoiceNum.Remove(ID.Key);
+// 				ChoiceNum.Remove(ID.Value);
+			}
+			else
+			{
+				PRINTLOG(TEXT("FoundKey == nullptr"));
+			}
+		}
+		else
+		{
+			PRINTLOG(TEXT("FoundKey == nullptr"));
 		}
 	}
 	
@@ -90,6 +111,21 @@ void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일
 void APSH_Mtvs3rdGameModBase::SetActor(class APSH_LastChoiceActor *Actor) 
 {
 	ChoiceActor = Actor;
-    if (ChoiceActor)
-	UE_LOG(LogTemp,Warning,TEXT("APSH_LastChoiceActor : %s"),*ChoiceActor->GetName());
+// 	if (ChoiceActor)
+// 	{
+// 
+// 		UE_LOG(LogTemp,Warning,TEXT("APSH_LastChoiceActor : %s"),*ChoiceActor->GetName());
+// 	 		FTimerHandle f;
+//  		
+// 	}
+}
+void APSH_Mtvs3rdGameModBase::Test()
+{
+	if (ChoiceActor)
+	{
+		LastChoice(1, 4);  // 1 영철 2 옥순 3 영수 4 영숙
+		LastChoice(2, 3);
+		LastChoice(3, 2);
+		LastChoice(4, 1);
+	}
 }
