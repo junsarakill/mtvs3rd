@@ -28,6 +28,6 @@ public:
 	class UTextBlock * TB_PlayerCount;
 
 	UPROPERTY(EditDefaultsOnly)
-	int MaxPlayerCount = 2;
+	int MaxPlayerCount = 4;
 	
 };
