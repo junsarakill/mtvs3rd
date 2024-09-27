@@ -30,16 +30,13 @@ public:
 	UPROPERTY(EditDefaultsOnly)
  	class UWidgetComponent * ChoiceWidgetComponent;
 
-	void SetPlayerName(FString Name);
+	void SetPlayerName(const FString& ManName, const FString& WomanName);
 
 	UPROPERTY(EditAnywhere,Replicated)
 	int playerCount = 0;
 
-	UFUNCTION(Server,Reliable)
-	void SRPC_Visible();
-
 	UFUNCTION(NetMulticast,Reliable)
-	void MRPC_Visible();
+	void MRPC_Visible(const FString& ManName, const FString& WomanName);
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const;
 

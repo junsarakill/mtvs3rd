@@ -26,6 +26,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	int playerCount = 0;
 	
+	void Travel();
+
 	UFUNCTION(NetMulticast,Reliable)
 	void MRPC_StartFade();
 };

@@ -12,6 +12,7 @@
 #include "Net/UnrealNetwork.h"
 #include "JBS/BS_PlayerState.h"
 #include "PSH/PSH_GameInstance.h"
+#include "mtvs3rd.h"
 
 // Sets default values
 APSH_Portal::APSH_Portal()
@@ -86,10 +87,10 @@ void APSH_Portal::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 				else // 배열에 없다면
 				{
 					// jbs 수정
-					// auto playerData = player->GetMyPS()->GetPlayerData(); // 상대의 데이터를 가져옴
-					// PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
-                                      
-					PlayerArray.Add(player);
+// 					auto playerData = player->GetMyPS()->GetPlayerData(); // 상대의 데이터를 가져옴
+// 					PlayerDataArray.Add(playerData); // 플레이어 스테이트의 구조체.
+//                                       
+// 					PlayerArray.Add(player);
 					PlayerCount++;
 					OnRep_PlayerPotal();
 					
@@ -114,31 +115,30 @@ void APSH_Portal::SetPortal()
 void APSH_Portal::GoPotal()
 {
 	// 맨처음 플레이어를 기준으로 호감도 높은 ID를 판별
-    if (!PlayerDataArray.IsEmpty())
-    {
-        if (PlayerDataArray[0].syncPercentID1 >= PlayerDataArray[0].syncPercentID2) // 호감도 비교.
-        {
-            SetMeshPlayerID = PlayerDataArray[0].otherUserID1; // 높은 호감도 ID
-        }
-        else
-        {
-            SetMeshPlayerID = PlayerDataArray[0].otherUserID2; // 높은 호감도 ID
-        }
-	}
-    
-    // 베타에 설문 추가
-    for (auto PlayerChek : PlayerArray) // 플레이어 의 배열
-    {
-		// jbs 수정
-        auto playerDataChek = PlayerChek->GetPlayerState<ABS_PlayerState>()->GetPlayerData();
-        if (SetMeshPlayerID == playerDataChek.Id) // 가장 호감도가 높은 ID와 ID를 비교
-        {
-			//PlayerArray[0]-> // 0번을 기준으로 찾았기 때문에 0번의 매쉬를 변경
-            //PlayerChek->   // 0번 기준 호감도가 가장 높은 플레이어의 매쉬를 변경 
-			break;
-		}
-        playerDataChek.PrintStruct();
-    }
+//     if (!PlayerDataArray.IsEmpty())
+//     {
+//         if (PlayerDataArray[0].syncPercentID1 >= PlayerDataArray[0].syncPercentID2) // 호감도 비교.
+//         {
+//             SetMeshPlayerID = PlayerDataArray[0].otherUserID1; // 높은 호감도 ID
+//         }
+//         else
+//         {
+//             SetMeshPlayerID = PlayerDataArray[0].otherUserID2; // 높은 호감도 ID
+//         }
+// 	}
+//     
+//     // 베타에 설문 추가
+//     for (auto PlayerChek : PlayerArray) // 플레이어 의 배열
+//     {
+//         auto playerDataChek = PlayerChek->GetMyPS()->GetPlayerData();
+//         if (SetMeshPlayerID == playerDataChek.Id) // 가장 호감도가 높은 ID와 ID를 비교
+//         {
+// 			//PlayerArray[0]-> // 0번을 기준으로 찾았기 때문에 0번의 매쉬를 변경
+//             //PlayerChek->   // 0번 기준 호감도가 가장 높은 플레이어의 매쉬를 변경 
+// 			break;
+// 		}
+//         playerDataChek.PrintStruct();
+//     }
 
     SRPC_GoPotal();
 }
@@ -162,6 +162,7 @@ void APSH_Portal::MRPC_GoPotal_Implementation()
     {
         auto *state = Cast<ABS_PlayerState>(player->GetPlayerState());
         state->SetIsFinalSelect(true);
+		PRINTLOG(TEXT("EndPotalOn"));
     }
 }
 

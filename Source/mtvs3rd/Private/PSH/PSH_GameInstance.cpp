@@ -197,22 +197,26 @@ void UPSH_GameInstance::OnJoinSessionComplate(FName SessionName, EOnJoinSessionC
 /// ???? ?????? ??? ?? ???
 void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
 {
-    PlayerData = Data; // ?????? ????????
+    PlayerData = Data; // ������ ��������
+
     const FUniqueNetIdPtr netID =
         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 
-    if (netID)
+    FString UID;
+    FString ID = netID->ToString();
+    if (netID != nullptr)
     {
-        if(GEngine)
+
+        for (int i = 7; i < 16; i++)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("netid valid"));
+            UID += ID[i];
         }
-        
-        PlayerData.Id = FCString::Atoi(*netID->ToString()); // Id ???
+        PlayerData.Id = FCString::Atoi(*UID);
     }
     else
     {
-        PlayerData.Id = 0;
+        UID = 0;
+        PlayerData.Id = FCString::Atoi(*UID);
     }
     // FIXME jbs ??? ???? ???? ??
     if(PlayerData.Id == 0 || PlayerData.Id == -1)
@@ -373,9 +377,11 @@ void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation()
 
 void UPSH_GameInstance::MRPC_QuestStateButtonJson_Implementation() 
 {
-    TMap<FString, FString> QestData;                     // ??????? ??? ??????
-    QestData.Add("Id", FString::FromInt(PlayerData.Id)); // ?? ?��????
-    QestData.Add("GroupID", mySessionName.ToString());   // ?? ?�
+    if (GEngine)
+        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("MRPC_QuestStateButtonJson_Implementation!")));
+    TMap<FString, FString> QestData;                     // ���̽��� �� ������
+    QestData.Add("Id", FString::FromInt(PlayerData.Id)); // � �÷��̾
+    QestData.Add("GroupID", mySessionName.ToString());   // � �濡
 
     FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
@@ -407,8 +413,13 @@ void UPSH_GameInstance::OnResQuestStatePost(FHttpRequestPtr Request, FHttpRespon
     if (bConnectedSuccessfully) 
     {
         FString result = Response->GetContentAsString();
-        UPSH_JsonParseLibrary::JsonParse(result, PlayerData); // ???? ???? ???
+        UPSH_JsonParseLibrary::JsonParse(result, PlayerData); // ���� ���� ��û
+
         PlayerData.PrintStruct();
+
+        if (GEngine)
+            GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString(TEXT("OnResQuestStatePost!")));
+        
 
 		auto *pc = GetWorld()->GetFirstPlayerController();
         if (pc)
@@ -480,8 +491,23 @@ void UPSH_GameInstance::StartDataReQestJson()
     const FUniqueNetIdPtr netID =
         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
 
-    QestData.Add("ID", netID->ToString());                         // ?? ?��????
-    QestData.Add("GroupID", mySessionName.ToString());   // ?? ?�
+    FString UID;
+    if (netID != nullptr)
+    {
+       FString ID = netID->ToString();
+ 
+       for (int i = 7; i < 16; i++)
+       {
+           UID[i] += ID[i];
+       }
+    }
+    else
+    {
+        UID = 0;
+    }
+
+    QestData.Add("ID", UID);                         // � �÷��̾
+    QestData.Add("GroupID", mySessionName.ToString());   // � �濡
 
     FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 

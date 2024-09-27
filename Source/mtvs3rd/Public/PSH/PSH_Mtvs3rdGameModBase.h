@@ -41,11 +41,13 @@ private:
 	
 	TMap<int,int> ChoiceNum;
 
+	TArray<FString> NameArray;
+
 	UPROPERTY(EditDefaultsOnly)
 	int LastChoiceNum = 0;    // 함수 실행 체크 변수 최대 플레이어 수보다 많도록 체크하는 용도.
 
 	UPROPERTY(EditDefaultsOnly)
-	int playerCount = 0;   // 최대 플레이어 수 
+	int playerCount = 4;   // 최대 플레이어 수 
 
 	UPROPERTY()
 	class APSH_LastChoiceActor * ChoiceActor;
@@ -62,8 +64,7 @@ public:
 	void SetActor(class APSH_LastChoiceActor * Actor);
 
 
-
-
+	void Test();
 
 	
 private:
