@@ -96,11 +96,11 @@ void UPSH_StartDataWidget::OnClickRequest()
 		Gi->SetStartData(data);
 		// FIXME
 		// 테스트용 AI 있을때는 끄길바람.
-// 		if (HttpActor)
-// 		{
-// 			Gi->FindOtherSession();
-// 			HttpActor->SelectComponent->SetVisibility(false);
-// 		}
+		if (HttpActor)
+		{
+			Gi->FindOtherSession();
+			HttpActor->SelectComponent->SetVisibility(false);
+		}
 
 	}
 }
