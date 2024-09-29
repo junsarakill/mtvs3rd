@@ -53,11 +53,11 @@ void AMiniGameWidgetActor::BeginPlay()
     //	pcWiidget->SetOwner(this);
     // }
 
-    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" missionWidget"));
+    //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" missionWidget"));
     // missionWidget = CreateWidget<UMiniGameMissionWidget>(GetWorld(), MissionWidgetFactory);
     if (missionWidgetUI)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" missionWidget1111111111"));
+        //GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" missionWidget1111111111"));
 
         missionWidgetUI->SetVisibility(true);
     }
@@ -75,7 +75,7 @@ void AMiniGameWidgetActor::BeginPlay()
     
     // 트리거박스 찾기
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMiniGameTriggerBox_Item::StaticClass(), findTB);
-    GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
+    // GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT(" %d"), findTB.Num()));
 
 
     // BillBoardQuestionsWidget();
@@ -150,16 +150,6 @@ void AMiniGameWidgetActor::HideMissionWidget()
     if (player->IsLocallyControlled())
     {
         SRPC_SetVisibilityByGender();
-        // // 플레이어 id로 찾아오기
-        // auto* myPlayer = Cast<ABS_VRPlayer>(GetOwner());
-        // auto* ps = UBS_Utility::TryGetPlayerState(GetWorld(), myPlayer->ID);
-        // auto pd = ps->GetPlayerData();
-        // missionWidgetUI->SetVisibility(false);
-  
-		// if (pd.Gender == "Man")
-		// {
-        //     miniGameUIComp->SetVisibility(true);
-        // }
 
     }
 }
@@ -178,8 +168,8 @@ void AMiniGameWidgetActor::MRPC_SetVisibilityByGender_Implementation(FPSH_HttpDa
 {
     missionWidgetUI->SetVisibility(false);
   
-    //if (playerData.Gender == "Man")
-    //{
+    if (playerData.Gender == "Man")
+    {
         miniGameUIComp->SetVisibility(true);
-    //}
+    }
 }

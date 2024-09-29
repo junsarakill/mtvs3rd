@@ -11,7 +11,7 @@ void APSH_LobbyGameModeBase::PostLogin(APlayerController *NewPlayer)
     //         장소입니다.블루프린트로 OnPostLogin 을 구현하여 부가 로직을 추가할 수 있습니다.
 
     playerCount++;
-    if (playerCount >= 2)
+    if (playerCount >= 4)
     {
         FTimerHandle f;
         GetWorld()->GetTimerManager().SetTimer(f, [&]() {Travel(); }, 5, false);
