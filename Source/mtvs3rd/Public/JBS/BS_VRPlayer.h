@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include <PSH/PSH_HttpDataTable.h>
 #include <JBS/BS_Utility.h>
-#include<JBS/BS_PlayerState.h>
+#include <JBS/BS_PlayerState.h>
 #include "BS_VRPlayer.generated.h"
 
 UCLASS()
@@ -30,27 +30,6 @@ public:
 
 #pragma region 변수 영역
 protected:
-	// // 플레이어 id
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, ReplicatedUsing=OnRep_Id, Category="Default|Values")
-	// int id;
-		public:
-	// __declspec(property(get = GetId, put = SetId)) int ID;
-	// int GetId()
-	// {
-	// 	return id;
-	// }
-	// void SetId(int value)
-	// {
-	// 	id = value;
-	// 	// SRPC_CalcPlayerType();
-	// }
-	// UFUNCTION(BlueprintCallable)
-	// void OnRep_Id();
-
-    protected:
-	
-	
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float cameraHeight = 166.f;
 	// 이동 속도
@@ -73,7 +52,6 @@ protected:
 	FVector moveDir;
 
 	// 회전 설정
-	// XXX 나중엔 자연스러운 회전 추가할까?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	bool isSnapTurn = true;
 
@@ -85,6 +63,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float smoothTurnMulti = 5.f;
 
+#pragma region 디버그 변수
 	// 디버그용 최종 선택 가능
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
@@ -96,10 +75,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
 
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
-	// bool isSetAppearance = false;
-
-	
+#pragma endregion
 
 #pragma region 프리팹
 
@@ -114,7 +90,6 @@ protected:
 #pragma endregion
 
 #pragma region 컴포넌트, 오브젝트
-
 	// 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Components", BlueprintGetter=GetAnim, BlueprintSetter=SetAnim)
 	class UBS_PlayerBaseAnimInstance* anim;
@@ -130,17 +105,12 @@ protected:
 		protected:
 
 public:
-	// 플레이어 ps
-	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Objects")
-	// ABS_PlayerState* ps;
-	// __declspec(property(get = GetMyPS, put = SetMyPS)) ABS_PlayerState* PS;
-	// ABS_PlayerState *GetMyPS();
-	// void SetMyPS(class ABS_PlayerState *value);
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* vrRoot;
+	// vr 카메라
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UCameraComponent* vrHMDCam;
+	// 컨트롤러
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class ABS_Hand* leftController;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
@@ -148,15 +118,13 @@ public:
 	// 최종 선택 UI 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")
 	class UStaticMeshComponent* playerUIPos1;
-
 	// 최종 선택 ui 액터
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Objects")
 	class ABS_SelectConfirmActor* selectConfirmUIActor;
 
-	
+#pragma endregion
+#pragma endregion
 
-#pragma endregion
-#pragma endregion
 #pragma region 함수 영역
 protected:
 	// 이동방향 설정
@@ -167,6 +135,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EventTurn(float value);
 
+	// 스냅턴
 	void SnapTurn(bool isRight);
 
 	//자연스러운 회전
@@ -175,8 +144,9 @@ protected:
 	// 마우스 회전
 	UFUNCTION(BlueprintCallable)
 	void EventLookup(FVector2D value);
+	
 
-    public:
+public:
 	// imc 추가
 	UFUNCTION(BlueprintCallable)
 	void SetIMC(UInputMappingContext* imc);
@@ -186,12 +156,15 @@ protected:
 	void StartTrip();
 
 	// 프로필에 따른 겉모습 수정
+	// XXX
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerAppearance(EPlayerType type);
-	
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerAppearance2(EPlayerType type);
+
 	UFUNCTION(Server, Reliable)
 	void SRPC_CalcPlayerType(EPlayerType type);
-	// void SRPC_CalcPlayerType();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MRPC_CalcPlayerType(EPlayerType pType);

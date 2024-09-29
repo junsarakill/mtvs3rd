@@ -47,11 +47,17 @@ struct FProfileData
 
 	FProfileData() {}
 
-	FProfileData(FString name, int32 percent, FString gender)
+	FProfileData(FString name, int32 percent, FString gender, int32 age)
 	{
 		this->name = name;
-		// @@ 젠더에 더불어 나이대로 얼터체크 필요
-		type = gender == TEXT("Man") ? EPlayerType::MALE1 : EPlayerType::FEMALE1;
+		//XXX 젠더에 더불어 나이대로 얼터체크 필요
+		bool isMale = gender == TEXT("Man");
+		bool isAlter = age >= 30;
+		if(isMale)
+			type = !isAlter ? EPlayerType::MALE1 : EPlayerType::MALE2;
+		else
+			type = !isAlter ? EPlayerType::FEMALE1 : EPlayerType::FEMALE2;
+		
 		syncPercent = percent;
 	}
 };

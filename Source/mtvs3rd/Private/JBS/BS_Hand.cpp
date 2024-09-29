@@ -63,23 +63,18 @@ void ABS_Hand::BeginPlay()
 	// ray 초기값 설정
 	SetEnableRay(ENABLE_RAY);
 
-	// 
-	// if(!HasAuthority())
-	// {
-	// 	uiInteractComp->SetActive(false);
-	// }
+	// 클라이언트 이외는 상호작용 불가하게 제거
 	ownerPlayer = Cast<ABS_VRPlayer>(this->GetOwner());
-	if(ownerPlayer)
-	{
-		if(!ownerPlayer->IsLocallyControlled())
-		{
-			uiInteractComp->DestroyComponent();
-		}
-	}
+	if(ownerPlayer && !ownerPlayer->IsLocallyControlled())
+		uiInteractComp->DestroyComponent();
 }
 
 void ABS_Hand::SetController(EMotionControllerType type, ABS_VRPlayer* player)
 {
+	// 주인 설정
+	check(player);
+	ownerPlayer = player;
+
 	cType = type;
 	// 컨트롤러 데이터 찾기
 	for(FControllerType fct : typeData)
@@ -106,10 +101,6 @@ void ABS_Hand::SetController(EMotionControllerType type, ABS_VRPlayer* player)
 			break;
 		}
 	}
-
-	// 주인 설정
-	check(player);
-	ownerPlayer = player;
 }
 
 // Called every frame
@@ -139,8 +130,7 @@ void ABS_Hand::SetEnableRay(bool value)
 void ABS_Hand::SetGrabActor(ABS_GrabbableActor *actor)
 {
 	check(actor);
-	// if(isGrab)
-	// 	return;
+
 	isGrab = true;
 	grabActor = actor;
 }
@@ -348,7 +338,6 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 	if(ownerData.otherUserID1 == otherPlayerData.Id)
 	{
 		sync = ownerData.syncPercentID1;
-		
 	}
 	else if(ownerData.otherUserID2 == otherPlayerData.Id)
 	{
@@ -356,7 +345,7 @@ void ABS_Hand::SpawnProfileUI(FPSH_HttpDataTable otherPlayerData)
 	}
 	
 	// 프로필 데이터 구조체
-	FProfileData data(otherPlayerData.Name,(int) sync, otherPlayerData.Gender);
+	FProfileData data(otherPlayerData.Name,(int) sync, otherPlayerData.Gender, otherPlayerData.Age);
 	// ui에 값 설정
 	profileUIActor->SetProfileUIValue(data);
 }
