@@ -40,7 +40,7 @@ public:
 	FName mySessionName = "Couple";
 	
 // 게임 시작 데이터 통신
-private:
+public:
 	UPROPERTY()
 	FPSH_HttpDataTable PlayerData; // 플레이어 데이터 구조체.
 
@@ -96,6 +96,7 @@ public:
 	void SRPC_SaveData();
 
 	void SaveData();
+
 
     UFUNCTION(Server,Reliable)
 	void SRPC_QuestStateButtonJson();

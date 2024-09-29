@@ -42,6 +42,11 @@ void APSH_Mtvs3rdGameModBase::PreLogin(const FString &Options, const FString &Ad
 void APSH_Mtvs3rdGameModBase::PostLogin(APlayerController *NewPlayer) 
 {
     Super::PostLogin(NewPlayer);
+	
+	playerCount++;
+	//Gi->PlayerData.Id = playerCount;
+	playerState = Cast<ABS_PlayerState>(NewPlayer->PlayerState);
+	playerState->id = playerCount;
 
 }
 
@@ -111,21 +116,20 @@ void APSH_Mtvs3rdGameModBase::ChekChoice() // 현재는 2명으로 구현되어 있음 4명일
 void APSH_Mtvs3rdGameModBase::SetActor(class APSH_LastChoiceActor *Actor) 
 {
 	ChoiceActor = Actor;
-// 	if (ChoiceActor)
-// 	{
-// 
-// 		UE_LOG(LogTemp,Warning,TEXT("APSH_LastChoiceActor : %s"),*ChoiceActor->GetName());
+	if (ChoiceActor)
+	{
+
+// 		PRINTLOG(TEXT("APSH_LastChoiceActor : %s"),*ChoiceActor->GetName());
 // 	 		FTimerHandle f;
 //  		
-// 	}
+// 		GetWorld()->GetTimerManager().SetTimer(f,this,&APSH_Mtvs3rdGameModBase::Test, 5, false);
+	}
 }
 void APSH_Mtvs3rdGameModBase::Test()
 {
 	if (ChoiceActor)
 	{
 		LastChoice(1, 4);  // 1 영철 2 옥순 3 영수 4 영숙
-		LastChoice(2, 3);
-		LastChoice(3, 2);
 		LastChoice(4, 1);
 	}
 }

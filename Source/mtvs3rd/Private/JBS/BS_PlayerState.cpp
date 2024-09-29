@@ -35,7 +35,7 @@ void ABS_PlayerState::BeginPlay()
     {
         //pc로 뭔가 하기
         auto* gi = UBS_Utility::GetGI(GetWorld());
-        SRPC_SetPlayerdata(gi->GetStartData());
+        SRPC_SetPlayerdata(gi->GetData(id));
 
         // 플레이어 외형 계산
         EPlayerType pType = CalcPlayerType();

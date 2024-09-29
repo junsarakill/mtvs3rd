@@ -71,9 +71,10 @@ void APSH_LastChoiceActor::Tick(float DeltaTime)
 
 void APSH_LastChoiceActor::SetPlayerName(const FString& ManName, const FString& WomanName) // ¼­¹ö
 {
+	auto* pc = Cast<ABS_VRPlayerController>(GetWorld()->GetFirstPlayerController());
     playerCount++;
 
-    if (playerCount > 1)
+    if (playerCount > 1 && pc->IsLocalController() && pc)
     {
 		PRINTLOG(TEXT("ManName : %s , WomanName : %s"),*ManName,*WomanName);
 		playerCount = 0;

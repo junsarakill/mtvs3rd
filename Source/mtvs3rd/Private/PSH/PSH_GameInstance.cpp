@@ -199,30 +199,30 @@ void UPSH_GameInstance::SetStartData(FPSH_HttpDataTable Data)
 {
     PlayerData = Data; // ������ ��������
 
-    const FUniqueNetIdPtr netID =
-        GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
+//     const FUniqueNetIdPtr netID =
+//         GetWorld()->GetFirstLocalPlayerFromController()->GetUniqueNetIdForPlatformUser().GetUniqueNetId();
+// 
+//     FString UID;
+//     FString ID = netID->ToString();
+//     if (netID != nullptr)
+//     {
+// 
+//         for (int i = 7; i < 16; i++)
+//         {
+//             UID += ID[i];
+//         }
+//         PlayerData.Id = FCString::Atoi(*UID);
+//     }
+//     else
+//     {
+//         UID = 0;
+//         PlayerData.Id = FCString::Atoi(*UID);
+//     }
+//     // FIXME jbs ??? ???? ???? ??
+//     if(PlayerData.Id == 0 || PlayerData.Id == -1)
+//         PlayerData.Id = FMath::RandRange(1, 9999);
 
-    FString UID;
-    FString ID = netID->ToString();
-    if (netID != nullptr)
-    {
-
-        for (int i = 7; i < 16; i++)
-        {
-            UID += ID[i];
-        }
-        PlayerData.Id = FCString::Atoi(*UID);
-    }
-    else
-    {
-        UID = 0;
-        PlayerData.Id = FCString::Atoi(*UID);
-    }
-    // FIXME jbs ??? ???? ???? ??
-    if(PlayerData.Id == 0 || PlayerData.Id == -1)
-        PlayerData.Id = FMath::RandRange(1, 9999);
-
-    StatDataJson(); // ???? ???
+   // StatDataJson(); // ???? ???
 
     FString num = FString::FromInt(PlayerData.Id); // ID ?? ? ???? 
 
@@ -307,7 +307,19 @@ void UPSH_GameInstance::QuestButtonJson(int ButtonNum, int QestNum, int playerID
 
     FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
-    ReqQuestPost(json); // ???? ????? ??????��?
+    auto* pc = GetWorld()->GetFirstPlayerController();
+
+    if (pc)
+    {
+        playerState = Cast<ABS_PlayerState>(pc->PlayerState);
+    }
+
+    GetData(playerState->id);
+    playerState->SetPlayerData(PlayerData); // ?��???? ?????? ????
+    SRPC_SaveData();
+    SaveData();
+
+    //ReqQuestPost(json); // ???? ????? ??????��?
 }
 
 void UPSH_GameInstance::ReqQuestPost(FString json)
@@ -361,19 +373,23 @@ void UPSH_GameInstance::QuestStateButtonJson()
 
 void UPSH_GameInstance::SRPC_SaveData_Implementation() 
 {
+    PRINTLOG(TEXT("SeverDataSave : %d"), PlayerData.syncPercentID1);
+    PlayerData.syncPercentID1 +=5;
     FName RowName = FName(FString::FromInt(PlayerData.Id)); // ??? ????
     DataTable->AddRow(RowName, PlayerData);                 // ?????? ??????? ???.//
 
-    PRINTLOG(TEXT("SeverDataSave"));
+    PRINTLOG(TEXT("SeverDataSave : %d"), PlayerData.syncPercentID1);
     PlayerData.PrintStruct();
 }
 
 void UPSH_GameInstance::SaveData()
 {
+    PRINTLOG(TEXT("SaveData: %d"), PlayerData.syncPercentID1);
+    PlayerData.syncPercentID1 += 5;
     FName RowName = FName(FString::FromInt(PlayerData.Id)); // ??? ????
     DataTable->AddRow(RowName, PlayerData);                 // ?????? ??????? ???.//
 
-    PRINTLOG(TEXT("SaveData"));
+    PRINTLOG(TEXT("SaveData: %d"), PlayerData.syncPercentID1);
     PlayerData.PrintStruct();
 }
 void UPSH_GameInstance::SRPC_QuestStateButtonJson_Implementation() 
@@ -444,7 +460,7 @@ void UPSH_GameInstance::MatchDataJson()
 
     FString json = UPSH_JsonParseLibrary::MakeJson(QestData);
 
-    ReqQuestPost(json); // ???? ????? ??????��?
+    ReqMatchDataJson(json); // ???? ????? ??????��?
 }
 
 void UPSH_GameInstance::ReqMatchDataJson(FString json) 

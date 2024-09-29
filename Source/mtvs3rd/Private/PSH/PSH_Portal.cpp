@@ -160,7 +160,7 @@ void APSH_Portal::MRPC_GoPotal_Implementation()
 {
     if (TagetName == TEXT("EndPotal"))
     {
-        auto *state = Cast<ABS_PlayerState>(player->GetPlayerState());
+        auto *state = Cast<ABS_PlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
         state->SetIsFinalSelect(true);
 		PRINTLOG(TEXT("EndPotalOn"));
     }
