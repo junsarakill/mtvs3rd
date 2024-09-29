@@ -50,8 +50,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+#pragma region 변수
 public:
-#pragma region 값
 	// 손 ik용 world transfrom //0923 b mann xr 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Values")
 	FTransform handWorldTR;
@@ -141,6 +141,17 @@ public:
 	// ui 상호작용
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UWidgetInteractionComponent* uiInteractComp;
+		public:
+	__declspec(property(get = GetInteractComp, put = SetInteractComp)) class UWidgetInteractionComponent* UI_INTERACT_COMP;
+	class UWidgetInteractionComponent* GetInteractComp()
+	{
+		return uiInteractComp;
+	}
+	void SetInteractComp(class UWidgetInteractionComponent* value)
+	{
+		uiInteractComp = value;
+	}
+	
 	// 손 루트
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class USceneComponent* handRoot;
@@ -195,9 +206,6 @@ public:
 
 	
 #pragma region 함수
-
-
-
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetController(EMotionControllerType type, ABS_VRPlayer* player);

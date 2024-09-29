@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include <PSH/PSH_HttpDataTable.h>
 #include <JBS/BS_Utility.h>
-#include<JBS/BS_PlayerState.h>
+#include <JBS/BS_PlayerState.h>
 #include "BS_VRPlayer.generated.h"
 
 UCLASS()
@@ -63,6 +63,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Values")
 	float smoothTurnMulti = 5.f;
 
+#pragma region 디버그 변수
 	// 디버그용 최종 선택 가능
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableDebugFinalSelect = false;
@@ -74,6 +75,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Debug")
 	bool enableViewPlayerStat = true;
 
+#pragma endregion
 
 #pragma region 프리팹
 
@@ -88,7 +90,6 @@ protected:
 #pragma endregion
 
 #pragma region 컴포넌트, 오브젝트
-
 	// 애니메이션
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Default|Components", BlueprintGetter=GetAnim, BlueprintSetter=SetAnim)
 	class UBS_PlayerBaseAnimInstance* anim;
@@ -123,6 +124,7 @@ public:
 
 #pragma endregion
 #pragma endregion
+
 #pragma region 함수 영역
 protected:
 	// 이동방향 설정
@@ -133,6 +135,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EventTurn(float value);
 
+	// 스냅턴
 	void SnapTurn(bool isRight);
 
 	//자연스러운 회전
@@ -153,12 +156,15 @@ public:
 	void StartTrip();
 
 	// 프로필에 따른 겉모습 수정
+	// XXX
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerAppearance(EPlayerType type);
-	
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerAppearance2(EPlayerType type);
+
 	UFUNCTION(Server, Reliable)
 	void SRPC_CalcPlayerType(EPlayerType type);
-	// void SRPC_CalcPlayerType();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MRPC_CalcPlayerType(EPlayerType pType);
