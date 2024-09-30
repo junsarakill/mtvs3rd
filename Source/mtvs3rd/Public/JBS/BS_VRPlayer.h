@@ -111,9 +111,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
 	class UCameraComponent* vrHMDCam;
 	// 컨트롤러
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Components")
 	class ABS_Hand* leftController;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated, Category="Default|Components")
 	class ABS_Hand* rightController;
 	// 최종 선택 UI 위치
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Default|Component")

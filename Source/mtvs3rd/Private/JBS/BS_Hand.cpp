@@ -8,6 +8,7 @@
 #include <JBS/BS_GrabComponent.h>
 #include "DrawDebugHelpers.h"
 #include "Engine/EngineTypes.h"
+#include "GameFramework/Actor.h"
 #include "JBS/BS_GrabbableActor.h"
 #include "JBS/BS_VRPlayer.h"
 #include <Components/WidgetInteractionComponent.h>
@@ -26,6 +27,7 @@ ABS_Hand::ABS_Hand()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 	motionRoot = CreateDefaultSubobject<USceneComponent>(TEXT("motionRoot"));
 	// motionRoot->SetupAttachment(motionController);

@@ -102,6 +102,8 @@ void ABS_VRPlayer::Tick(float DeltaTime)
 		FVector vel = GetVelocity();
 		FVector fv = GetActorForwardVector();
 		FVector rv = GetActorRightVector();
+
+		// GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s"), *vel.ToString()));
 		
 		GetAnim()->vertical = FVector::DotProduct(fv, vel);
 		GetAnim()->horizontal = FVector::DotProduct(rv, vel);
@@ -216,7 +218,9 @@ void ABS_VRPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// DOREPLIFETIME(ABS_VRPlayer, isSetAppearance);
+	DOREPLIFETIME(ABS_VRPlayer, leftController);
+	DOREPLIFETIME(ABS_VRPlayer, rightController);
+	
 }
 
 void ABS_VRPlayer::SRPC_CalcPlayerType_Implementation(EPlayerType type)
@@ -227,7 +231,7 @@ void ABS_VRPlayer::SRPC_CalcPlayerType_Implementation(EPlayerType type)
 void ABS_VRPlayer::MRPC_CalcPlayerType_Implementation(EPlayerType pType)
 {
 	// 해당 타입대로 외형 설정
-	SetPlayerAppearance2(pType);
+	// SetPlayerAppearance2(pType);
 }
 
 void ABS_VRPlayer::SRPC_DebugPlayerStat_Implementation()
