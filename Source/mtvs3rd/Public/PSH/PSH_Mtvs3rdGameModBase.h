@@ -66,6 +66,7 @@ public:
 
 	void Test();
 
+	void TestTimer();
 	
 private:
 };

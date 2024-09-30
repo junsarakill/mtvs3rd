@@ -13,6 +13,7 @@
 #include "JBS/BS_PlayerState.h"
 #include "PSH/PSH_GameInstance.h"
 #include "mtvs3rd.h"
+#include "PSH/PSH_Mtvs3rdGameModBase.h"
 
 // Sets default values
 APSH_Portal::APSH_Portal()
@@ -153,6 +154,9 @@ void APSH_Portal::SRPC_GoPotal_Implementation()
 	if (TagetName == TEXT("EndPotal"))
     {
        MRPC_GoPotal();
+	   auto * Gm = Cast<APSH_Mtvs3rdGameModBase>(GetWorld()->GetAuthGameMode());
+	   Gm->Test();
+	  
     }
 }
 

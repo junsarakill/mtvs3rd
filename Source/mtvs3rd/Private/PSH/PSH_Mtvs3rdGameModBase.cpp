@@ -119,17 +119,19 @@ void APSH_Mtvs3rdGameModBase::SetActor(class APSH_LastChoiceActor *Actor)
 	if (ChoiceActor)
 	{
 
-// 		PRINTLOG(TEXT("APSH_LastChoiceActor : %s"),*ChoiceActor->GetName());
-// 	 		FTimerHandle f;
-//  		
-// 		GetWorld()->GetTimerManager().SetTimer(f,this,&APSH_Mtvs3rdGameModBase::Test, 5, false);
+
 	}
 }
 void APSH_Mtvs3rdGameModBase::Test()
 {
 	if (ChoiceActor)
 	{
-		LastChoice(1, 4);  // 1 ¿µÃ¶ 2 ¿Á¼ø 3 ¿µ¼ö 4 ¿µ¼÷
-		LastChoice(4, 1);
+		LastChoice(1, 2);  // 1 ¿µÃ¶ 2 ¿Á¼ø 3 ¿µ¼ö 4 ¿µ¼÷
+		LastChoice(2, 1);
 	}
+}
+void APSH_Mtvs3rdGameModBase::TestTimer()
+{
+	FTimerHandle f;
+	GetWorld()->GetTimerManager().SetTimer(f, this, &APSH_Mtvs3rdGameModBase::Test, 30, false);
 }
